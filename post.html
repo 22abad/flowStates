@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading... | flowstates.me</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { background-color: #0f172a; color: #e2e8f0; overflow-x: hidden; }
+        .font-serif-en { font-family: 'Lora', serif; }
+        .font-serif-cn { font-family: 'Noto Serif SC', serif; }
+        #flowCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        .fade-in { animation: fadeIn 1s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Markdown 样式定制 */
+        .markdown-body p { margin-bottom: 1.5em; line-height: 1.8; font-weight: 300; opacity: 0.9; }
+        .markdown-body h2 { font-size: 1.5em; margin-top: 2em; margin-bottom: 1em; color: #2dd4bf; }
+        .markdown-body blockquote { border-left: 3px solid #2dd4bf; padding-left: 1rem; font-style: italic; opacity: 0.8; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 0 8px 8px 0; }
+        .markdown-body code { font-family: monospace; background: rgba(0,0,0,0.3); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; color: #a5f3fc; }
+    </style>
+</head>
+<body class="antialiased selection:bg-teal-500 selection:text-white pb-20">
+
+    <canvas id="flowCanvas"></canvas>
+
+    <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <a href="/" class="text-lg font-bold tracking-widest text-teal-400 hover:text-white transition">← FLOWSTATES.ME</a>
+        <button id="langToggle" class="px-4 py-1 border border-slate-600 rounded-full text-xs hover:bg-slate-800 transition uppercase tracking-wide">Switch to 中文</button>
+    </nav>
+
+    <main class="mt-32 px-4 sm:px-0 max-w-2xl mx-auto fade-in">
+        <div id="loading" class="text-center opacity-50 italic">Retrieving memory...</div>
+        
+        <article id="article-content" class="hidden">
+            <header class="mb-12 text-center">
+                <div id="post-date" class="text-teal-500 text-xs uppercase tracking-[0.2em] mb-4"></div>
+                <h1 class="text-3xl sm:text-4xl font-bold leading-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400">
+                    <span id="title-en" class="content-en font-serif-en block"></span>
+                    <span id="title-zh" class="content-zh hidden font-serif-cn block"></span>
+                </h1>
+            </header>
+
+            <div id="md-render-area" class="prose prose-invert prose-lg mx-auto font-serif-en markdown-body">
+                <!-- 内容将注入这里 -->
+            </div>
+        </article>
+    </main>
+
+    <script>
+    (async function() {
+        const GITHUB_USERNAME = '22abad';
+        const GITHUB_REPO = 'flowStates';
+        const POSTS_FOLDER = 'posts';
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+
+        if (!postId) { window.location.href = '/'; return; }
+
+        const toggleBtn = document.getElementById('langToggle');
+        let isEnglish = true;
+
+        function updateLanguage() {
+            const en = document.querySelectorAll('.content-en');
+            const zh = document.querySelectorAll('.content-zh');
+            if (isEnglish) {
+                zh.forEach(el => el.classList.add('hidden'));
+                en.forEach(el => el.classList.remove('hidden'));
+                toggleBtn.textContent = 'Switch to 中文';
+            } else {
+                en.forEach(el => el.classList.add('hidden'));
+                zh.forEach(el => el.classList.remove('hidden'));
+                toggleBtn.textContent = 'Switch to English';
+            }
+        }
+
+        toggleBtn.addEventListener('click', () => {
+            isEnglish = !isEnglish;
+            updateLanguage();
+        });
+
+        try {
+            // 直接从 GitHub Raw User Content 获取 Markdown 文件
+            // 格式：https://raw.githubusercontent.com/{user}/{repo}/{branch}/{path}
+            const mdUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${postId}.md`;
+            const mdRes = await fetch(mdUrl);
+            
+            if (!mdRes.ok) throw new Error('Post not found');
+            
+            let mdText = await mdRes.text();
+
+            // 解析元数据 (Front Matter JSON)
+            // 我们约定：文章开头如果是 ```json ... ```，则视为元数据并提取，不渲染在正文里
+            const match = mdText.match(/^```json\s*([\s\S]*?)\s*```/);
+            let meta = {};
+            
+            if (match) {
+                try {
+                    meta = JSON.parse(match[1]);
+                    // 从正文中移除元数据部分，只保留后面的 Markdown
+                    mdText = mdText.replace(match[0], ''); 
+                } catch (e) { console.warn('Meta parse error'); }
+            }
+
+            // 渲染页面
+            document.title = `${meta.title_en || 'Post'} | flowstates.me`;
+            document.getElementById('post-date').innerText = meta.date || 'Unknown Date';
+            document.getElementById('title-en').innerText = meta.title_en || 'Untitled';
+            document.getElementById('title-zh').innerText = meta.title_zh || '无标题';
+            
+            // 解析 Markdown 正文
+            document.getElementById('md-render-area').innerHTML = marked.parse(mdText);
+
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('article-content').classList.remove('hidden');
+            updateLanguage();
+
+        } catch (err) {
+            document.getElementById('loading').innerText = "Error: " + err.message;
+            console.error(err);
+        }
+
+        // Canvas 动画
+        const canvas = document.getElementById('flowCanvas');
+        const ctx = canvas.getContext('2d');
+        let w, h, particles = [];
+        function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+        function anim() {
+            ctx.clearRect(0, 0, w, h);
+            particles.forEach(p => {
+                p.x += p.vx; p.y += p.vy;
+                if(p.x < 0) p.x = w; if(p.x > w) p.x = 0;
+                if(p.y < 0) p.y = h; if(p.y > h) p.y = 0;
+                ctx.fillStyle = 'rgba(94, 234, 212, 0.15)';
+                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+            });
+            requestAnimationFrame(anim);
+        }
+        window.addEventListener('resize', resize); resize();
+        for(let i=0; i<40; i++) particles.push({x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, s:Math.random()*2});
+        anim();
+    })();
+    </script>
+</body>
+</html>
