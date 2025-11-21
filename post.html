@@ -88,10 +88,14 @@
   let lastMeta = {};
 
   function wrapLangSections(html){
-    // Replace markers [EN], [ZH], [END] in the rendered HTML (after markdown -> HTML)
+    // Close previous language container before opening the next one.
+    // This avoids unclosed <div> nesting when multiple [EN]/[ZH] appear.
+    // Replace sequence: [EN] -> <div class="content-en">
+    //                    [ZH] -> </div><div class="content-zh hidden">
+    //                    [END] -> </div>
     return html
       .replace(/\[EN\]/g, '<div class="content-en">')
-      .replace(/\[ZH\]/g, '<div class="content-zh hidden">')
+      .replace(/\[ZH\]/g, '</div><div class="content-zh hidden">')
       .replace(/\[END\]/g, '</div>');
   }
 
