@@ -24,7 +24,7 @@
             flowstates.me
         </div>
         <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-teal-900/50 hover:border-teal-400 transition uppercase tracking-wide">
-            Switch to 中文
+            SWITCH TO 中文
         </button>
     </nav>
 
@@ -60,8 +60,8 @@
     (function() {
         // 配置：你的 GitHub 用户名和仓库名
         const GITHUB_USERNAME = '22abad'; 
-        const GITHUB_REPO = 'flowStates'; // 确保这和你的仓库名一致
-        const POSTS_FOLDER = 'posts'; // 存放 .md 文件的文件夹名
+        const GITHUB_REPO = 'flowStates'; 
+        const POSTS_FOLDER = 'posts'; 
 
         // 1. 语言切换逻辑
         const toggleBtn = document.getElementById('langToggle');
@@ -73,11 +73,11 @@
             if (isEnglish) {
                 zhEls.forEach(el => el.classList.add('hidden'));
                 enEls.forEach(el => el.classList.remove('hidden'));
-                toggleBtn.textContent = 'Switch to 中文';
+                toggleBtn.textContent = 'SWITCH TO 中文';
             } else {
                 enEls.forEach(el => el.classList.add('hidden'));
                 zhEls.forEach(el => el.classList.remove('hidden'));
-                toggleBtn.textContent = 'Switch to English';
+                toggleBtn.textContent = 'SWITCH TO ENGLISH';
             }
         }
 
@@ -86,19 +86,41 @@
             updateLang();
         });
 
-        // 2. 动态获取 GitHub 文件列表并解析 Front Matter
+        // 2. 简易 Front Matter (YAML/KV) 解析器
+        function parseFrontMatter(text) {
+            // 匹配以 --- 开头和结尾的块，提取键值对
+            const match = text.match(/^---\s*([\s\S]*?)\s*---/);
+            const meta = { date: 'Unknown', summary_en: 'No summary.', summary_zh: '暂无简介。' };
+
+            if (match) {
+                const lines = match[1].split('\n');
+                lines.forEach(line => {
+                    // 修正解析逻辑，只看第一个冒号，后面全部视为值
+                    const colonIndex = line.indexOf(':');
+                    if (colonIndex > 0) {
+                        const key = line.substring(0, colonIndex).trim();
+                        let value = line.substring(colonIndex + 1).trim();
+                        // 移除包裹在值外部的引号
+                        value = value.replace(/^['"]|['"]$/g, '');
+                        meta[key] = value;
+                    }
+                });
+            }
+            return meta;
+        }
+
+        // 3. 动态获取 GitHub 文件列表并解析 Front Matter
         async function loadPosts() {
             const listContainer = document.getElementById('post-list');
             try {
-                // 调用 GitHub API 获取文件列表
                 const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${POSTS_FOLDER}`;
                 const response = await fetch(apiUrl);
                 
-                if (!response.ok) throw new Error('GitHub API limit or Network error');
+                if (!response.ok) {
+                     throw new Error('Repo Private or Content Not Found');
+                }
                 
                 const files = await response.json();
-                
-                // 过滤出 .md 文件
                 const mdFiles = files.filter(file => file.name.endsWith('.md'));
 
                 if (mdFiles.length === 0) {
@@ -108,31 +130,19 @@
 
                 listContainer.innerHTML = ''; // 清空 Loading 提示
 
-                // 遍历每个文件，获取内容并提取元数据
-                // 注意：这里并发请求所有文章的内容
                 const postsData = await Promise.all(mdFiles.map(async (file) => {
-                    // 获取 raw 内容
                     const contentRes = await fetch(file.download_url);
                     const text = await contentRes.text();
                     
-                    // 简单的 Front Matter 解析器 (提取文件头部的 JSON 配置)
-                    // 格式要求：文章开头必须是 ```json ... ``` 包含的元数据
-                    const match = text.match(/^```json\s*([\s\S]*?)\s*```/);
-                    let meta = { 
-                        title_en: file.name.replace('.md', ''), 
-                        title_zh: file.name.replace('.md', ''),
-                        date: 'Unknown',
-                        summary_en: 'No summary.',
-                        summary_zh: '暂无简介。'
-                    };
+                    const meta = parseFrontMatter(text);
 
-                    if (match) {
-                        try {
-                            meta = JSON.parse(match[1]);
-                        } catch (e) { console.warn('Failed to parse meta for', file.name); }
-                    }
-                    
-                    return { ...meta, filename: file.name };
+                    return { 
+                        ...meta, 
+                        // 如果 meta 里没有标题，使用文件名作为默认标题
+                        title_en: meta.title_en || file.name.replace('.md', ''),
+                        title_zh: meta.title_zh || file.name.replace('.md', ''),
+                        filename: file.name 
+                    };
                 }));
 
                 // 按日期倒序排列 (新的在前)
@@ -141,7 +151,6 @@
                 // 渲染列表
                 postsData.forEach(post => {
                     const item = document.createElement('a');
-                    // 链接到通用阅读器，文件名需要 URI 编码
                     const encodedFilename = encodeURIComponent(post.filename.replace('.md', ''));
                     item.href = `post.html?id=${encodedFilename}`; 
                     item.className = "block group p-6 rounded-lg hover:bg-slate-800/50 transition border border-transparent hover:border-slate-700";
@@ -161,15 +170,15 @@
                     listContainer.appendChild(item);
                 });
 
-                updateLang(); // 刷新语言显示
+                updateLang();
 
             } catch (error) {
                 console.error(error);
-                listContainer.innerHTML = `<div class="text-center text-red-400 text-sm">Failed to load.<br><span class="text-xs opacity-50">${error.message}</span></div>`;
+                listContainer.innerHTML = `<div class="text-center text-red-400 text-sm py-10">Failed to load from GitHub.<br><span class="text-xs opacity-50">${error.message}. Please check if the GitHub Repo (${GITHUB_REPO}) is Public.</span></div>`;
             }
         }
 
-        // 3. Canvas 动画 (保持不变)
+        // 4. Canvas 动画 (保持不变)
         const canvas = document.getElementById('flowCanvas');
         const ctx = canvas.getContext('2d');
         let w, h, particles = [];
@@ -188,8 +197,7 @@
         window.addEventListener('resize', resize); resize();
         for(let i=0; i<40; i++) particles.push({x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, s:Math.random()*2});
         anim();
-
-        // 初始化
+        
         loadPosts();
     })();
     </script>
