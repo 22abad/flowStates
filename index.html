@@ -109,7 +109,7 @@
                 listContainer.innerHTML = ''; // 清空 Loading 提示
 
                 // 遍历每个文件，获取内容并提取元数据
-                // 注意：为了性能，这里并发请求所有文章的内容（GitHub API 有速率限制，文章多了可能需要优化）
+                // 注意：这里并发请求所有文章的内容
                 const postsData = await Promise.all(mdFiles.map(async (file) => {
                     // 获取 raw 内容
                     const contentRes = await fetch(file.download_url);
@@ -141,7 +141,9 @@
                 // 渲染列表
                 postsData.forEach(post => {
                     const item = document.createElement('a');
-                    item.href = `post.html?id=${post.filename.replace('.md', '')}`; // 链接到通用阅读器
+                    // 链接到通用阅读器，文件名需要 URI 编码
+                    const encodedFilename = encodeURIComponent(post.filename.replace('.md', ''));
+                    item.href = `post.html?id=${encodedFilename}`; 
                     item.className = "block group p-6 rounded-lg hover:bg-slate-800/50 transition border border-transparent hover:border-slate-700";
                     item.innerHTML = `
                         <div class="flex justify-between items-baseline mb-2">
@@ -163,7 +165,7 @@
 
             } catch (error) {
                 console.error(error);
-                listContainer.innerHTML = `<div class="text-center text-red-400 text-sm">Failed to load from GitHub.<br><span class="text-xs opacity-50">${error.message}</span></div>`;
+                listContainer.innerHTML = `<div class="text-center text-red-400 text-sm">Failed to load.<br><span class="text-xs opacity-50">${error.message}</span></div>`;
             }
         }
 

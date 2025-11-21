@@ -20,6 +20,8 @@
         .markdown-body h2 { font-size: 1.5em; margin-top: 2em; margin-bottom: 1em; color: #2dd4bf; }
         .markdown-body blockquote { border-left: 3px solid #2dd4bf; padding-left: 1rem; font-style: italic; opacity: 0.8; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 0 8px 8px 0; }
         .markdown-body code { font-family: monospace; background: rgba(0,0,0,0.3); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; color: #a5f3fc; }
+        .markdown-body pre { background: #1e293b; padding: 1em; border-radius: 8px; overflow-x: auto; margin-bottom: 1.5em; }
+        .markdown-body pre code { background: none; padding: 0; color: #e2e8f0; }
     </style>
 </head>
 <body class="antialiased selection:bg-teal-500 selection:text-white pb-20">
@@ -83,17 +85,18 @@
         });
 
         try {
+            // 解码文件名，防止中文名乱码
+            const decodedPostId = decodeURIComponent(postId);
+            
             // 直接从 GitHub Raw User Content 获取 Markdown 文件
-            // 格式：https://raw.githubusercontent.com/{user}/{repo}/{branch}/{path}
-            const mdUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${postId}.md`;
+            const mdUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${decodedPostId}.md`;
             const mdRes = await fetch(mdUrl);
             
             if (!mdRes.ok) throw new Error('Post not found');
             
             let mdText = await mdRes.text();
 
-            // 解析元数据 (Front Matter JSON)
-            // 我们约定：文章开头如果是 ```json ... ```，则视为元数据并提取，不渲染在正文里
+            // 解析 YAML Front Matter (--- ... ---)
             const match = mdText.match(/^```json\s*([\s\S]*?)\s*```/);
             let meta = {};
             
