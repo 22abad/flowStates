@@ -3,171 +3,127 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Flow States | flowstates.me</title>
+    <title>Loading... | flowstates.me</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         body { background-color: #0f172a; color: #e2e8f0; overflow-x: hidden; }
         .font-serif-en { font-family: 'Lora', serif; }
         .font-serif-cn { font-family: 'Noto Serif SC', serif; }
-        #flowCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6; }
-        .fade-in { animation: fadeIn 1.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        #flowCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
+        .fade-in { animation: fadeIn 1s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Markdown 样式定制 */
+        .markdown-body p { margin-bottom: 1.5em; line-height: 1.8; font-weight: 300; opacity: 0.9; }
+        .markdown-body h2 { font-size: 1.5em; margin-top: 2em; margin-bottom: 1em; color: #2dd4bf; }
+        .markdown-body blockquote { border-left: 3px solid #2dd4bf; padding-left: 1rem; font-style: italic; opacity: 0.8; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 0 8px 8px 0; }
+        .markdown-body code { font-family: monospace; background: rgba(0,0,0,0.3); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; color: #a5f3fc; }
     </style>
 </head>
-<body class="antialiased selection:bg-teal-500 selection:text-white">
+<body class="antialiased selection:bg-teal-500 selection:text-white pb-20">
 
     <canvas id="flowCanvas"></canvas>
 
-    <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-sm bg-slate-900/30">
-        <div class="text-xl font-bold tracking-widest opacity-90 hover:text-teal-300 transition cursor-pointer" onclick="window.location.reload()">
-            flowstates.me
-        </div>
-        <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-teal-900/50 hover:border-teal-400 transition uppercase tracking-wide">
-            Switch to 中文
-        </button>
+    <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+        <a href="/" class="text-lg font-bold tracking-widest text-teal-400 hover:text-white transition">← FLOWSTATES.ME</a>
+        <button id="langToggle" class="px-4 py-1 border border-slate-600 rounded-full text-xs hover:bg-slate-800 transition uppercase tracking-wide">Switch to 中文</button>
     </nav>
 
-    <main class="min-h-screen flex flex-col justify-center items-center px-4 sm:px-0 py-20 relative z-10">
-        <article class="max-w-2xl w-full fade-in mb-20">
-            <h1 class="text-5xl sm:text-6xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-blue-200">
-                <span class="content-en font-serif-en">Flow States</span>
-                <span class="content-zh hidden font-serif-cn">心流时刻</span>
-            </h1>
-            <div class="text-center space-y-6 text-lg sm:text-xl opacity-80 font-light max-w-lg mx-auto">
-                <p class="content-en font-serif-en">A digital garden dedicated to capturing the fleeting moments of absolute clarity and creation.</p>
-                <p class="content-zh hidden font-serif-cn">一座数字花园，致力于捕捉那些绝对清醒与创造力的稍纵即逝的时刻。</p>
+    <main class="mt-32 px-4 sm:px-0 max-w-2xl mx-auto fade-in">
+        <div id="loading" class="text-center opacity-50 italic">Retrieving memory...</div>
+        
+        <article id="article-content" class="hidden">
+            <header class="mb-12 text-center">
+                <div id="post-date" class="text-teal-500 text-xs uppercase tracking-[0.2em] mb-4"></div>
+                <h1 class="text-3xl sm:text-4xl font-bold leading-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400">
+                    <span id="title-en" class="content-en font-serif-en block"></span>
+                    <span id="title-zh" class="content-zh hidden font-serif-cn block"></span>
+                </h1>
+            </header>
+
+            <div id="md-render-area" class="prose prose-invert prose-lg mx-auto font-serif-en markdown-body">
+                <!-- 内容将注入这里 -->
             </div>
         </article>
-
-        <!-- 动态博客列表区域 -->
-        <section id="blog-section" class="max-w-2xl w-full fade-in border-t border-slate-800 pt-10">
-            <h2 class="text-xs uppercase tracking-[0.2em] text-teal-500 mb-8 text-center">
-                <span class="content-en">Flow Logs</span>
-                <span class="content-zh hidden">心流日志</span>
-            </h2>
-            <div id="post-list" class="space-y-6">
-                <div class="text-center opacity-50 text-sm italic">Connecting to GitHub...</div>
-            </div>
-        </section>
     </main>
 
-    <footer class="fixed bottom-6 w-full text-center opacity-40 text-xs uppercase tracking-widest pointer-events-none">
-        22abad @ Ireland
-    </footer>
-
     <script>
-    (function() {
-        // 配置：你的 GitHub 用户名和仓库名
-        const GITHUB_USERNAME = '22abad'; 
-        const GITHUB_REPO = 'flowstates-website'; // 确保这和你的仓库名一致
-        const POSTS_FOLDER = 'posts'; // 存放 .md 文件的文件夹名
+    (async function() {
+        const GITHUB_USERNAME = '22abad';
+        const GITHUB_REPO = 'flowStates';
+        const POSTS_FOLDER = 'posts';
 
-        // 1. 语言切换逻辑
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get('id');
+
+        if (!postId) { window.location.href = '/'; return; }
+
         const toggleBtn = document.getElementById('langToggle');
         let isEnglish = true;
 
-        function updateLang() {
-            const enEls = document.querySelectorAll('.content-en');
-            const zhEls = document.querySelectorAll('.content-zh');
+        function updateLanguage() {
+            const en = document.querySelectorAll('.content-en');
+            const zh = document.querySelectorAll('.content-zh');
             if (isEnglish) {
-                zhEls.forEach(el => el.classList.add('hidden'));
-                enEls.forEach(el => el.classList.remove('hidden'));
+                zh.forEach(el => el.classList.add('hidden'));
+                en.forEach(el => el.classList.remove('hidden'));
                 toggleBtn.textContent = 'Switch to 中文';
             } else {
-                enEls.forEach(el => el.classList.add('hidden'));
-                zhEls.forEach(el => el.classList.remove('hidden'));
+                en.forEach(el => el.classList.add('hidden'));
+                zh.forEach(el => el.classList.remove('hidden'));
                 toggleBtn.textContent = 'Switch to English';
             }
         }
 
         toggleBtn.addEventListener('click', () => {
             isEnglish = !isEnglish;
-            updateLang();
+            updateLanguage();
         });
 
-        // 2. 动态获取 GitHub 文件列表并解析 Front Matter
-        async function loadPosts() {
-            const listContainer = document.getElementById('post-list');
-            try {
-                // 调用 GitHub API 获取文件列表
-                const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${POSTS_FOLDER}`;
-                const response = await fetch(apiUrl);
-                
-                if (!response.ok) throw new Error('GitHub API limit or Network error');
-                
-                const files = await response.json();
-                
-                // 过滤出 .md 文件
-                const mdFiles = files.filter(file => file.name.endsWith('.md'));
+        try {
+            // 直接从 GitHub Raw User Content 获取 Markdown 文件
+            // 格式：https://raw.githubusercontent.com/{user}/{repo}/{branch}/{path}
+            const mdUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${postId}.md`;
+            const mdRes = await fetch(mdUrl);
+            
+            if (!mdRes.ok) throw new Error('Post not found');
+            
+            let mdText = await mdRes.text();
 
-                if (mdFiles.length === 0) {
-                    listContainer.innerHTML = '<div class="text-center opacity-50">No logs found yet.</div>';
-                    return;
-                }
-
-                listContainer.innerHTML = ''; // 清空 Loading 提示
-
-                // 遍历每个文件，获取内容并提取元数据
-                // 注意：为了性能，这里并发请求所有文章的内容（GitHub API 有速率限制，文章多了可能需要优化）
-                const postsData = await Promise.all(mdFiles.map(async (file) => {
-                    // 获取 raw 内容
-                    const contentRes = await fetch(file.download_url);
-                    const text = await contentRes.text();
-                    
-                    // 简单的 Front Matter 解析器 (提取文件头部的 JSON 配置)
-                    // 格式要求：文章开头必须是 ```json ... ``` 包含的元数据
-                    const match = text.match(/^```json\s*([\s\S]*?)\s*```/);
-                    let meta = { 
-                        title_en: file.name.replace('.md', ''), 
-                        title_zh: file.name.replace('.md', ''),
-                        date: 'Unknown',
-                        summary_en: 'No summary.',
-                        summary_zh: '暂无简介。'
-                    };
-
-                    if (match) {
-                        try {
-                            meta = JSON.parse(match[1]);
-                        } catch (e) { console.warn('Failed to parse meta for', file.name); }
-                    }
-                    
-                    return { ...meta, filename: file.name };
-                }));
-
-                // 按日期倒序排列 (新的在前)
-                postsData.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                // 渲染列表
-                postsData.forEach(post => {
-                    const item = document.createElement('a');
-                    item.href = `post.html?id=${post.filename.replace('.md', '')}`; // 链接到通用阅读器
-                    item.className = "block group p-6 rounded-lg hover:bg-slate-800/50 transition border border-transparent hover:border-slate-700";
-                    item.innerHTML = `
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="text-xl font-serif-en group-hover:text-teal-300 transition">
-                                <span class="content-en">${post.title_en}</span>
-                                <span class="content-zh hidden">${post.title_zh}</span>
-                            </h3>
-                            <span class="text-xs font-mono opacity-50 whitespace-nowrap ml-4">${post.date}</span>
-                        </div>
-                        <p class="text-sm opacity-60 font-light leading-relaxed">
-                            <span class="content-en">${post.summary_en}</span>
-                            <span class="content-zh hidden">${post.summary_zh}</span>
-                        </p>
-                    `;
-                    listContainer.appendChild(item);
-                });
-
-                updateLang(); // 刷新语言显示
-
-            } catch (error) {
-                console.error(error);
-                listContainer.innerHTML = `<div class="text-center text-red-400 text-sm">Failed to load from GitHub.<br><span class="text-xs opacity-50">${error.message}</span></div>`;
+            // 解析元数据 (Front Matter JSON)
+            // 我们约定：文章开头如果是 ```json ... ```，则视为元数据并提取，不渲染在正文里
+            const match = mdText.match(/^```json\s*([\s\S]*?)\s*```/);
+            let meta = {};
+            
+            if (match) {
+                try {
+                    meta = JSON.parse(match[1]);
+                    // 从正文中移除元数据部分，只保留后面的 Markdown
+                    mdText = mdText.replace(match[0], ''); 
+                } catch (e) { console.warn('Meta parse error'); }
             }
+
+            // 渲染页面
+            document.title = `${meta.title_en || 'Post'} | flowstates.me`;
+            document.getElementById('post-date').innerText = meta.date || 'Unknown Date';
+            document.getElementById('title-en').innerText = meta.title_en || 'Untitled';
+            document.getElementById('title-zh').innerText = meta.title_zh || '无标题';
+            
+            // 解析 Markdown 正文
+            document.getElementById('md-render-area').innerHTML = marked.parse(mdText);
+
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('article-content').classList.remove('hidden');
+            updateLanguage();
+
+        } catch (err) {
+            document.getElementById('loading').innerText = "Error: " + err.message;
+            console.error(err);
         }
 
-        // 3. Canvas 动画 (保持不变)
+        // Canvas 动画
         const canvas = document.getElementById('flowCanvas');
         const ctx = canvas.getContext('2d');
         let w, h, particles = [];
@@ -186,9 +142,6 @@
         window.addEventListener('resize', resize); resize();
         for(let i=0; i<40; i++) particles.push({x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, s:Math.random()*2});
         anim();
-
-        // 初始化
-        loadPosts();
     })();
     </script>
 </body>
