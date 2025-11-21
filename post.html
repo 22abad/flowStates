@@ -7,132 +7,213 @@
   <meta name="description" content="Flowstates — personal logs and short essays." />
   <meta name="theme-color" content="#0f172a" />
 
-  <!-- Tailwind + marked + DOMPurify -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
+
   <style>
-    :root{--bg:#0f172a;--muted:#94a3b8}
-    body{background:var(--bg);color:#e2e8f0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,'Lora',serif;margin:0}
+    body { background:#0f172a; color:#e2e8f0; margin:0; }
     .font-serif-en{font-family:'Lora',serif}
     .font-serif-cn{font-family:'Noto Serif SC',serif}
-    #flowCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1;opacity:0.45}
-    .fade-in{animation:fadeIn .9s ease-out both}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+    #flowCanvas{position:fixed;inset:0;z-index:-1;opacity:.4}
+    .fade-in{animation:fadeIn .8s ease-out both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 
-    /* Markdown styling */
     .markdown-body{max-width:740px;margin:0 auto}
-    .markdown-body p{margin-bottom:1.4em;line-height:1.75;opacity:.94}
-    .markdown-body h1,.markdown-body h2,.markdown-body h3{color:#2dd4bf;margin-top:1.6em;margin-bottom:.5em}
-    .markdown-body blockquote{border-left:3px solid #2dd4bf;padding:1rem;background:rgba(255,255,255,0.02);border-radius:0 6px 6px 0}
-    .markdown-body code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,monospace;background:rgba(0,0,0,0.35);padding:.15em .35em;border-radius:4px;color:#a5f3fc}
-    .markdown-body pre{background:#0b1220;padding:1rem;border-radius:8px;overflow:auto}
-
-    .muted{color:var(--muted)}
-    a.post-link{color:inherit;text-decoration:none}
+    .markdown-body p{margin-bottom:1.4em;line-height:1.75}
+    .markdown-body h1,.markdown-body h2,.markdown-body h3{color:#2dd4bf;margin-top:1.6em;margin-bottom:.6em;}
+    .markdown-body blockquote{border-left:3px solid #2dd4bf;padding:1rem;background:rgba(255,255,255,0.04);border-radius:0 6px 6px 0;}
+    .markdown-body pre{background:#0b1220;padding:1rem;border-radius:8px;overflow:auto;}
   </style>
 </head>
-<body class="antialiased selection:bg-teal-500 selection:text-white pb-20">
 
-<canvas id="flowCanvas" aria-hidden="true"></canvas>
+<body class="pb-20 antialiased">
+<canvas id="flowCanvas"></canvas>
 
-<nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
-  <a href="/" class="text-lg font-bold tracking-widest text-teal-400 hover:text-white transition">← FLOWSTATES.ME</a>
-  <div class="flex items-center gap-3">
-    <a id="rawLink" class="text-xs muted" href="#" target="_blank" rel="noopener">raw</a>
-    <button id="langToggle" class="px-4 py-1 border border-slate-600 rounded-full text-xs hover:bg-slate-800 transition uppercase tracking-wide">Switch to 中文</button>
-  </div>
+<nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/70 backdrop-blur border-b border-slate-800">
+  <a href="/" class="text-lg font-bold tracking-widest text-teal-400">← FLOWSTATES.ME</a>
+  <button id="langToggle" class="px-4 py-1 text-xs border border-slate-600 rounded-full">Switch to 中文</button>
 </nav>
 
-<main class="mt-32 px-4 sm:px-0 max-w-3xl mx-auto fade-in">
-  <div id="loading" class="text-center opacity-50 italic">Retrieving memory...</div>
+<main class="mt-32 px-4 max-w-3xl mx-auto fade-in">
+  <div id="loading" class="text-center opacity-60 italic">Retrieving memory...</div>
 
   <article id="article-content" class="hidden">
     <header class="mb-8 text-center">
-      <div id="post-date" class="text-teal-400 text-xs uppercase tracking-[0.2em] mb-3"></div>
-      <h1 class="text-3xl sm:text-4xl font-bold leading-tight">
+      <div id="post-date" class="text-teal-400 text-xs tracking-[0.2em] mb-3"></div>
+      <h1 class="text-3xl font-bold">
         <span id="title-en" class="content-en font-serif-en block"></span>
-        <span id="title-zh" class="content-zh hidden font-serif-cn block"></span>
+        <span id="title-zh" class="content-zh font-serif-cn hidden block"></span>
       </h1>
-      <p id="post-summary" class="muted text-sm mt-3"></p>
+      <p id="post-summary" class="text-slate-400 text-sm mt-3"></p>
     </header>
 
-    <div id="md-render-area" class="prose prose-invert prose-lg mx-auto font-serif-en markdown-body"></div>
+    <div id="md-render-area" class="markdown-body prose prose-invert prose-lg font-serif-en"></div>
 
-    <div class="mt-16 pt-8 border-t border-slate-800 flex justify-between items-center text-xs uppercase tracking-widest opacity-50">
-      <span>End of Flow Log</span>
-      <span>22abad</span>
+    <div class="mt-12 pt-8 border-t border-slate-800 text-center text-xs tracking-widest opacity-50">
+      End of Flow Log — 22abad
     </div>
   </article>
 
   <div id="error-state" class="hidden text-center mt-12">
-    <p class="text-red-400">Failed to load this entry.</p>
-    <p class="muted">Check the console for details or <a id="fallback-link" class="underline" href="/">return home</a>.</p>
+    <p class="text-red-400 text-lg mb-2">Failed to load this entry.</p>
+    <a href="/" class="underline text-slate-400">← Return Home</a>
   </div>
 </main>
 
 <script>
 (async function(){
-  // CONFIG
   const GITHUB_USERNAME = '22abad';
   const GITHUB_REPO = 'flowStates';
   const POSTS_FOLDER = 'posts';
+  const UPLOADED_MD_PATH = '/mnt/data/250121lawToCS.md';
 
   const loadingEl = document.getElementById('loading');
   const articleEl = document.getElementById('article-content');
+  const errorState = document.getElementById('error-state');
   const mdArea = document.getElementById('md-render-area');
   const titleEnEl = document.getElementById('title-en');
   const titleZhEl = document.getElementById('title-zh');
   const dateEl = document.getElementById('post-date');
   const summaryEl = document.getElementById('post-summary');
-  const rawLink = document.getElementById('rawLink');
-  const errorState = document.getElementById('error-state');
   const toggleBtn = document.getElementById('langToggle');
 
   let isEnglish = true;
   let lastMeta = {};
 
-  function setLanguage(meta){
-    // update title + summary
-    titleEnEl.textContent = meta.title_en || meta.title || 'Untitled';
-    titleZhEl.textContent = meta.title_zh || meta.title || '无标题';
-    summaryEl.textContent = isEnglish ? (meta.summary_en || meta.summary || '') : (meta.summary_zh || meta.summary || '');
-
-    // switch visibility
-    document.querySelectorAll('.content-en').forEach(n=>n.classList.toggle('hidden', !isEnglish));
-    document.querySelectorAll('.content-zh').forEach(n=>n.classList.toggle('hidden', isEnglish));
-
-    toggleBtn.textContent = isEnglish ? 'Switch to 中文' : 'Switch to English';
+  function hardFail(msg){
+    console.error(msg);
+    loadingEl.classList.add("hidden");
+    articleEl.classList.add("hidden");
+    errorState.classList.remove("hidden");
   }
-
-  toggleBtn.addEventListener('click', ()=>{
-    isEnglish = !isEnglish;
-    setLanguage(lastMeta || {});
-  });
 
   function parseFrontMatter(raw){
     const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
     if(!m) return {meta:{}, body:raw};
-    const head = m[1];
+    const lines = m[1].split('\n');
     const meta = {};
-    head.split(/\r?\n/).forEach(line=>{
-      if(!line.trim()) return;
-      const idx = line.indexOf(':');
-      if(idx<0) return;
-      const key = line.slice(0, idx).trim();
-      let val = line.slice(idx+1).trim();
-      if(/^['\"]/.test(val) && /['\"]$/.test(val)) val = val.slice(1,-1);
-      meta[key] = val;
+    lines.forEach(l=>{
+      const i=l.indexOf(':');
+      if(i>0){
+        const k=l.slice(0,i).trim();
+        let v=l.slice(i+1).trim();
+        if(/^['"]/.test(v) && /['"]$/.test(v)) v=v.slice(1,-1);
+        meta[k]=v;
+      }
     });
-    return {meta, body: raw.slice(m[0].length)};
+    return {meta, body:raw.slice(m[0].length)};
   }
 
-  function renderAndSplitMarkdown(md){
-    const rawHtml = marked.parse(md || '');
-    const clean = DOMPurify.sanitize(rawHtml, {USE_PROFILES:{html:true}});
+  function renderMarkdown(md){
+    return DOMPurify.sanitize(marked.parse(md || ''),{USE_PROFILES:{html:true}});
+  }
 
-    const wrapped = clean
-      .replace(/\[EN\]/g, '<div class="content-en">')
-      .replace(/\[ZH\]/g, '<div class="content-zh hidden">')
+  async function fetchWithTimeout(url, timeout=8000){
+    const controller=new AbortController();
+    const id=setTimeout(()=>controller.abort(),timeout);
+    try{
+      const res=await fetch(url,{signal:controller.signal});
+      clearTimeout(id);
+      return res;
+    }catch(e){
+      clearTimeout(id);
+      throw e;
+    }
+  }
+
+  function applyLang(meta){
+    titleEnEl.textContent=meta.title_en||meta.title||'Untitled';
+    titleZhEl.textContent=meta.title_zh||meta.title||'无标题';
+    summaryEl.textContent=isEnglish?(meta.summary_en||''):(meta.summary_zh||'');
+
+    document.querySelectorAll('.content-en').forEach(el=>el.classList.toggle('hidden',!isEnglish));
+    document.querySelectorAll('.content-zh').forEach(el=>el.classList.toggle('hidden',isEnglish));
+
+    toggleBtn.textContent = isEnglish ? "Switch to 中文" : "Switch to English";
+  }
+
+  toggleBtn.addEventListener('click',()=>{
+    isEnglish=!isEnglish;
+    applyLang(lastMeta);
+  });
+
+  async function loadPost(){
+    const params=new URLSearchParams(location.search);
+    const postId=params.get('id');
+    if(!postId) return hardFail("No ID");
+
+    const decoded = decodeURIComponent(postId).replace(/\.(md|markdown)$/i,'');
+
+    const rawUrl=`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${decoded}.md`;
+
+    // 1: GitHub
+    try{
+      const res=await fetchWithTimeout(rawUrl,9000);
+      if(!res.ok) throw new Error("GitHub "+res.status);
+      const text=await res.text();
+      const {meta,body}=parseFrontMatter(text);
+      lastMeta=meta;
+
+      document.title=(meta.title_en||'Untitled')+" | flowstates.me";
+      dateEl.textContent=meta.date||'';
+      mdArea.innerHTML=renderMarkdown(body);
+
+      loadingEl.classList.add("hidden");
+      articleEl.classList.remove("hidden");
+      applyLang(meta);
+      return;
+    }catch(e){ console.warn(e); }
+
+    // 2: Local fallback
+    try{
+      const res2=await fetchWithTimeout(UPLOADED_MD_PATH,4000);
+      if(res2.ok){
+        const text2=await res2.text();
+        const {meta,body}=parseFrontMatter(text2);
+        lastMeta=meta;
+
+        document.title=(meta.title_en||'Untitled')+" | flowstates.me";
+        dateEl.textContent=meta.date||'';
+        mdArea.innerHTML=renderMarkdown(body);
+
+        loadingEl.classList.add("hidden");
+        articleEl.classList.remove("hidden");
+        applyLang(meta);
+        return;
+      }
+    }catch(e){ console.warn(e); }
+
+    // All failed
+    hardFail("Load failed");
+  }
+
+  await loadPost();
+
+  // Canvas
+  const c=document.getElementById('flowCanvas');
+  const ctx=c.getContext('2d');
+  let w=c.width=innerWidth, h=c.height=innerHeight;
+  const pts=Array.from({length:40}).map(()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5}));
+
+  window.addEventListener('resize',()=>{w=c.width=innerWidth;h=c.height=innerHeight;});
+
+  (function draw(){
+    ctx.clearRect(0,0,w,h);
+    ctx.fillStyle='rgba(45,212,191,0.08)';
+    pts.forEach(p=>{
+      p.x+=p.vx; p.y+=p.vy;
+      if(p.x<0)p.x=w; if(p.x>w)p.x=0;
+      if(p.y<0)p.y=h; if(p.y>h)p.y=0;
+      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  })();
+
+})();
+</script>
+
+</body>
+</html>
