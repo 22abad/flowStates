@@ -1,3 +1,4 @@
+```json
 {
     "title_en": "Transition: From Law to Computer Science in a New Country",
     "title_zh": "转变：异国他乡，从法律到计算机",
@@ -5,7 +6,7 @@
     "summary_en": "A deep dive into the journey of shifting careers and adapting to life in Ireland.",
     "summary_zh": "深入探讨职业转变的旅程以及在爱尔兰适应新生活的点滴。"
 }
-
+```
 
 <div class="content-en">
 
@@ -15,7 +16,7 @@ It hasn't been an easy journey. Moving from the structured, precedent-based worl
 
 However, being "new" is not only about all those things above. It relates more to my inner self and my actual feelings. I often find myself questioning my decisions, wondering if I'm on the right path. But then, I solve a complex problem, or finally understand a concept that eluded me for days, and the satisfaction is immense.
 
-The biggest change about me is my attitude to life. It's both because I am on a new land and because I am willingly making those changes.
+> The biggest change about me is my attitude to life. It's both because I am on a new land and because I am willingly making those changes.
 
 This willingness to change is crucial. It's not just about learning Java or Python; it's about learning how to learn again. It's about being humble enough to ask questions and resilient enough to fail repeatedly until the code runs successfully.
 
@@ -33,7 +34,7 @@ Every day is a challenge, but also an opportunity. An opportunity to build somet
 
 然而，“新”不仅仅关于上述外在的一切。它更多地关乎我的内心自我和真实感受。我经常发现自己质疑自己的决定，想知道自己是否走在正确的道路上。但随后，我解决了一个复杂的问题，或者终于理解了一个困扰我几天的概念，那种满足感是巨大的。
 
-我最大的改变是对生活的态度。这既是因为我身处这片新土地，也是因为我发自内心地愿意做出改变。
+> 我最大的改变是对生活的态度。这既是因为我身处这片新土地，也是因为我发自内心地愿意做出改变。
 
 这种改变的意愿至关重要。这不仅仅是学习 Java 或 Python，而是关于重新学习如何学习。它是关于足够谦逊去提问，足够坚韧去一次又一次地失败，直到代码成功运行。
 
@@ -42,3 +43,4 @@ Every day is a challenge, but also an opportunity. An opportunity to build somet
 每一天都是挑战，也是机遇。一个构建事物的机遇，一个解开谜题的机遇，一个创造的机遇。在这片新的土地上，带着这些新的技能，我正在缓慢但坚定地构建一个全新的自己。
 
 </div>
+```
