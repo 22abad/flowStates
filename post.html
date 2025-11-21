@@ -1,164 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title id="page-title">Loading... | flowstates.me</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
-    <style>
-        body { background-color: #0f172a; color: #e2e8f0; overflow-x: hidden; }
-        .font-serif-en { font-family: 'Lora', serif; }
-        .font-serif-cn { font-family: 'Noto Serif SC', serif; }
-        #flowCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
-        .fade-in { animation: fadeIn 1s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* Markdown 样式定制 */
-        .markdown-body { max-width: 700px; margin-left: auto; margin-right: auto; }
-        .markdown-body p { margin-bottom: 1.5em; line-height: 1.8; font-weight: 300; opacity: 0.9; }
-        .markdown-body h1, .markdown-body h2, .markdown-body h3 { color: #2dd4bf; margin-top: 2em; margin-bottom: 1em; font-weight: 600; }
-        .markdown-body blockquote { border-left: 3px solid #2dd4bf; padding-left: 1rem; font-style: italic; opacity: 0.8; background: rgba(255,255,255,0.03); padding: 1rem; border-radius: 0 8px 8px 0; }
-        .markdown-body code { font-family: monospace; background: rgba(0,0,0,0.3); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em; color: #a5f3fc; }
-        .markdown-body pre { background: #1e293b; padding: 1em; border-radius: 8px; overflow-x: auto; margin-bottom: 1.5em; }
-        .markdown-body pre code { background: none; padding: 0; color: #e2e8f0; }
-    </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title id="page-title">Loading... | flowstates.me</title>
+  <meta name="description" content="Flowstates — personal logs and short essays." />
+  <meta name="theme-color" content="#0f172a" />
+
+  <!-- Tailwind + marked + DOMPurify -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
+
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f172a;--muted:#94a3b8}
+    body{background:var(--bg);color:#e2e8f0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,'Lora',serif;margin:0}
+    .font-serif-en{font-family:'Lora',serif}
+    .font-serif-cn{font-family:'Noto Serif SC',serif}
+    #flowCanvas{position:fixed;inset:0;width:100%;height:100%;z-index:-1;opacity:0.45}
+    .fade-in{animation:fadeIn .9s ease-out both}
+    @keyframes fadeIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+    /* Markdown styling */
+    .markdown-body{max-width:740px;margin:0 auto}
+    .markdown-body p{margin-bottom:1.4em;line-height:1.75;opacity:.94}
+    .markdown-body h1,.markdown-body h2,.markdown-body h3{color:#2dd4bf;margin-top:1.6em;margin-bottom:.5em}
+    .markdown-body blockquote{border-left:3px solid #2dd4bf;padding:1rem;background:rgba(255,255,255,0.02);border-radius:0 6px 6px 0}
+    .markdown-body code{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,monospace;background:rgba(0,0,0,0.35);padding:.15em .35em;border-radius:4px;color:#a5f3fc}
+    .markdown-body pre{background:#0b1220;padding:1rem;border-radius:8px;overflow:auto}
+
+    .muted{color:var(--muted)}
+    a.post-link{color:inherit;text-decoration:none}
+  </style>
 </head>
 <body class="antialiased selection:bg-teal-500 selection:text-white pb-20">
 
-    <canvas id="flowCanvas"></canvas>
+<canvas id="flowCanvas" aria-hidden="true"></canvas>
 
-    <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
-        <a href="/" class="text-lg font-bold tracking-widest text-teal-400 hover:text-white transition">← FLOWSTATES.ME</a>
-        <button id="langToggle" class="px-4 py-1 border border-slate-600 rounded-full text-xs hover:bg-slate-800 transition uppercase tracking-wide">Switch to 中文</button>
-    </nav>
+<nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-800">
+  <a href="/" class="text-lg font-bold tracking-widest text-teal-400 hover:text-white transition">← FLOWSTATES.ME</a>
+  <div class="flex items-center gap-3">
+    <a id="rawLink" class="text-xs muted" href="#" target="_blank" rel="noopener">raw</a>
+    <button id="langToggle" class="px-4 py-1 border border-slate-600 rounded-full text-xs hover:bg-slate-800 transition uppercase tracking-wide">Switch to 中文</button>
+  </div>
+</nav>
 
-    <main class="mt-32 px-4 sm:px-0 max-w-2xl mx-auto fade-in">
-        <div id="loading" class="text-center opacity-50 italic">Retrieving memory...</div>
-        
-        <article id="article-content" class="hidden">
-            <header class="mb-12 text-center">
-                <div id="post-date" class="text-teal-500 text-xs uppercase tracking-[0.2em] mb-4"></div>
-                <h1 class="text-3xl sm:text-4xl font-bold leading-tight text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-400">
-                    <span id="title-en" class="content-en font-serif-en block"></span>
-                    <span id="title-zh" class="content-zh hidden font-serif-cn block"></span>
-                </h1>
-            </header>
+<main class="mt-32 px-4 sm:px-0 max-w-3xl mx-auto fade-in">
+  <div id="loading" class="text-center opacity-50 italic">Retrieving memory...</div>
 
-            <div id="md-render-area" class="prose prose-invert prose-lg mx-auto font-serif-en markdown-body">
-                <!-- Markdown 内容将注入这里 -->
-            </div>
-            
-            <div class="mt-20 pt-8 border-t border-slate-800 flex justify-between items-center text-xs uppercase tracking-widest opacity-50">
-                <span>End of Flow Log</span>
-                <span>22abad</span>
-            </div>
-        </article>
-    </main>
+  <article id="article-content" class="hidden">
+    <header class="mb-8 text-center">
+      <div id="post-date" class="text-teal-400 text-xs uppercase tracking-[0.2em] mb-3"></div>
+      <h1 class="text-3xl sm:text-4xl font-bold leading-tight">
+        <span id="title-en" class="content-en font-serif-en block"></span>
+        <span id="title-zh" class="content-zh hidden font-serif-cn block"></span>
+      </h1>
+      <p id="post-summary" class="muted text-sm mt-3"></p>
+    </header>
 
-    <script>
-    (async function() {
-        const GITHUB_USERNAME = '22abad';
-        const GITHUB_REPO = 'flowStates';
-        const POSTS_FOLDER = 'posts';
+    <div id="md-render-area" class="prose prose-invert prose-lg mx-auto font-serif-en markdown-body"></div>
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const postId = urlParams.get('id');
+    <div class="mt-16 pt-8 border-t border-slate-800 flex justify-between items-center text-xs uppercase tracking-widest opacity-50">
+      <span>End of Flow Log</span>
+      <span>22abad</span>
+    </div>
+  </article>
 
-        if (!postId) { window.location.href = '/'; return; }
+  <div id="error-state" class="hidden text-center mt-12">
+    <p class="text-red-400">Failed to load this entry.</p>
+    <p class="muted">Check the console for details or <a id="fallback-link" class="underline" href="/">return home</a>.</p>
+  </div>
+</main>
 
-        const toggleBtn = document.getElementById('langToggle');
-        let isEnglish = true;
+<script>
+(async function(){
+  // CONFIG
+  const GITHUB_USERNAME = '22abad';
+  const GITHUB_REPO = 'flowStates';
+  const POSTS_FOLDER = 'posts';
 
-        function updateLanguage(meta) {
-            const en = document.querySelectorAll('.content-en');
-            const zh = document.querySelectorAll('.content-zh');
-            
-            // 确保标题也切换
-            document.getElementById('title-en').innerText = meta.title_en;
-            document.getElementById('title-zh').innerText = meta.title_zh;
-            
-            if (isEnglish) {
-                zh.forEach(el => el.classList.add('hidden'));
-                en.forEach(el => el.classList.remove('hidden'));
-                toggleBtn.textContent = 'Switch to 中文';
-            } else {
-                en.forEach(el => el.classList.add('hidden'));
-                zh.forEach(el => el.classList.remove('hidden'));
-                toggleBtn.textContent = 'Switch to English';
-            }
-        }
+  const loadingEl = document.getElementById('loading');
+  const articleEl = document.getElementById('article-content');
+  const mdArea = document.getElementById('md-render-area');
+  const titleEnEl = document.getElementById('title-en');
+  const titleZhEl = document.getElementById('title-zh');
+  const dateEl = document.getElementById('post-date');
+  const summaryEl = document.getElementById('post-summary');
+  const rawLink = document.getElementById('rawLink');
+  const errorState = document.getElementById('error-state');
+  const toggleBtn = document.getElementById('langToggle');
 
-        // --- Fetch and Render Logic ---
-        try {
-            // 1. 解码文件名，防止中文名乱码
-            const decodedPostId = decodeURIComponent(postId);
-            
-            // 2. 从 GitHub Raw User Content 获取 Markdown 文件
-            const mdUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${decodedPostId}.md`;
-            const mdRes = await fetch(mdUrl);
-            
-            if (!mdRes.ok) throw new Error('Post not found: ' + mdRes.status);
-            
-            let mdText = await mdRes.text();
+  let isEnglish = true;
+  let lastMeta = {};
 
-            // 3. 解析元数据 (Front Matter KV)
-            // 修正：匹配以 --- 开头和结尾的块，提取键值对
-            const match = mdText.match(/^---\s*([\s\S]*?)\s*---/);
-            let meta = { title_en: 'Untitled', title_zh: '无标题', date: 'Unknown Date' };
-            
-            if (match) {
-                const lines = match[1].split('\n');
-                lines.forEach(line => {
-                    const colonIndex = line.indexOf(':');
-                    if (colonIndex > 0) {
-                        const key = line.substring(0, colonIndex).trim();
-                        let value = line.substring(colonIndex + 1).trim().replace(/^['"]|['"]$/g, '');
-                        meta[key] = value;
-                    }
-                });
-                // 移除头部元数据，只保留后面的 Markdown
-                mdText = mdText.replace(match[0], ''); 
-            }
+  function setLanguage(meta){
+    // update title + summary
+    titleEnEl.textContent = meta.title_en || meta.title || 'Untitled';
+    titleZhEl.textContent = meta.title_zh || meta.title || '无标题';
+    summaryEl.textContent = isEnglish ? (meta.summary_en || meta.summary || '') : (meta.summary_zh || meta.summary || '');
 
-            // 4. 渲染内容
-            document.getElementById('page-title').innerText = `${meta.title_en} | flowstates.me`;
-            document.getElementById('post-date').innerText = meta.date || 'Unknown Date';
-            document.getElementById('md-render-area').innerHTML = marked.parse(mdText);
+    // switch visibility
+    document.querySelectorAll('.content-en').forEach(n=>n.classList.toggle('hidden', !isEnglish));
+    document.querySelectorAll('.content-zh').forEach(n=>n.classList.toggle('hidden', isEnglish));
 
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('article-content').classList.remove('hidden');
-            
-            // 5. 初始化语言切换
-            updateLanguage(meta);
-            toggleBtn.addEventListener('click', () => updateLanguage(meta));
+    toggleBtn.textContent = isEnglish ? 'Switch to 中文' : 'Switch to English';
+  }
 
-        } catch (err) {
-            document.getElementById('loading').innerText = "Error Loading Post. Check console.";
-            console.error(err);
-        }
+  toggleBtn.addEventListener('click', ()=>{
+    isEnglish = !isEnglish;
+    setLanguage(lastMeta || {});
+  });
 
-        // 6. Canvas 动画
-        const canvas = document.getElementById('flowCanvas');
-        const ctx = canvas.getContext('2d');
-        let w, h, particles = [];
-        function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-        function anim() {
-            ctx.clearRect(0, 0, w, h);
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if(p.x < 0) p.x = w; if(p.x > w) p.x = 0;
-                if(p.y < 0) p.y = h; if(p.y > h) p.y = 0;
-                ctx.fillStyle = 'rgba(94, 234, 212, 0.15)';
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
-            });
-            requestAnimationFrame(anim);
-        }
-        window.addEventListener('resize', resize); resize();
-        for(let i=0; i<40; i++) particles.push({x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, s:Math.random()*2});
-        anim();
-    })();
-    </script>
-</body>
-</html>
+  function parseFrontMatter(raw){
+    const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
+    if(!m) return {meta:{}, body:raw};
+    const head = m[1];
+    const meta = {};
+    head.split(/\r?\n/).forEach(line=>{
+      if(!line.trim()) return;
+      const idx = line.indexOf(':');
+      if(idx<0) return;
+      const key = line.slice(0, idx).trim();
+      let val = line.slice(idx+1).trim();
+      if(/^['\"]/.test(val) && /['\"]$/.test(val)) val = val.slice(1,-1);
+      meta[key] = val;
+    });
+    return {meta, body: raw.slice(m[0].length)};
+  }
+
+  function renderAndSplitMarkdown(md){
+    const rawHtml = marked.parse(md || '');
+    const clean = DOMPurify.sanitize(rawHtml, {USE_PROFILES:{html:true}});
+
+    const wrapped = clean
+      .replace(/\[EN\]/g, '<div class="content-en">')
+      .replace(/\[ZH\]/g, '<div class="content-zh hidden">')

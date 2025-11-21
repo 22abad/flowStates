@@ -1,205 +1,186 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flow States | flowstates.me</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #0f172a; color: #e2e8f0; overflow-x: hidden; }
+        :root{--bg:#0f172a;--muted:#94a3b8}
+        body { background-color: var(--bg); color: #e2e8f0; overflow-x: hidden; }
         .font-serif-en { font-family: 'Lora', serif; }
         .font-serif-cn { font-family: 'Noto Serif SC', serif; }
-        #flowCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6; }
-        .fade-in { animation: fadeIn 1.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        #flowCanvas { position: fixed; inset:0; width:100%; height:100%; z-index:-1; opacity:0.6; }
+        .fade-in { animation: fadeIn 1.2s ease-out both; }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:none} }
+        a.post { text-decoration: none; }
     </style>
 </head>
 <body class="antialiased selection:bg-teal-500 selection:text-white">
 
-    <canvas id="flowCanvas"></canvas>
+<canvas id="flowCanvas" aria-hidden="true"></canvas>
 
-    <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-sm bg-slate-900/30">
-        <div class="text-xl font-bold tracking-widest opacity-90 hover:text-teal-300 transition cursor-pointer" onclick="window.location.reload()">
-            flowstates.me
+<nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-sm bg-slate-900/30">
+    <div class="text-xl font-bold tracking-widest opacity-90 hover:text-teal-300 transition cursor-pointer" onclick="window.location.reload()">flowstates.me</div>
+    <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-teal-900/50 hover:border-teal-400 transition uppercase tracking-wide">SWITCH TO 中文</button>
+</nav>
+
+<main class="min-h-screen flex flex-col justify-center items-center px-4 sm:px-0 py-20 relative z-10">
+    <article class="max-w-2xl w-full fade-in mb-20">
+        <h1 class="text-5xl sm:text-6xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-blue-200">
+            <span class="content-en font-serif-en">Flow States</span>
+            <span class="content-zh hidden font-serif-cn">心流时刻</span>
+        </h1>
+        <div class="text-center space-y-6 text-lg sm:text-xl opacity-80 font-light max-w-lg mx-auto">
+            <p class="content-en font-serif-en">A digital garden dedicated to capturing the fleeting moments of absolute clarity and creation.</p>
+            <p class="content-zh hidden font-serif-cn">一座数字花园，致力于捕捉那些绝对清醒与创造力的稍纵即逝的时刻。</p>
         </div>
-        <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-teal-900/50 hover:border-teal-400 transition uppercase tracking-wide">
-            SWITCH TO 中文
-        </button>
-    </nav>
+    </article>
 
-    <main class="min-h-screen flex flex-col justify-center items-center px-4 sm:px-0 py-20 relative z-10">
-        <article class="max-w-2xl w-full fade-in mb-20">
-            <h1 class="text-5xl sm:text-6xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-blue-200">
-                <span class="content-en font-serif-en">Flow States</span>
-                <span class="content-zh hidden font-serif-cn">心流时刻</span>
-            </h1>
-            <div class="text-center space-y-6 text-lg sm:text-xl opacity-80 font-light max-w-lg mx-auto">
-                <p class="content-en font-serif-en">A digital garden dedicated to capturing the fleeting moments of absolute clarity and creation.</p>
-                <p class="content-zh hidden font-serif-cn">一座数字花园，致力于捕捉那些绝对清醒与创造力的稍纵即逝的时刻。</p>
-            </div>
-        </article>
+    <section id="blog-section" class="max-w-2xl w-full fade-in border-t border-slate-800 pt-10">
+        <h2 class="text-xs uppercase tracking-[0.2em] text-teal-500 mb-8 text-center">
+            <span class="content-en">Flow Logs</span>
+            <span class="content-zh hidden">心流日志</span>
+        </h2>
+        <div id="post-list" class="space-y-6">
+            <div class="text-center opacity-50 text-sm italic">Connecting to GitHub...</div>
+        </div>
+    </section>
+</main>
 
-        <!-- 动态博客列表区域 -->
-        <section id="blog-section" class="max-w-2xl w-full fade-in border-t border-slate-800 pt-10">
-            <h2 class="text-xs uppercase tracking-[0.2em] text-teal-500 mb-8 text-center">
-                <span class="content-en">Flow Logs</span>
-                <span class="content-zh hidden">心流日志</span>
-            </h2>
-            <div id="post-list" class="space-y-6">
-                <div class="text-center opacity-50 text-sm italic">Connecting to GitHub...</div>
-            </div>
-        </section>
-    </main>
+<footer class="fixed bottom-6 w-full text-center opacity-40 text-xs uppercase tracking-widest pointer-events-none">22abad @ Ireland</footer>
 
-    <footer class="fixed bottom-6 w-full text-center opacity-40 text-xs uppercase tracking-widest pointer-events-none">
-        22abad @ Ireland
-    </footer>
+<script>
+(function(){
+    // CONFIG - update to your repo if needed
+    const GITHUB_USERNAME = '22abad';
+    const GITHUB_REPO = 'flowStates';
+    const POSTS_FOLDER = 'posts';
 
-    <script>
-    (function() {
-        // 配置：你的 GitHub 用户名和仓库名
-        const GITHUB_USERNAME = '22abad'; 
-        const GITHUB_REPO = 'flowStates'; 
-        const POSTS_FOLDER = 'posts'; 
+    // i18n state
+    const toggleBtn = document.getElementById('langToggle');
+    let isEnglish = true;
+    function updateLang() {
+        document.querySelectorAll('.content-en').forEach(el => el.classList.toggle('hidden', !isEnglish));
+        document.querySelectorAll('.content-zh').forEach(el => el.classList.toggle('hidden', isEnglish));
+        toggleBtn.textContent = isEnglish ? 'SWITCH TO 中文' : 'SWITCH TO ENGLISH';
+    }
+    toggleBtn.addEventListener('click', ()=>{ isEnglish = !isEnglish; updateLang(); });
 
-        // 1. 语言切换逻辑
-        const toggleBtn = document.getElementById('langToggle');
-        let isEnglish = true;
-
-        function updateLang() {
-            const enEls = document.querySelectorAll('.content-en');
-            const zhEls = document.querySelectorAll('.content-zh');
-            if (isEnglish) {
-                zhEls.forEach(el => el.classList.add('hidden'));
-                enEls.forEach(el => el.classList.remove('hidden'));
-                toggleBtn.textContent = 'SWITCH TO 中文';
-            } else {
-                enEls.forEach(el => el.classList.add('hidden'));
-                zhEls.forEach(el => el.classList.remove('hidden'));
-                toggleBtn.textContent = 'SWITCH TO ENGLISH';
+    // Robust simple front-matter parser (key: value lines). Returns {meta, body}
+    function parseFrontMatter(raw){
+        const result = {meta:{}, body: raw};
+        const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
+        if(!m) return result;
+        const head = m[1];
+        head.split(/\r?\n/).forEach(line=>{
+            const idx = line.indexOf(':');
+            if(idx>-1){
+                const key = line.slice(0, idx).trim();
+                let val = line.slice(idx+1).trim();
+                if(/^['"].*['"]$/.test(val)) val = val.slice(1,-1);
+                result.meta[key] = val;
             }
-        }
-
-        toggleBtn.addEventListener('click', () => {
-            isEnglish = !isEnglish;
-            updateLang();
         });
+        result.body = raw.slice(m[0].length);
+        return result;
+    }
 
-        // 2. 简易 Front Matter (YAML/KV) 解析器
-        function parseFrontMatter(text) {
-            // 匹配以 --- 开头和结尾的块，提取键值对
-            const match = text.match(/^---\s*([\s\S]*?)\s*---/);
-            const meta = { date: 'Unknown', summary_en: 'No summary.', summary_zh: '暂无简介。' };
+    // Sanitize simple text for textContent (we avoid innerHTML for user content)
+    function createPostCard(post){
+        const a = document.createElement('a');
+        const id = encodeURIComponent(post.filename.replace(/\.md$/i,''));
+        a.href = `post.html?id=${id}`;
+        a.className = 'post block group p-6 rounded-lg hover:bg-slate-800/50 transition border border-transparent hover:border-slate-700';
 
-            if (match) {
-                const lines = match[1].split('\n');
-                lines.forEach(line => {
-                    // 修正解析逻辑，只看第一个冒号，后面全部视为值
-                    const colonIndex = line.indexOf(':');
-                    if (colonIndex > 0) {
-                        const key = line.substring(0, colonIndex).trim();
-                        let value = line.substring(colonIndex + 1).trim();
-                        // 移除包裹在值外部的引号
-                        value = value.replace(/^['"]|['"]$/g, '');
-                        meta[key] = value;
-                    }
-                });
-            }
-            return meta;
-        }
+        const top = document.createElement('div');
+        top.className = 'flex justify-between items-baseline mb-2';
 
-        // 3. 动态获取 GitHub 文件列表并解析 Front Matter
-        async function loadPosts() {
-            const listContainer = document.getElementById('post-list');
-            try {
-                const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${POSTS_FOLDER}`;
-                const response = await fetch(apiUrl);
-                
-                if (!response.ok) {
-                     throw new Error('Repo Private or Content Not Found');
-                }
-                
-                const files = await response.json();
-                const mdFiles = files.filter(file => file.name.endsWith('.md'));
+        const h3 = document.createElement('h3');
+        h3.className = 'text-xl font-serif-en group-hover:text-teal-300 transition';
 
-                if (mdFiles.length === 0) {
-                    listContainer.innerHTML = '<div class="text-center opacity-50">No logs found yet.</div>';
-                    return;
-                }
+        const enSpan = document.createElement('span'); enSpan.className = 'content-en font-serif-en'; enSpan.textContent = post.title_en || post.filename.replace(/\.md$/i,'');
+        const zhSpan = document.createElement('span'); zhSpan.className = 'content-zh hidden font-serif-cn'; zhSpan.textContent = post.title_zh || post.title_en || post.filename.replace(/\.md$/i,'');
+        h3.appendChild(enSpan); h3.appendChild(zhSpan);
 
-                listContainer.innerHTML = ''; // 清空 Loading 提示
+        const date = document.createElement('span'); date.className = 'text-xs font-mono opacity-50 whitespace-nowrap ml-4'; date.textContent = post.date || '';
+        top.appendChild(h3); top.appendChild(date);
 
-                const postsData = await Promise.all(mdFiles.map(async (file) => {
-                    const contentRes = await fetch(file.download_url);
-                    const text = await contentRes.text();
-                    
-                    const meta = parseFrontMatter(text);
+        const p = document.createElement('p'); p.className = 'text-sm opacity-60 font-light leading-relaxed';
+        const pEn = document.createElement('span'); pEn.className = 'content-en'; pEn.textContent = post.summary_en || '';
+        const pZh = document.createElement('span'); pZh.className = 'content-zh hidden'; pZh.textContent = post.summary_zh || '';
+        p.appendChild(pEn); p.appendChild(pZh);
 
-                    return { 
-                        ...meta, 
-                        // 如果 meta 里没有标题，使用文件名作为默认标题
-                        title_en: meta.title_en || file.name.replace('.md', ''),
-                        title_zh: meta.title_zh || file.name.replace('.md', ''),
-                        filename: file.name 
+        a.appendChild(top); a.appendChild(p);
+        return a;
+    }
+
+    async function loadPosts(){
+        const listContainer = document.getElementById('post-list');
+        try{
+            const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${POSTS_FOLDER}`;
+            const res = await fetch(apiUrl);
+            if(!res.ok) throw new Error(res.status + ' ' + res.statusText);
+            const files = await res.json();
+            const mdFiles = files.filter(f=>/\.md$/i.test(f.name));
+            if(mdFiles.length===0){ listContainer.innerHTML = '<div class="text-center opacity-50">No logs found yet.</div>'; return; }
+            listContainer.innerHTML = '';
+
+            // Fetch each file (download_url) and parse front matter
+            const posts = await Promise.all(mdFiles.map(async f=>{
+                try{
+                    const txtRes = await fetch(f.download_url);
+                    if(!txtRes.ok) throw new Error('Failed to download '+f.name);
+                    const text = await txtRes.text();
+                    const parsed = parseFrontMatter(text);
+                    const meta = parsed.meta || {};
+                    // normalize known fields
+                    return {
+                        filename: f.name,
+                        title_en: meta.title_en || meta.title || f.name.replace(/\.md$/,''),
+                        title_zh: meta.title_zh || meta.title || '',
+                        date: meta.date || meta.date_en || '',
+                        summary_en: meta.summary_en || meta.summary || '',
+                        summary_zh: meta.summary_zh || ''
                     };
-                }));
+                }catch(e){
+                    console.warn('Skipping', f.name, e);
+                    return { filename: f.name, title_en: f.name.replace(/\.md$/,'') };
+                }
+            }));
 
-                // 按日期倒序排列 (新的在前)
-                postsData.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                // 渲染列表
-                postsData.forEach(post => {
-                    const item = document.createElement('a');
-                    const encodedFilename = encodeURIComponent(post.filename.replace('.md', ''));
-                    item.href = `post.html?id=${encodedFilename}`; 
-                    item.className = "block group p-6 rounded-lg hover:bg-slate-800/50 transition border border-transparent hover:border-slate-700";
-                    item.innerHTML = `
-                        <div class="flex justify-between items-baseline mb-2">
-                            <h3 class="text-xl font-serif-en group-hover:text-teal-300 transition">
-                                <span class="content-en">${post.title_en}</span>
-                                <span class="content-zh hidden">${post.title_zh}</span>
-                            </h3>
-                            <span class="text-xs font-mono opacity-50 whitespace-nowrap ml-4">${post.date}</span>
-                        </div>
-                        <p class="text-sm opacity-60 font-light leading-relaxed">
-                            <span class="content-en">${post.summary_en}</span>
-                            <span class="content-zh hidden">${post.summary_zh}</span>
-                        </p>
-                    `;
-                    listContainer.appendChild(item);
-                });
-
-                updateLang();
-
-            } catch (error) {
-                console.error(error);
-                listContainer.innerHTML = `<div class="text-center text-red-400 text-sm py-10">Failed to load from GitHub.<br><span class="text-xs opacity-50">${error.message}. Please check if the GitHub Repo (${GITHUB_REPO}) is Public.</span></div>`;
-            }
-        }
-
-        // 4. Canvas 动画 (保持不变)
-        const canvas = document.getElementById('flowCanvas');
-        const ctx = canvas.getContext('2d');
-        let w, h, particles = [];
-        function resize() { w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
-        function anim() {
-            ctx.clearRect(0, 0, w, h);
-            particles.forEach(p => {
-                p.x += p.vx; p.y += p.vy;
-                if(p.x < 0) p.x = w; if(p.x > w) p.x = 0;
-                if(p.y < 0) p.y = h; if(p.y > h) p.y = 0;
-                ctx.fillStyle = 'rgba(94, 234, 212, 0.15)';
-                ctx.beginPath(); ctx.arc(p.x, p.y, p.s, 0, Math.PI*2); ctx.fill();
+            // sort by date if possible, newest first; fallback to filename
+            posts.sort((a,b)=>{
+                const da = a.date ? Date.parse(a.date) : 0;
+                const db = b.date ? Date.parse(b.date) : 0;
+                return (db - da) || a.filename.localeCompare(b.filename);
             });
-            requestAnimationFrame(anim);
+
+            posts.forEach(p=> listContainer.appendChild(createPostCard(p)));
+            updateLang();
+
+        }catch(err){
+            console.error(err);
+            listContainer.innerHTML = `<div class="text-center text-red-400 text-sm py-10">Failed to load from GitHub.<br><span class="text-xs opacity-50">${escapeHtml(err.message || String(err))}. Please check repo visibility or network.</span></div>`;
         }
-        window.addEventListener('resize', resize); resize();
-        for(let i=0; i<40; i++) particles.push({x:Math.random()*w, y:Math.random()*h, vx:(Math.random()-0.5)*0.2, vy:(Math.random()-0.5)*0.2, s:Math.random()*2});
-        anim();
-        
-        loadPosts();
-    })();
-    </script>
+    }
+
+    // small helper to escape for insertion into innerHTML in error cases
+    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    // Canvas (lightweight background animation)
+    const canvas = document.getElementById('flowCanvas');
+    const ctx = canvas.getContext && canvas.getContext('2d');
+    let w,h,particles=[];
+    function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
+    function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(94,234,212,0.12)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
+    if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
+
+    // initialize
+    loadPosts();
+    updateLang();
+})();
+</script>
 </body>
 </html>
