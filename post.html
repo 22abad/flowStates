@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title id="page-title">Loading... | flowstates.me</title>
-  <meta name="description" content="Flowstates — personal logs and short essays." />
+  <meta name="description" content="Flowstates — personal logs and essays." />
   <meta name="theme-color" content="#0f172a" />
 
   <script src="https://cdn.tailwindcss.com"></script>
@@ -14,27 +14,29 @@
   <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
 
   <style>
-    body { background:#0f172a; color:#e2e8f0; margin:0; }
+    :root{--bg:#0f172a;--muted:#94a3b8}
+    body{background:var(--bg);color:#e2e8f0;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Lora',serif}
     .font-serif-en{font-family:'Lora',serif}
     .font-serif-cn{font-family:'Noto Serif SC',serif}
     #flowCanvas{position:fixed;inset:0;z-index:-1;opacity:.4}
     .fade-in{animation:fadeIn .8s ease-out both}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-
     .markdown-body{max-width:740px;margin:0 auto}
     .markdown-body p{margin-bottom:1.4em;line-height:1.75}
     .markdown-body h1,.markdown-body h2,.markdown-body h3{color:#2dd4bf;margin-top:1.6em;margin-bottom:.6em;}
     .markdown-body blockquote{border-left:3px solid #2dd4bf;padding:1rem;background:rgba(255,255,255,0.04);border-radius:0 6px 6px 0;}
-    .markdown-body pre{background:#0b1220;padding:1rem;border-radius:8px;overflow:auto;}
+    .hidden{display:none !important}
   </style>
 </head>
-
 <body class="pb-20 antialiased">
-<canvas id="flowCanvas"></canvas>
+<canvas id="flowCanvas" aria-hidden="true"></canvas>
 
 <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/70 backdrop-blur border-b border-slate-800">
   <a href="/" class="text-lg font-bold tracking-widest text-teal-400">← FLOWSTATES.ME</a>
-  <button id="langToggle" class="px-4 py-1 text-xs border border-slate-600 rounded-full">Switch to 中文</button>
+  <div class="flex items-center gap-3">
+    <a id="rawLink" class="text-xs" href="#" target="_blank" rel="noopener">raw</a>
+    <button id="langToggle" class="px-4 py-1 text-xs border border-slate-600 rounded-full">Switch to 中文</button>
+  </div>
 </nav>
 
 <main class="mt-32 px-4 max-w-3xl mx-auto fade-in">
@@ -70,6 +72,7 @@
   const POSTS_FOLDER = 'posts';
   const UPLOADED_MD_PATH = '/mnt/data/250121lawToCS.md';
 
+  // DOM
   const loadingEl = document.getElementById('loading');
   const articleEl = document.getElementById('article-content');
   const errorState = document.getElementById('error-state');
@@ -78,10 +81,19 @@
   const titleZhEl = document.getElementById('title-zh');
   const dateEl = document.getElementById('post-date');
   const summaryEl = document.getElementById('post-summary');
+  const rawLink = document.getElementById('rawLink');
   const toggleBtn = document.getElementById('langToggle');
 
   let isEnglish = true;
   let lastMeta = {};
+
+  function wrapLangSections(html){
+    // Replace markers [EN], [ZH], [END] in the rendered HTML (after markdown -> HTML)
+    return html
+      .replace(/\[EN\]/g, '<div class="content-en">')
+      .replace(/\[ZH\]/g, '<div class="content-zh hidden">')
+      .replace(/\[END\]/g, '</div>');
+  }
 
   function hardFail(msg){
     console.error(msg);
@@ -93,29 +105,32 @@
   function parseFrontMatter(raw){
     const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
     if(!m) return {meta:{}, body:raw};
-    const lines = m[1].split('\n');
+    const lines = m[1].split(/\r?\n/);
     const meta = {};
     lines.forEach(l=>{
-      const i=l.indexOf(':');
+      const i = l.indexOf(':');
       if(i>0){
-        const k=l.slice(0,i).trim();
-        let v=l.slice(i+1).trim();
-        if(/^['"]/.test(v) && /['"]$/.test(v)) v=v.slice(1,-1);
+        const k = l.slice(0,i).trim();
+        let v = l.slice(i+1).trim();
+        if(/^['"]/.test(v) && /['"]$/.test(v)) v = v.slice(1,-1);
         meta[k]=v;
       }
     });
-    return {meta, body:raw.slice(m[0].length)};
+    return {meta, body: raw.slice(m[0].length)};
   }
 
   function renderMarkdown(md){
-    return DOMPurify.sanitize(marked.parse(md || ''),{USE_PROFILES:{html:true}});
+    // Convert markdown to HTML, then wrap [EN]/[ZH]/[END] tokens into language containers, then sanitize.
+    const rawHtml = marked.parse(md || '');
+    const wrapped = wrapLangSections(rawHtml);
+    return DOMPurify.sanitize(wrapped, {USE_PROFILES:{html:true}});
   }
 
   async function fetchWithTimeout(url, timeout=8000){
-    const controller=new AbortController();
-    const id=setTimeout(()=>controller.abort(),timeout);
+    const controller = new AbortController();
+    const id = setTimeout(()=>controller.abort(), timeout);
     try{
-      const res=await fetch(url,{signal:controller.signal});
+      const res = await fetch(url, {signal: controller.signal});
       clearTimeout(id);
       return res;
     }catch(e){
@@ -125,93 +140,101 @@
   }
 
   function applyLang(meta){
-    titleEnEl.textContent=meta.title_en||meta.title||'Untitled';
-    titleZhEl.textContent=meta.title_zh||meta.title||'无标题';
-    summaryEl.textContent=isEnglish?(meta.summary_en||''):(meta.summary_zh||'');
+    titleEnEl.textContent = meta.title_en || meta.title || 'Untitled';
+    titleZhEl.textContent = meta.title_zh || meta.title || '无标题';
+    summaryEl.textContent = isEnglish ? (meta.summary_en || '') : (meta.summary_zh || '');
 
-    document.querySelectorAll('.content-en').forEach(el=>el.classList.toggle('hidden',!isEnglish));
-    document.querySelectorAll('.content-zh').forEach(el=>el.classList.toggle('hidden',isEnglish));
+    document.querySelectorAll('.content-en').forEach(el=>el.classList.toggle('hidden', !isEnglish));
+    document.querySelectorAll('.content-zh').forEach(el=>el.classList.toggle('hidden', isEnglish));
 
-    toggleBtn.textContent = isEnglish ? "Switch to 中文" : "Switch to English";
+    toggleBtn.textContent = isEnglish ? 'Switch to 中文' : 'Switch to English';
   }
 
-  toggleBtn.addEventListener('click',()=>{
-    isEnglish=!isEnglish;
-    applyLang(lastMeta);
-  });
+  toggleBtn.addEventListener('click', ()=>{ isEnglish = !isEnglish; applyLang(lastMeta); });
 
   async function loadPost(){
-    const params=new URLSearchParams(location.search);
-    const postId=params.get('id');
-    if(!postId) return hardFail("No ID");
+    const params = new URLSearchParams(location.search);
+    const postId = params.get('id');
+    if(!postId) return hardFail('No post id provided');
 
-    const decoded = decodeURIComponent(postId).replace(/\.(md|markdown)$/i,'');
+    const decoded = decodeURIComponent(postId).replace(/\.(md|markdown)$/i, '');
+    const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${decoded}.md`;
 
-    const rawUrl=`https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${decoded}.md`;
+    rawLink.href = rawUrl;
+    rawLink.textContent = 'raw';
 
-    // 1: GitHub
+    // Try GitHub raw
     try{
-      const res=await fetchWithTimeout(rawUrl,9000);
-      if(!res.ok) throw new Error("GitHub "+res.status);
-      const text=await res.text();
-      const {meta,body}=parseFrontMatter(text);
-      lastMeta=meta;
+      const res = await fetchWithTimeout(rawUrl, 9000);
+      if(!res.ok) throw new Error('GitHub returned ' + res.status);
+      const text = await res.text();
+      const {meta, body} = parseFrontMatter(text);
+      lastMeta = meta;
 
-      document.title=(meta.title_en||'Untitled')+" | flowstates.me";
-      dateEl.textContent=meta.date||'';
-      mdArea.innerHTML=renderMarkdown(body);
+      document.title = (meta.title_en || meta.title || 'Untitled') + ' | flowstates.me';
+      dateEl.textContent = meta.date || '';
+      mdArea.innerHTML = renderMarkdown(body);
 
-      loadingEl.classList.add("hidden");
-      articleEl.classList.remove("hidden");
+      loadingEl.classList.add('hidden');
+      articleEl.classList.remove('hidden');
       applyLang(meta);
       return;
-    }catch(e){ console.warn(e); }
+    }catch(e){
+      console.warn('GitHub fetch failed', e);
+    }
 
-    // 2: Local fallback
+    // Try local uploaded path (may not be accessible in browser)
     try{
-      const res2=await fetchWithTimeout(UPLOADED_MD_PATH,4000);
+      const res2 = await fetchWithTimeout(UPLOADED_MD_PATH, 4000);
       if(res2.ok){
-        const text2=await res2.text();
-        const {meta,body}=parseFrontMatter(text2);
-        lastMeta=meta;
+        const text2 = await res2.text();
+        const {meta, body} = parseFrontMatter(text2);
+        lastMeta = meta;
 
-        document.title=(meta.title_en||'Untitled')+" | flowstates.me";
-        dateEl.textContent=meta.date||'';
-        mdArea.innerHTML=renderMarkdown(body);
+        document.title = (meta.title_en || meta.title || 'Untitled') + ' | flowstates.me';
+        dateEl.textContent = meta.date || '';
+        rawLink.href = UPLOADED_MD_PATH;
+        rawLink.textContent = 'local';
+        mdArea.innerHTML = renderMarkdown(body);
 
-        loadingEl.classList.add("hidden");
-        articleEl.classList.remove("hidden");
+        loadingEl.classList.add('hidden');
+        articleEl.classList.remove('hidden');
         applyLang(meta);
         return;
       }
-    }catch(e){ console.warn(e); }
+    }catch(e){
+      console.warn('Local fetch failed', e);
+    }
 
-    // All failed
-    hardFail("Load failed");
+    hardFail('All fetch attempts failed');
   }
 
   await loadPost();
 
-  // Canvas
-  const c=document.getElementById('flowCanvas');
-  const ctx=c.getContext('2d');
-  let w=c.width=innerWidth, h=c.height=innerHeight;
-  const pts=Array.from({length:40}).map(()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5}));
+  // lightweight canvas background
+  const canvas = document.getElementById('flowCanvas');
+  const ctx = canvas && canvas.getContext && canvas.getContext('2d');
+  if(ctx){
+    let w = canvas.width = innerWidth, h = canvas.height = innerHeight;
+    const particles = Array.from({length:36}).map(()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,r:Math.random()*1.6}));
 
-  window.addEventListener('resize',()=>{w=c.width=innerWidth;h=c.height=innerHeight;});
+    window.addEventListener('resize', ()=>{ w = canvas.width = innerWidth; h = canvas.height = innerHeight; });
 
-  (function draw(){
-    ctx.clearRect(0,0,w,h);
-    ctx.fillStyle='rgba(45,212,191,0.08)';
-    pts.forEach(p=>{
-      p.x+=p.vx; p.y+=p.vy;
-      if(p.x<0)p.x=w; if(p.x>w)p.x=0;
-      if(p.y<0)p.y=h; if(p.y>h)p.y=0;
-      ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
-    });
-    requestAnimationFrame(draw);
-  })();
-
+    (function anim(){
+      ctx.clearRect(0,0,w,h);
+      particles.forEach(p=>{
+        p.x += p.vx; p.y += p.vy;
+        if(p.x < -10) p.x = w + 10;
+        if(p.x > w + 10) p.x = -10;
+        if(p.y < -10) p.y = h + 10;
+        if(p.y > h + 10) p.y = -10;
+        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fillStyle = 'rgba(45,212,191,0.08)';
+        ctx.fill();
+      });
+      requestAnimationFrame(anim);
+    })();
+  }
 })();
 </script>
 
