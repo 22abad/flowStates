@@ -7,10 +7,10 @@ categories:
   - "Reflections"
   - "Learning Journey"
 tags:
-  - "Java"
   - "Health"
   - "Productivity"
-  - "CS Student"
+  - "Coding"
+  - "AI"
 summary_en: "A reflection on pushing physical limits with caffeine, the realization that rest is a strategic necessity, and the pivot from brute-force learning to a sustainable Full Stack journey."
 summary_zh: "反思用咖啡因挑战身体极限的经历，意识到休息是战略必须，并记录从暴力学习向可持续全栈开发之旅的转型。"
 ---
