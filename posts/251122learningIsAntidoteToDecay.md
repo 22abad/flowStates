@@ -4,6 +4,13 @@ title_zh: "四十三岁的思维：学习是抗击衰退的唯一解药"
 date: 2025-11-22
 summary_en: "At 43, embracing Computer Science not just for career shift, but as a deliberate strategy to combat mental stagnation and maintain cognitive vitality."
 summary_zh: "四十三岁的思维：学习是抗击衰退的唯一解药。"
+categories:
+  - Essays
+tags:
+  - Mindset
+  - CS
+  - Learning
+  - Life
 ---
 
 [EN]
