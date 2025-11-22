@@ -1,281 +1,207 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title id="page-title">Loading... | flowstates.me</title>
-  <meta name="description" content="Flowstates — personal logs and essays." />
-  <meta name="theme-color" content="#0f172a" />
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
-
-  <link href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600&family=Noto+Serif+SC:wght@300;500;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root{--bg:#0f172a;--muted:#94a3b8}
-    body{background:var(--bg);color:#e2e8f0;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Lora',serif}
-    .font-serif-en{font-family:'Lora',serif}
-    .font-serif-cn{font-family:'Noto Serif SC',serif}
-    #flowCanvas{position:fixed;inset:0;z-index:-1;opacity:.4}
-    .fade-in{animation:fadeIn .8s ease-out both}
-    @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flow Log | flowstates.me</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
-    .markdown-body{max-width:740px;margin:0 auto}
-    .markdown-body p{margin-bottom:1.4em;line-height:1.75}
-    .markdown-body h1,.markdown-body h2,.markdown-body h3{color:#2dd4bf;margin-top:1.6em;margin-bottom:.6em;}
-    .markdown-body blockquote{border-left:3px solid #2dd4bf;padding:1rem;background:rgba(255,255,255,0.04);border-radius:0 6px 6px 0;}
-    .markdown-body code {color: #e2e8f0; background: rgba(255,255,255,0.1); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em;}
-    .markdown-body pre code {background: transparent; padding: 0;}
-    
-    .hidden{display:none !important}
-  </style>
+    <style>
+        :root{--bg:#0f172a;--muted:#94a3b8}
+        body { background-color: var(--bg); color: #e2e8f0; overflow-x: hidden; }
+        .font-serif-en { font-family: 'Lora', serif; }
+        .font-serif-cn { font-family: 'Noto Serif SC', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        
+        #flowCanvas { position: fixed; inset:0; width:100%; height:100%; z-index:-1; opacity:0.6; }
+        .fade-in { animation: fadeIn 1s ease-out both; }
+        @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
+
+        /* --- Markdown Typography Improvements --- */
+        .prose { font-size: 1.125rem; line-height: 1.9; } /* Larger text, breathable line height */
+        
+        /* Hide duplicate H1 if it exists in markdown */
+        .prose h1:first-child { display: none; } 
+        
+        .prose h1, .prose h2, .prose h3 { color: #f1f5f9; margin-top: 2.5em; margin-bottom: 0.8em; font-weight: 600; letter-spacing: -0.02em; }
+        .prose h1 { font-size: 2.25em; }
+        .prose h2 { font-size: 1.75em; border-bottom: 1px solid #334155; padding-bottom: 0.3em; color: #ccfbf1; }
+        .prose h3 { font-size: 1.4em; color: #99f6e4; }
+        
+        .prose p { margin-bottom: 1.5em; opacity: 0.9; }
+        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; color: #cbd5e1; }
+        
+        /* Stylized Blockquote */
+        .prose blockquote { 
+            border-left: 4px solid #2dd4bf; 
+            background: rgba(30, 41, 59, 0.5);
+            padding: 1rem 1.5rem; 
+            margin: 2rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic; 
+            color: #e2e8f0;
+        }
+        
+        .prose code { background: #1e293b; padding: 0.2em 0.4em; rounded: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #5eead4; border: 1px solid #334155; }
+        .prose pre { background: #020617; padding: 1.5em; overflow-x: auto; border-radius: 8px; margin-bottom: 2em; border: 1px solid #1e293b; }
+        .prose pre code { background: transparent; padding: 0; border: none; color: inherit; }
+        .prose strong { color: #fff; font-weight: 700; }
+        .prose a { color: #5eead4; text-decoration: underline; text-decoration-color: #2dd4bf; text-underline-offset: 3px; }
+        .prose a:hover { color: #fff; }
+
+        /* Tag/Badge Styles */
+        .cat-badge { 
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
+            background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.3);
+            color: #5eead4; padding: 0.3rem 0.8rem; border-radius: 999px;
+        }
+        .tag-pill { 
+            font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
+            border: 1px solid #475569; color: #94a3b8; padding: 0.2rem 0.6rem; border-radius: 4px;
+        }
+    </style>
 </head>
-<body class="pb-20 antialiased">
+<body class="antialiased selection:bg-teal-500 selection:text-white">
+
 <canvas id="flowCanvas" aria-hidden="true"></canvas>
 
-<nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/70 backdrop-blur border-b border-slate-800">
-  <a href="/" class="text-lg font-bold tracking-widest text-teal-400">← FLOWSTATES.ME</a>
-  <div class="flex items-center gap-3">
-    <a id="rawLink" class="text-xs hover:text-teal-400 transition" href="#" target="_blank" rel="noopener">raw</a>
-    <button id="langToggle" class="px-4 py-1 text-xs border border-slate-600 rounded-full hover:border-teal-400 hover:text-teal-400 transition">Switch to 中文</button>
-  </div>
+<nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-md bg-slate-900/60 border-b border-slate-800/50">
+    <a href="index.html" class="group text-lg font-bold tracking-widest opacity-90 hover:text-teal-300 transition flex items-center gap-2">
+        <span class="group-hover:-translate-x-1 transition-transform duration-300">←</span> BACK
+    </a>
+    <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-teal-900/50 hover:border-teal-400 transition uppercase tracking-wide">SWITCH TO 中文</button>
 </nav>
 
-<main class="mt-32 px-4 max-w-3xl mx-auto fade-in">
-  <div id="loading" class="text-center opacity-60 italic">Retrieving memory...</div>
+<main class="min-h-screen max-w-3xl mx-auto px-6 py-32 relative z-10">
+    
+    <header class="fade-in mb-12 pb-8 border-b border-slate-800">
+        <div class="flex flex-wrap items-center gap-4 mb-6">
+            <span id="post-date" class="text-xs font-mono text-slate-500 uppercase tracking-widest">Loading...</span>
+            <div id="post-cats" class="flex gap-2"></div>
+        </div>
+        
+        <h1 class="text-3xl sm:text-5xl font-bold text-slate-100 leading-tight mb-6">
+            <span id="title-en" class="content-en font-serif-en block"></span>
+            <span id="title-zh" class="content-zh hidden font-serif-cn block mt-2 opacity-90"></span>
+        </h1>
 
-  <article id="article-content" class="hidden">
-    <header class="mb-8 text-center">
-      <div id="post-date" class="text-teal-400 text-xs tracking-[0.2em] mb-3"></div>
-      <h1 class="text-3xl font-bold">
-        <span id="title-en" class="content-en font-serif-en block"></span>
-        <span id="title-zh" class="content-zh font-serif-cn hidden block"></span>
-      </h1>
-      <p id="post-summary" class="text-slate-400 text-sm mt-3"></p>
+        <div id="post-tags" class="flex flex-wrap gap-2 opacity-80"></div>
     </header>
 
-    <div id="md-render-area" class="markdown-body prose prose-invert prose-lg"></div>
+    <article id="post-body" class="prose fade-in font-serif-en text-slate-300">
+        <div class="text-center opacity-50 italic py-20">Retrieving content...</div>
+    </article>
 
-    <div class="mt-12 pt-8 border-t border-slate-800 text-center text-xs tracking-widest opacity-50">
-      End of Flow Log — 22abad
-    </div>
-  </article>
-
-  <div id="error-state" class="hidden text-center mt-12">
-    <p class="text-red-400 text-lg mb-2">Failed to load this entry.</p>
-    <a href="/" class="underline text-slate-400">← Return Home</a>
-  </div>
 </main>
 
 <script>
-(async function(){
-  const GITHUB_USERNAME = '22abad';
-  const GITHUB_REPO = 'flowStates';
-  const POSTS_FOLDER = 'posts';
-  // 请确认这个本地路径是否正确，如果不正确会导致本地 fallback 失败
-  const UPLOADED_MD_PATH = '/mnt/data/250121lawToCS.md';
+(function(){
+    // CONFIG
+    const GITHUB_USERNAME = '22abad';
+    const GITHUB_REPO = 'flowStates';
+    const POSTS_FOLDER = 'posts';
 
-  const loadingEl = document.getElementById('loading');
-  const articleEl = document.getElementById('article-content');
-  const errorState = document.getElementById('error-state');
-  const mdArea = document.getElementById('md-render-area');
-  const titleEnEl = document.getElementById('title-en');
-  const titleZhEl = document.getElementById('title-zh');
-  const dateEl = document.getElementById('post-date');
-  const summaryEl = document.getElementById('post-summary');
-  const rawLink = document.getElementById('rawLink');
-  const toggleBtn = document.getElementById('langToggle');
-
-  let isEnglish = true;
-  let lastMeta = {};
-
-  function hardFail(msg){
-    console.error(msg);
-    loadingEl.classList.add("hidden");
-    articleEl.classList.add("hidden");
-    errorState.classList.remove("hidden");
-  }
-
-  function parseFrontMatter(raw){
-    const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
-    if(!m) return {meta:{}, body:raw};
-    const lines = m[1].split(/\r?\n/);
-    const meta = {};
-    lines.forEach(l=>{
-      const i = l.indexOf(':');
-      if(i>0){
-        const k = l.slice(0,i).trim();
-        let v = l.slice(i+1).trim();
-        if(/^['"]/.test(v) && /['"]$/.test(v)) v = v.slice(1,-1);
-        meta[k]=v;
-      }
-    });
-    return {meta, body: raw.slice(m[0].length)};
-  }
-
-  // --- 修复后的渲染逻辑：支持多段穿插 ---
-  function renderMarkdown(md){
-    if(!md) return '';
-
-    // 1. 按照标签拆分内容
-    // 正则解释：保留分隔符 [EN], [ZH], [END]
-    const parts = md.split(/(\[(?:EN|ZH|END)\])/);
-    
-    let html = '';
-    let currentLang = 'en'; // 默认视为英文（兼容没有标签的老文章）
-
-    parts.forEach(part => {
-      // 检查是否是标签
-      if (part === '[EN]') {
-        currentLang = 'en';
-        return;
-      }
-      if (part === '[ZH]') {
-        currentLang = 'zh';
-        return;
-      }
-      if (part === '[END]') {
-        currentLang = null; // 结束标记后不再包裹特定语言（或者你可以选择 default）
-        return;
-      }
-
-      // 如果是纯空字符串（split产生的），跳过
-      if (!part.trim()) return;
-
-      // 渲染这一小块 Markdown
-      const rendered = marked.parse(part);
-
-      // 根据当前状态包裹
-      if (currentLang === 'en') {
-        html += `<div class="content-en font-serif-en">${rendered}</div>`;
-      } else if (currentLang === 'zh') {
-        html += `<div class="content-zh font-serif-cn hidden">${rendered}</div>`;
-      } else {
-        // 如果在 [END] 之后还有内容，或者状态不明，默认显示出来
-        html += `<div class="content-en font-serif-en">${rendered}</div>`;
-      }
-    });
-
-    return DOMPurify.sanitize(html, {USE_PROFILES:{html:true}});
-  }
-
-  async function fetchWithTimeout(url, timeout=8000){
-    const controller = new AbortController();
-    const id = setTimeout(()=>controller.abort(), timeout);
-    try{
-      const res = await fetch(url, {signal: controller.signal});
-      clearTimeout(id);
-      return res;
-    }catch(e){
-      clearTimeout(id);
-      throw e;
+    const toggleBtn = document.getElementById('langToggle');
+    let isEnglish = true;
+    function updateLang() {
+        document.querySelectorAll('.content-en').forEach(el => el.classList.toggle('hidden', !isEnglish));
+        document.querySelectorAll('.content-zh').forEach(el => el.classList.toggle('hidden', isEnglish));
+        toggleBtn.textContent = isEnglish ? 'SWITCH TO 中文' : 'SWITCH TO ENGLISH';
     }
-  }
+    toggleBtn.addEventListener('click', ()=>{ isEnglish = !isEnglish; updateLang(); });
 
-  function applyLang(meta){
-    titleEnEl.textContent = meta.title_en || meta.title || 'Untitled';
-    titleZhEl.textContent = meta.title_zh || meta.title || '无标题';
-    
-    titleEnEl.classList.toggle('hidden', !isEnglish);
-    titleZhEl.classList.toggle('hidden', isEnglish);
+    function getQueryParam(name) { return new URLSearchParams(window.location.search).get(name); }
 
-    summaryEl.textContent = isEnglish 
-      ? (meta.summary_en || meta.summary || '') 
-      : (meta.summary_zh || meta.summary || '');
-
-    document.querySelectorAll('.content-en').forEach(el=>el.classList.toggle('hidden', !isEnglish));
-    document.querySelectorAll('.content-zh').forEach(el=>el.classList.toggle('hidden', isEnglish));
-
-    toggleBtn.textContent = isEnglish ? 'Switch to 中文' : 'Switch to English';
-  }
-
-  toggleBtn.addEventListener('click', ()=>{ isEnglish = !isEnglish; applyLang(lastMeta); });
-
-  async function loadPost(){
-    const params = new URLSearchParams(location.search);
-    const postId = params.get('id');
-    // 如果没有 id，说明可能是在首页或路径错误
-    if(!postId) return hardFail('No post id provided');
-
-    const decoded = decodeURIComponent(postId).replace(/\.(md|markdown)$/i, '');
-    const rawUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${decoded}.md`;
-
-    rawLink.href = rawUrl;
-    rawLink.textContent = 'raw';
-
-    try{
-      const res = await fetchWithTimeout(rawUrl, 9000);
-      if(!res.ok) throw new Error('GitHub returned ' + res.status);
-      const text = await res.text();
-      const {meta, body} = parseFrontMatter(text);
-      lastMeta = meta;
-
-      document.title = (meta.title_en || meta.title || 'Untitled') + ' | flowstates.me';
-      dateEl.textContent = meta.date || '';
-      mdArea.innerHTML = renderMarkdown(body);
-
-      loadingEl.classList.add('hidden');
-      articleEl.classList.remove('hidden');
-      applyLang(meta);
-      return;
-    }catch(e){
-      console.warn('GitHub fetch failed', e);
+    function parseFrontMatter(raw){
+        const result = {meta:{}, body: raw};
+        const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
+        if(!m) return result;
+        const head = m[1]; const lines = head.split(/\r?\n/); let currentKey = null;
+        lines.forEach(line => {
+            if(!line.trim()) return;
+            if(line.trim().startsWith('-') && currentKey) {
+                let val = line.trim().replace(/^-\s*/, '').trim();
+                if(/^['"].*['"]$/.test(val)) val = val.slice(1,-1);
+                if(!Array.isArray(result.meta[currentKey])) result.meta[currentKey] = [];
+                result.meta[currentKey].push(val);
+            } else if(line.includes(':')) {
+                const idx = line.indexOf(':'); const key = line.slice(0, idx).trim(); let val = line.slice(idx+1).trim(); currentKey = key;
+                if(val) { if(/^['"].*['"]$/.test(val)) val = val.slice(1,-1); result.meta[key] = val; } else { result.meta[key] = []; }
+            }
+        });
+        result.body = raw.slice(m[0].length); return result;
     }
 
-    try{
-      const res2 = await fetchWithTimeout(UPLOADED_MD_PATH, 4000);
-      if(res2.ok){
-        const text2 = await res2.text();
-        const {meta, body} = parseFrontMatter(text2);
-        lastMeta = meta;
-
-        document.title = (meta.title_en || meta.title || 'Untitled') + ' | flowstates.me';
-        dateEl.textContent = meta.date || '';
-        rawLink.href = UPLOADED_MD_PATH;
-        rawLink.textContent = 'local';
-        mdArea.innerHTML = renderMarkdown(body);
-
-        loadingEl.classList.add('hidden');
-        articleEl.classList.remove('hidden');
-        applyLang(meta);
-        return;
-      }
-    }catch(e){
-      console.warn('Local fetch failed', e);
+    function renderBodyContent(rawBody) {
+        const enMatch = rawBody.match(/\[EN\]([\s\S]*?)\[END\]/);
+        const zhMatch = rawBody.match(/\[ZH\]([\s\S]*?)\[END\]/);
+        let html = '';
+        if(enMatch) html += `<div class="content-en">${marked.parse(enMatch[1])}</div>`;
+        else if(!zhMatch) html += `<div class="content-en">${marked.parse(rawBody)}</div>`;
+        if(zhMatch) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhMatch[1])}</div>`;
+        document.getElementById('post-body').innerHTML = html;
     }
 
-    hardFail('All fetch attempts failed');
-  }
+    async function loadPost(){
+        const filename = getQueryParam('id');
+        if(!filename) { window.location.href = 'index.html'; return; }
 
-  await loadPost();
+        try {
+            const fileUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${decodeURIComponent(filename)}.md`;
+            const res = await fetch(fileUrl);
+            if(!res.ok) throw new Error('Post not found');
+            const text = await res.text();
+            
+            const data = parseFrontMatter(text);
+            const meta = data.meta;
 
-  const canvas = document.getElementById('flowCanvas');
-  const ctx = canvas && canvas.getContext && canvas.getContext('2d');
-  if(ctx){
-    let w = canvas.width = innerWidth, h = canvas.height = innerHeight;
-    const particles = Array.from({length:36}).map(()=>({x:Math.random()*w,y:Math.random()*h,vx:(Math.random()-0.5)*0.3,vy:(Math.random()-0.5)*0.3,r:Math.random()*1.6}));
+            // 1. Titles & Date
+            document.title = (meta.title_en || meta.title) + ' | Flow States';
+            document.getElementById('title-en').textContent = meta.title_en || meta.title;
+            document.getElementById('title-zh').textContent = meta.title_zh || meta.title_en;
+            document.getElementById('post-date').textContent = meta.date || '';
 
-    window.addEventListener('resize', ()=>{ w = canvas.width = innerWidth; h = canvas.height = innerHeight; });
+            // 2. Categories (Badges)
+            const catsContainer = document.getElementById('post-cats');
+            const cats = Array.isArray(meta.categories) ? meta.categories : (meta.categories ? [meta.categories] : []);
+            cats.forEach(c => {
+                const span = document.createElement('span');
+                span.className = 'cat-badge';
+                span.textContent = c;
+                catsContainer.appendChild(span);
+            });
 
-    (function anim(){
-      ctx.clearRect(0,0,w,h);
-      particles.forEach(p=>{
-        p.x += p.vx; p.y += p.vy;
-        if(p.x < -10) p.x = w + 10;
-        if(p.x > w + 10) p.x = -10;
-        if(p.y < -10) p.y = h + 10;
-        if(p.y > h + 10) p.y = -10;
-        ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-        ctx.fillStyle = 'rgba(45,212,191,0.08)';
-        ctx.fill();
-      });
-      requestAnimationFrame(anim);
-    })();
-  }
+            // 3. Tags
+            const tagsContainer = document.getElementById('post-tags');
+            const tags = Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []);
+            tags.forEach(t => {
+                const span = document.createElement('span');
+                span.className = 'tag-pill';
+                span.textContent = '#' + t;
+                tagsContainer.appendChild(span);
+            });
+
+            // 4. Render Body
+            renderBodyContent(data.body);
+            updateLang();
+
+        } catch(e) {
+            console.error(e);
+            document.getElementById('post-body').innerHTML = `<div class="text-red-400 py-10 text-center">Error loading post. <br><a href="index.html" class="underline mt-4 inline-block">Return home</a></div>`;
+        }
+    }
+
+    const canvas = document.getElementById('flowCanvas');
+    const ctx = canvas.getContext && canvas.getContext('2d');
+    let w,h,particles=[];
+    function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
+    function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(94,234,212,0.12)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
+    if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
+
+    loadPost();
 })();
 </script>
-
 </body>
 </html>
