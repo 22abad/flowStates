@@ -16,15 +16,24 @@
   <style>
     :root{--bg:#0f172a;--muted:#94a3b8}
     body{background:var(--bg);color:#e2e8f0;margin:0;font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,'Lora',serif}
+    
+    /* 字体工具类 */
     .font-serif-en{font-family:'Lora',serif}
     .font-serif-cn{font-family:'Noto Serif SC',serif}
+    
+    /* 背景动效 */
     #flowCanvas{position:fixed;inset:0;z-index:-1;opacity:.4}
     .fade-in{animation:fadeIn .8s ease-out both}
     @keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+    
+    /* Markdown 样式覆写 */
     .markdown-body{max-width:740px;margin:0 auto}
     .markdown-body p{margin-bottom:1.4em;line-height:1.75}
     .markdown-body h1,.markdown-body h2,.markdown-body h3{color:#2dd4bf;margin-top:1.6em;margin-bottom:.6em;}
     .markdown-body blockquote{border-left:3px solid #2dd4bf;padding:1rem;background:rgba(255,255,255,0.04);border-radius:0 6px 6px 0;}
+    .markdown-body code {color: #e2e8f0; background: rgba(255,255,255,0.1); padding: 0.2em 0.4em; border-radius: 4px; font-size: 0.9em;}
+    .markdown-body pre code {background: transparent; padding: 0;}
+    
     .hidden{display:none !important}
   </style>
 </head>
@@ -34,8 +43,8 @@
 <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 bg-slate-900/70 backdrop-blur border-b border-slate-800">
   <a href="/" class="text-lg font-bold tracking-widest text-teal-400">← FLOWSTATES.ME</a>
   <div class="flex items-center gap-3">
-    <a id="rawLink" class="text-xs" href="#" target="_blank" rel="noopener">raw</a>
-    <button id="langToggle" class="px-4 py-1 text-xs border border-slate-600 rounded-full">Switch to 中文</button>
+    <a id="rawLink" class="text-xs hover:text-teal-400 transition" href="#" target="_blank" rel="noopener">raw</a>
+    <button id="langToggle" class="px-4 py-1 text-xs border border-slate-600 rounded-full hover:border-teal-400 hover:text-teal-400 transition">Switch to 中文</button>
   </div>
 </nav>
 
@@ -52,7 +61,7 @@
       <p id="post-summary" class="text-slate-400 text-sm mt-3"></p>
     </header>
 
-    <div id="md-render-area" class="markdown-body prose prose-invert prose-lg font-serif-en"></div>
+    <div id="md-render-area" class="markdown-body prose prose-invert prose-lg"></div>
 
     <div class="mt-12 pt-8 border-t border-slate-800 text-center text-xs tracking-widest opacity-50">
       End of Flow Log — 22abad
@@ -70,9 +79,10 @@
   const GITHUB_USERNAME = '22abad';
   const GITHUB_REPO = 'flowStates';
   const POSTS_FOLDER = 'posts';
+  // 保留了你的本地测试路径，如果上线需要注意这个路径是否存在
   const UPLOADED_MD_PATH = '/mnt/data/250121lawToCS.md';
 
-  // DOM
+  // DOM Elements
   const loadingEl = document.getElementById('loading');
   const articleEl = document.getElementById('article-content');
   const errorState = document.getElementById('error-state');
@@ -87,18 +97,6 @@
   let isEnglish = true;
   let lastMeta = {};
 
-  function wrapLangSections(html){
-    // Close previous language container before opening the next one.
-    // This avoids unclosed <div> nesting when multiple [EN]/[ZH] appear.
-    // Replace sequence: [EN] -> <div class="content-en">
-    //                    [ZH] -> </div><div class="content-zh hidden">
-    //                    [END] -> </div>
-    return html
-      .replace(/\[EN\]/g, '<div class="content-en">')
-      .replace(/\[ZH\]/g, '</div><div class="content-zh hidden">')
-      .replace(/\[END\]/g, '</div>');
-  }
-
   function hardFail(msg){
     console.error(msg);
     loadingEl.classList.add("hidden");
@@ -106,6 +104,7 @@
     errorState.classList.remove("hidden");
   }
 
+  // 解析 Front Matter (YAML头)
   function parseFrontMatter(raw){
     const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
     if(!m) return {meta:{}, body:raw};
@@ -123,11 +122,32 @@
     return {meta, body: raw.slice(m[0].length)};
   }
 
+  // 核心修改：双语 Markdown 渲染逻辑
   function renderMarkdown(md){
-    // Convert markdown to HTML, then wrap [EN]/[ZH]/[END] tokens into language containers, then sanitize.
-    const rawHtml = marked.parse(md || '');
-    const wrapped = wrapLangSections(rawHtml);
-    return DOMPurify.sanitize(wrapped, {USE_PROFILES:{html:true}});
+    if(!md) return '';
+
+    // 1. 尝试匹配双语标签结构
+    const pattern = /\[EN\]([\s\S]*?)\[ZH\]([\s\S]*?)\[END\]/;
+    const match = md.match(pattern);
+
+    if(match) {
+      const enRaw = match[1].trim();
+      const zhRaw = match[2].trim();
+
+      // 2. 分别渲染，并包裹在对应的字体容器中
+      // content-en 使用 Lora, content-zh 使用 Noto Serif SC
+      const enHtml = marked.parse(enRaw);
+      const zhHtml = marked.parse(zhRaw);
+
+      const combinedHtml = 
+        `<div class="content-en font-serif-en">${enHtml}</div>` +
+        `<div class="content-zh font-serif-cn hidden">${zhHtml}</div>`;
+
+      return DOMPurify.sanitize(combinedHtml, {USE_PROFILES:{html:true}});
+    } 
+    
+    // 3. 如果是旧文章（无标签），默认按英文/通用处理
+    return DOMPurify.sanitize(`<div class="content-en font-serif-en">${marked.parse(md)}</div>`, {USE_PROFILES:{html:true}});
   }
 
   async function fetchWithTimeout(url, timeout=8000){
@@ -144,13 +164,24 @@
   }
 
   function applyLang(meta){
+    // 标题切换
     titleEnEl.textContent = meta.title_en || meta.title || 'Untitled';
     titleZhEl.textContent = meta.title_zh || meta.title || '无标题';
-    summaryEl.textContent = isEnglish ? (meta.summary_en || '') : (meta.summary_zh || '');
+    
+    // 标题显隐
+    titleEnEl.classList.toggle('hidden', !isEnglish);
+    titleZhEl.classList.toggle('hidden', isEnglish);
 
+    // 摘要切换
+    summaryEl.textContent = isEnglish 
+      ? (meta.summary_en || meta.summary || '') 
+      : (meta.summary_zh || meta.summary || '');
+
+    // 正文内容切换
     document.querySelectorAll('.content-en').forEach(el=>el.classList.toggle('hidden', !isEnglish));
     document.querySelectorAll('.content-zh').forEach(el=>el.classList.toggle('hidden', isEnglish));
 
+    // 按钮文字
     toggleBtn.textContent = isEnglish ? 'Switch to 中文' : 'Switch to English';
   }
 
@@ -167,7 +198,7 @@
     rawLink.href = rawUrl;
     rawLink.textContent = 'raw';
 
-    // Try GitHub raw
+    // 优先尝试 GitHub raw
     try{
       const res = await fetchWithTimeout(rawUrl, 9000);
       if(!res.ok) throw new Error('GitHub returned ' + res.status);
@@ -177,6 +208,8 @@
 
       document.title = (meta.title_en || meta.title || 'Untitled') + ' | flowstates.me';
       dateEl.textContent = meta.date || '';
+      
+      // 渲染内容
       mdArea.innerHTML = renderMarkdown(body);
 
       loadingEl.classList.add('hidden');
@@ -187,7 +220,7 @@
       console.warn('GitHub fetch failed', e);
     }
 
-    // Try local uploaded path (may not be accessible in browser)
+    // 如果 GitHub 失败，尝试本地路径（作为 Fallback）
     try{
       const res2 = await fetchWithTimeout(UPLOADED_MD_PATH, 4000);
       if(res2.ok){
@@ -199,6 +232,7 @@
         dateEl.textContent = meta.date || '';
         rawLink.href = UPLOADED_MD_PATH;
         rawLink.textContent = 'local';
+        
         mdArea.innerHTML = renderMarkdown(body);
 
         loadingEl.classList.add('hidden');
@@ -215,7 +249,7 @@
 
   await loadPost();
 
-  // lightweight canvas background
+  // 背景动画 (Canvas)
   const canvas = document.getElementById('flowCanvas');
   const ctx = canvas && canvas.getContext && canvas.getContext('2d');
   if(ctx){
