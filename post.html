@@ -20,9 +20,9 @@
         @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
 
         /* --- Markdown Typography Improvements --- */
-        .prose { font-size: 1.125rem; line-height: 1.9; } /* Larger text, breathable line height */
+        .prose { font-size: 1.125rem; line-height: 1.9; } 
         
-        /* Hide duplicate H1 if it exists in markdown */
+        /* Hide duplicate H1 if it exists in markdown body */
         .prose h1:first-child { display: none; } 
         
         .prose h1, .prose h2, .prose h3 { color: #f1f5f9; margin-top: 2.5em; margin-bottom: 0.8em; font-weight: 600; letter-spacing: -0.02em; }
@@ -33,7 +33,6 @@
         .prose p { margin-bottom: 1.5em; opacity: 0.9; }
         .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; color: #cbd5e1; }
         
-        /* Stylized Blockquote */
         .prose blockquote { 
             border-left: 4px solid #2dd4bf; 
             background: rgba(30, 41, 59, 0.5);
@@ -134,13 +133,36 @@
         result.body = raw.slice(m[0].length); return result;
     }
 
+    // --- UPDATED RENDER FUNCTION (Fixes truncated text) ---
     function renderBodyContent(rawBody) {
-        const enMatch = rawBody.match(/\[EN\]([\s\S]*?)\[END\]/);
-        const zhMatch = rawBody.match(/\[ZH\]([\s\S]*?)\[END\]/);
+        // Regex to find ALL blocks using 'g' flag
+        const enRegex = /\[EN\]([\s\S]*?)\[END\]/g;
+        const zhRegex = /\[ZH\]([\s\S]*?)\[END\]/g;
+
+        let enContent = '';
+        let zhContent = '';
+        let match;
+
+        // Concatenate all English blocks
+        while ((match = enRegex.exec(rawBody)) !== null) {
+            enContent += match[1] + '\n\n';
+        }
+
+        // Concatenate all Chinese blocks
+        while ((match = zhRegex.exec(rawBody)) !== null) {
+            zhContent += match[1] + '\n\n';
+        }
+
         let html = '';
-        if(enMatch) html += `<div class="content-en">${marked.parse(enMatch[1])}</div>`;
-        else if(!zhMatch) html += `<div class="content-en">${marked.parse(rawBody)}</div>`;
-        if(zhMatch) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhMatch[1])}</div>`;
+
+        if(enContent || zhContent) {
+            if(enContent) html += `<div class="content-en">${marked.parse(enContent)}</div>`;
+            if(zhContent) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhContent)}</div>`;
+        } else {
+            // Fallback for plain markdown files without tags
+            html += `<div class="content-en">${marked.parse(rawBody)}</div>`;
+        }
+
         document.getElementById('post-body').innerHTML = html;
     }
 
@@ -157,13 +179,11 @@
             const data = parseFrontMatter(text);
             const meta = data.meta;
 
-            // 1. Titles & Date
             document.title = (meta.title_en || meta.title) + ' | Flow States';
             document.getElementById('title-en').textContent = meta.title_en || meta.title;
             document.getElementById('title-zh').textContent = meta.title_zh || meta.title_en;
             document.getElementById('post-date').textContent = meta.date || '';
 
-            // 2. Categories (Badges)
             const catsContainer = document.getElementById('post-cats');
             const cats = Array.isArray(meta.categories) ? meta.categories : (meta.categories ? [meta.categories] : []);
             cats.forEach(c => {
@@ -173,7 +193,6 @@
                 catsContainer.appendChild(span);
             });
 
-            // 3. Tags
             const tagsContainer = document.getElementById('post-tags');
             const tags = Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []);
             tags.forEach(t => {
@@ -183,7 +202,6 @@
                 tagsContainer.appendChild(span);
             });
 
-            // 4. Render Body
             renderBodyContent(data.body);
             updateLang();
 
