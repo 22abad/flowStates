@@ -19,23 +19,25 @@
         .fade-in { animation: fadeIn 1s ease-out both; }
         @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
 
-        /* --- Markdown Typography Improvements --- */
+        /* --- Markdown Typography Improvements (Irish Green Theme) --- */
         .prose { font-size: 1.125rem; line-height: 1.9; } 
         
-        /* Hide duplicate H1 if it exists in markdown body */
         .prose h1:first-child { display: none; } 
         
         .prose h1, .prose h2, .prose h3 { color: #f1f5f9; margin-top: 2.5em; margin-bottom: 0.8em; font-weight: 600; letter-spacing: -0.02em; }
         .prose h1 { font-size: 2.25em; }
-        .prose h2 { font-size: 1.75em; border-bottom: 1px solid #334155; padding-bottom: 0.3em; color: #ccfbf1; }
-        .prose h3 { font-size: 1.4em; color: #99f6e4; }
+        /* H2 color changed to light Emerald */
+        .prose h2 { font-size: 1.75em; border-bottom: 1px solid #334155; padding-bottom: 0.3em; color: #a7f3d0; }
+        /* H3 color changed to brighter Emerald */
+        .prose h3 { font-size: 1.4em; color: #6ee7b7; }
         
         .prose p { margin-bottom: 1.5em; opacity: 0.9; }
         .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; color: #cbd5e1; }
         
+        /* Blockquote style changed to Emerald */
         .prose blockquote { 
-            border-left: 4px solid #2dd4bf; 
-            background: rgba(30, 41, 59, 0.5);
+            border-left: 4px solid #34d399; 
+            background: rgba(52, 211, 153, 0.1);
             padding: 1rem 1.5rem; 
             margin: 2rem 0;
             border-radius: 0 8px 8px 0;
@@ -43,18 +45,20 @@
             color: #e2e8f0;
         }
         
-        .prose code { background: #1e293b; padding: 0.2em 0.4em; rounded: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #5eead4; border: 1px solid #334155; }
+        /* Inline code color changed to Emerald */
+        .prose code { background: #1e293b; padding: 0.2em 0.4em; rounded: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #34d399; border: 1px solid #334155; }
         .prose pre { background: #020617; padding: 1.5em; overflow-x: auto; border-radius: 8px; margin-bottom: 2em; border: 1px solid #1e293b; }
         .prose pre code { background: transparent; padding: 0; border: none; color: inherit; }
         .prose strong { color: #fff; font-weight: 700; }
-        .prose a { color: #5eead4; text-decoration: underline; text-decoration-color: #2dd4bf; text-underline-offset: 3px; }
+        /* Link color changed to Emerald */
+        .prose a { color: #34d399; text-decoration: underline; text-decoration-color: #34d399; text-underline-offset: 3px; }
         .prose a:hover { color: #fff; }
 
-        /* Tag/Badge Styles */
+        /* Tag/Badge Styles (Emerald) */
         .cat-badge { 
             font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
-            background: rgba(45, 212, 191, 0.1); border: 1px solid rgba(45, 212, 191, 0.3);
-            color: #5eead4; padding: 0.3rem 0.8rem; border-radius: 999px;
+            background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3);
+            color: #34d399; padding: 0.3rem 0.8rem; border-radius: 999px;
         }
         .tag-pill { 
             font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em;
@@ -62,15 +66,15 @@
         }
     </style>
 </head>
-<body class="antialiased selection:bg-teal-500 selection:text-white">
+<body class="antialiased selection:bg-emerald-500 selection:text-white">
 
 <canvas id="flowCanvas" aria-hidden="true"></canvas>
 
 <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-md bg-slate-900/60 border-b border-slate-800/50">
-    <a href="index.html" class="group text-lg font-bold tracking-widest opacity-90 hover:text-teal-300 transition flex items-center gap-2">
+    <a href="index.html" class="group text-lg font-bold tracking-widest opacity-90 hover:text-emerald-400 transition flex items-center gap-2">
         <span class="group-hover:-translate-x-1 transition-transform duration-300">←</span> BACK
     </a>
-    <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-teal-900/50 hover:border-teal-400 transition uppercase tracking-wide">SWITCH TO 中文</button>
+    <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-emerald-900/50 hover:border-emerald-400 transition uppercase tracking-wide">SWITCH TO 中文</button>
 </nav>
 
 <main class="min-h-screen max-w-3xl mx-auto px-6 py-32 relative z-10">
@@ -135,36 +139,20 @@
         result.body = raw.slice(m[0].length); return result;
     }
 
-    // --- UPDATED RENDER FUNCTION (Fixes truncated text) ---
     function renderBodyContent(rawBody) {
-        // Regex to find ALL blocks using 'g' flag
         const enRegex = /\[EN\]([\s\S]*?)\[END\]/g;
         const zhRegex = /\[ZH\]([\s\S]*?)\[END\]/g;
-
-        let enContent = '';
-        let zhContent = '';
-        let match;
-
-        // Concatenate all English blocks
-        while ((match = enRegex.exec(rawBody)) !== null) {
-            enContent += match[1] + '\n\n';
-        }
-
-        // Concatenate all Chinese blocks
-        while ((match = zhRegex.exec(rawBody)) !== null) {
-            zhContent += match[1] + '\n\n';
-        }
+        let enContent = '', zhContent = '', match;
+        while ((match = enRegex.exec(rawBody)) !== null) enContent += match[1] + '\n\n';
+        while ((match = zhRegex.exec(rawBody)) !== null) zhContent += match[1] + '\n\n';
 
         let html = '';
-
         if(enContent || zhContent) {
             if(enContent) html += `<div class="content-en">${marked.parse(enContent)}</div>`;
             if(zhContent) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhContent)}</div>`;
         } else {
-            // Fallback for plain markdown files without tags
             html += `<div class="content-en">${marked.parse(rawBody)}</div>`;
         }
-
         document.getElementById('post-body').innerHTML = html;
     }
 
@@ -213,11 +201,12 @@
         }
     }
 
+    // Canvas Animation - Background particle color changed to faint Emerald
     const canvas = document.getElementById('flowCanvas');
     const ctx = canvas.getContext && canvas.getContext('2d');
     let w,h,particles=[];
     function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
-    function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(94,234,212,0.12)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
+    function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(52, 211, 153, 0.15)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
     if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
 
     loadPost();
