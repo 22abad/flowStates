@@ -15,6 +15,10 @@
         .fade-in { animation: fadeIn 1.2s ease-out both; }
         @keyframes fadeIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:none} }
         a.post { text-decoration: none; }
+        
+        /* Tag Styles */
+        .tag-pill { transition: all 0.2s; }
+        .tag-pill:hover { transform: translateY(-1px); }
     </style>
 </head>
 <body class="antialiased selection:bg-teal-500 selection:text-white">
@@ -27,7 +31,7 @@
 </nav>
 
 <main class="min-h-screen flex flex-col justify-center items-center px-4 sm:px-0 py-20 relative z-10">
-    <article class="max-w-2xl w-full fade-in mb-20">
+    <article class="max-w-2xl w-full fade-in mb-16">
         <h1 class="text-5xl sm:text-6xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-blue-200">
             <span class="content-en font-serif-en">Flow States</span>
             <span class="content-zh hidden font-serif-cn">心流时刻</span>
@@ -39,10 +43,18 @@
     </article>
 
     <section id="blog-section" class="max-w-2xl w-full fade-in border-t border-slate-800 pt-10">
-        <h2 class="text-xs uppercase tracking-[0.2em] text-teal-500 mb-8 text-center">
-            <span class="content-en">Flow Logs</span>
-            <span class="content-zh hidden">心流日志</span>
-        </h2>
+        <div class="flex justify-between items-end mb-8 px-2">
+            <h2 class="text-xs uppercase tracking-[0.2em] text-teal-500">
+                <span class="content-en">Flow Logs</span>
+                <span class="content-zh hidden">心流日志</span>
+            </h2>
+            <div id="filter-indicator" class="hidden text-xs flex items-center gap-2">
+                <span class="opacity-60">Filtered by:</span>
+                <span id="active-filter-name" class="text-teal-300 font-bold border-b border-teal-300"></span>
+                <button onclick="clearFilter()" class="hover:text-red-400 ml-2" title="Clear Filter">✕</button>
+            </div>
+        </div>
+
         <div id="post-list" class="space-y-6">
             <div class="text-center opacity-50 text-sm italic">Connecting to GitHub...</div>
         </div>
@@ -52,134 +64,246 @@
 <footer class="fixed bottom-6 w-full text-center opacity-40 text-xs uppercase tracking-widest pointer-events-none">22abad @ Ireland</footer>
 
 <script>
-(function(){
-    // CONFIG - update to your repo if needed
-    const GITHUB_USERNAME = '22abad';
-    const GITHUB_REPO = 'flowStates';
-    const POSTS_FOLDER = 'posts';
+// GLOBAL STATE for filtering
+let ALL_POSTS = []; 
 
-    // i18n state
-    const toggleBtn = document.getElementById('langToggle');
-    let isEnglish = true;
-    function updateLang() {
-        document.querySelectorAll('.content-en').forEach(el => el.classList.toggle('hidden', !isEnglish));
-        document.querySelectorAll('.content-zh').forEach(el => el.classList.toggle('hidden', isEnglish));
-        toggleBtn.textContent = isEnglish ? 'SWITCH TO 中文' : 'SWITCH TO ENGLISH';
-    }
-    toggleBtn.addEventListener('click', ()=>{ isEnglish = !isEnglish; updateLang(); });
+// CONFIG - Update your repo details here
+const GITHUB_USERNAME = '22abad';
+const GITHUB_REPO = 'flowStates';
+const POSTS_FOLDER = 'posts';
 
-    // Robust simple front-matter parser (key: value lines). Returns {meta, body}
-    function parseFrontMatter(raw){
-        const result = {meta:{}, body: raw};
-        const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
-        if(!m) return result;
-        const head = m[1];
-        head.split(/\r?\n/).forEach(line=>{
+// i18n logic
+const toggleBtn = document.getElementById('langToggle');
+let isEnglish = true;
+function updateLang() {
+    document.querySelectorAll('.content-en').forEach(el => el.classList.toggle('hidden', !isEnglish));
+    document.querySelectorAll('.content-zh').forEach(el => el.classList.toggle('hidden', isEnglish));
+    toggleBtn.textContent = isEnglish ? 'SWITCH TO 中文' : 'SWITCH TO ENGLISH';
+}
+toggleBtn.addEventListener('click', ()=>{ isEnglish = !isEnglish; updateLang(); });
+
+// --- IMPROVED PARSER (Handles Lists/Arrays in YAML) ---
+function parseFrontMatter(raw){
+    const result = {meta:{}, body: raw};
+    const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
+    if(!m) return result;
+    
+    const head = m[1];
+    const lines = head.split(/\r?\n/);
+    let currentKey = null;
+
+    lines.forEach(line => {
+        if(!line.trim()) return; // skip empty lines
+
+        // Check for array item (starts with -)
+        if(line.trim().startsWith('-') && currentKey) {
+            let val = line.trim().replace(/^-\s*/, '').trim();
+            // Remove quotes if present
+            if(/^['"].*['"]$/.test(val)) val = val.slice(1,-1);
+            
+            if(!Array.isArray(result.meta[currentKey])) {
+                result.meta[currentKey] = []; // initialize array if needed
+            }
+            result.meta[currentKey].push(val);
+        } 
+        // Check for key: value
+        else if(line.includes(':')) {
             const idx = line.indexOf(':');
-            if(idx>-1){
-                const key = line.slice(0, idx).trim();
-                let val = line.slice(idx+1).trim();
+            const key = line.slice(0, idx).trim();
+            let val = line.slice(idx+1).trim();
+            
+            currentKey = key; // set current key for potential next lines (arrays)
+
+            if(val) {
                 if(/^['"].*['"]$/.test(val)) val = val.slice(1,-1);
                 result.meta[key] = val;
+            } else {
+                // Empty value usually means a list follows
+                result.meta[key] = []; 
             }
-        });
-        result.body = raw.slice(m[0].length);
-        return result;
-    }
-
-    // Sanitize simple text for textContent (we avoid innerHTML for user content)
-    function createPostCard(post){
-        const a = document.createElement('a');
-        const id = encodeURIComponent(post.filename.replace(/\.md$/i,''));
-        a.href = `post.html?id=${id}`;
-        a.className = 'post block group p-6 rounded-lg hover:bg-slate-800/50 transition border border-transparent hover:border-slate-700';
-
-        const top = document.createElement('div');
-        top.className = 'flex justify-between items-baseline mb-2';
-
-        const h3 = document.createElement('h3');
-        h3.className = 'text-xl font-serif-en group-hover:text-teal-300 transition';
-
-        const enSpan = document.createElement('span'); enSpan.className = 'content-en font-serif-en'; enSpan.textContent = post.title_en || post.filename.replace(/\.md$/i,'');
-        const zhSpan = document.createElement('span'); zhSpan.className = 'content-zh hidden font-serif-cn'; zhSpan.textContent = post.title_zh || post.title_en || post.filename.replace(/\.md$/i,'');
-        h3.appendChild(enSpan); h3.appendChild(zhSpan);
-
-        const date = document.createElement('span'); date.className = 'text-xs font-mono opacity-50 whitespace-nowrap ml-4'; date.textContent = post.date || '';
-        top.appendChild(h3); top.appendChild(date);
-
-        const p = document.createElement('p'); p.className = 'text-sm opacity-60 font-light leading-relaxed';
-        const pEn = document.createElement('span'); pEn.className = 'content-en'; pEn.textContent = post.summary_en || '';
-        const pZh = document.createElement('span'); pZh.className = 'content-zh hidden'; pZh.textContent = post.summary_zh || '';
-        p.appendChild(pEn); p.appendChild(pZh);
-
-        a.appendChild(top); a.appendChild(p);
-        return a;
-    }
-
-    async function loadPosts(){
-        const listContainer = document.getElementById('post-list');
-        try{
-            const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${POSTS_FOLDER}`;
-            const res = await fetch(apiUrl);
-            if(!res.ok) throw new Error(res.status + ' ' + res.statusText);
-            const files = await res.json();
-            const mdFiles = files.filter(f=>/\.md$/i.test(f.name));
-            if(mdFiles.length===0){ listContainer.innerHTML = '<div class="text-center opacity-50">No logs found yet.</div>'; return; }
-            listContainer.innerHTML = '';
-
-            // Fetch each file (download_url) and parse front matter
-            const posts = await Promise.all(mdFiles.map(async f=>{
-                try{
-                    const txtRes = await fetch(f.download_url);
-                    if(!txtRes.ok) throw new Error('Failed to download '+f.name);
-                    const text = await txtRes.text();
-                    const parsed = parseFrontMatter(text);
-                    const meta = parsed.meta || {};
-                    // normalize known fields
-                    return {
-                        filename: f.name,
-                        title_en: meta.title_en || meta.title || f.name.replace(/\.md$/,''),
-                        title_zh: meta.title_zh || meta.title || '',
-                        date: meta.date || meta.date_en || '',
-                        summary_en: meta.summary_en || meta.summary || '',
-                        summary_zh: meta.summary_zh || ''
-                    };
-                }catch(e){
-                    console.warn('Skipping', f.name, e);
-                    return { filename: f.name, title_en: f.name.replace(/\.md$/,'') };
-                }
-            }));
-
-            // sort by date if possible, newest first; fallback to filename
-            posts.sort((a,b)=>{
-                const da = a.date ? Date.parse(a.date) : 0;
-                const db = b.date ? Date.parse(b.date) : 0;
-                return (db - da) || a.filename.localeCompare(b.filename);
-            });
-
-            posts.forEach(p=> listContainer.appendChild(createPostCard(p)));
-            updateLang();
-
-        }catch(err){
-            console.error(err);
-            listContainer.innerHTML = `<div class="text-center text-red-400 text-sm py-10">Failed to load from GitHub.<br><span class="text-xs opacity-50">${escapeHtml(err.message || String(err))}. Please check repo visibility or network.</span></div>`;
         }
+    });
+
+    result.body = raw.slice(m[0].length);
+    return result;
+}
+
+// --- FILTERING LOGIC ---
+window.filterPosts = function(tag) {
+    const filtered = ALL_POSTS.filter(p => {
+        const cats = Array.isArray(p.categories) ? p.categories : [p.categories];
+        const tags = Array.isArray(p.tags) ? p.tags : [p.tags];
+        return cats.includes(tag) || tags.includes(tag);
+    });
+    
+    const indicator = document.getElementById('filter-indicator');
+    const label = document.getElementById('active-filter-name');
+    label.textContent = tag;
+    indicator.classList.remove('hidden');
+    
+    renderPosts(filtered);
+}
+
+window.clearFilter = function() {
+    document.getElementById('filter-indicator').classList.add('hidden');
+    renderPosts(ALL_POSTS);
+}
+
+// --- RENDERING LOGIC ---
+function createPostCard(post){
+    const card = document.createElement('div');
+    card.className = 'post block group p-6 rounded-lg bg-slate-800/20 hover:bg-slate-800/50 transition border border-transparent hover:border-slate-700 relative overflow-hidden';
+
+    // Link wrapper (clickable area)
+    const linkOverlay = document.createElement('a');
+    const id = encodeURIComponent(post.filename.replace(/\.md$/i,''));
+    linkOverlay.href = `post.html?id=${id}`;
+    linkOverlay.className = 'absolute inset-0 z-0'; // Covers the whole card
+    card.appendChild(linkOverlay);
+
+    // Top section: Title & Date
+    const top = document.createElement('div');
+    top.className = 'flex justify-between items-baseline mb-3 relative z-10 pointer-events-none'; // pointer-events-none allows click through to overlay
+
+    const h3 = document.createElement('h3');
+    h3.className = 'text-xl font-serif-en group-hover:text-teal-300 transition font-semibold';
+    
+    const enTitle = document.createElement('span'); enTitle.className = 'content-en'; enTitle.textContent = post.title_en;
+    const zhTitle = document.createElement('span'); zhTitle.className = 'content-zh hidden font-serif-cn'; zhTitle.textContent = post.title_zh || post.title_en;
+    
+    h3.appendChild(enTitle); h3.appendChild(zhTitle);
+
+    const date = document.createElement('span'); 
+    date.className = 'text-xs font-mono opacity-40 whitespace-nowrap ml-4'; 
+    date.textContent = post.date || '';
+    
+    top.appendChild(h3); top.appendChild(date);
+    card.appendChild(top);
+
+    // Middle: Summary
+    const p = document.createElement('div'); 
+    p.className = 'text-sm opacity-70 font-light leading-relaxed mb-4 relative z-10 pointer-events-none';
+    const pEn = document.createElement('span'); pEn.className = 'content-en'; pEn.textContent = post.summary_en || '';
+    const pZh = document.createElement('span'); pZh.className = 'content-zh hidden'; pZh.textContent = post.summary_zh || '';
+    p.appendChild(pEn); p.appendChild(pZh);
+    card.appendChild(p);
+
+    // Bottom: Tags & Categories
+    const metaRow = document.createElement('div');
+    metaRow.className = 'flex flex-wrap gap-2 mt-2 relative z-20'; // z-20 to sit ABOVE the link overlay
+
+    // Helper to create pills
+    const createPill = (text, isCat) => {
+        if(!text) return null;
+        const span = document.createElement('button');
+        span.onclick = (e) => {
+            e.preventDefault(); // Stop navigation
+            e.stopPropagation(); 
+            window.filterPosts(text);
+        };
+        // Category: Teal border/text, Tag: Slate border/text
+        const colorClass = isCat 
+            ? 'border-teal-500/30 text-teal-400 hover:bg-teal-500/10' 
+            : 'border-slate-600 text-slate-400 hover:bg-slate-700';
+            
+        span.className = `tag-pill text-[10px] uppercase tracking-wide px-2 py-0.5 border rounded-md ${colorClass} cursor-pointer`;
+        span.textContent = text;
+        return span;
+    };
+
+    // Add Categories
+    const cats = Array.isArray(post.categories) ? post.categories : (post.categories ? [post.categories] : []);
+    cats.forEach(c => { const el = createPill(c, true); if(el) metaRow.appendChild(el); });
+
+    // Add Tags
+    const tags = Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []);
+    tags.forEach(t => { const el = createPill(t, false); if(el) metaRow.appendChild(el); });
+
+    if(cats.length > 0 || tags.length > 0) card.appendChild(metaRow);
+
+    return card;
+}
+
+function renderPosts(postsToRender) {
+    const listContainer = document.getElementById('post-list');
+    listContainer.innerHTML = '';
+    
+    if(postsToRender.length === 0) {
+        listContainer.innerHTML = '<div class="text-center opacity-50 py-10">No logs found matching filter.</div>';
+        return;
     }
 
-    // small helper to escape for insertion into innerHTML in error cases
-    function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
-    // Canvas (lightweight background animation)
-    const canvas = document.getElementById('flowCanvas');
-    const ctx = canvas.getContext && canvas.getContext('2d');
-    let w,h,particles=[];
-    function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
-    function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(94,234,212,0.12)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
-    if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
-
-    // initialize
-    loadPosts();
+    postsToRender.forEach(p => {
+        listContainer.appendChild(createPostCard(p));
+    });
+    
+    // Re-apply current language visibility
     updateLang();
+}
+
+async function loadData(){
+    const listContainer = document.getElementById('post-list');
+    try{
+        const apiUrl = `https://api.github.com/repos/${GITHUB_USERNAME}/${GITHUB_REPO}/contents/${POSTS_FOLDER}`;
+        const res = await fetch(apiUrl);
+        if(!res.ok) throw new Error(res.status + ' ' + res.statusText);
+        const files = await res.json();
+        const mdFiles = files.filter(f=>/\.md$/i.test(f.name));
+        
+        if(mdFiles.length===0){ listContainer.innerHTML = '<div class="text-center opacity-50">No logs found yet.</div>'; return; }
+
+        // Fetch all files in parallel
+        ALL_POSTS = await Promise.all(mdFiles.map(async f=>{
+            try{
+                const txtRes = await fetch(f.download_url);
+                if(!txtRes.ok) throw new Error('Failed');
+                const text = await txtRes.text();
+                const parsed = parseFrontMatter(text);
+                const meta = parsed.meta || {};
+                
+                return {
+                    filename: f.name,
+                    title_en: meta.title_en || meta.title || f.name.replace(/\.md$/,''),
+                    title_zh: meta.title_zh || '',
+                    date: meta.date || '',
+                    summary_en: meta.summary_en || meta.summary || '',
+                    summary_zh: meta.summary_zh || '',
+                    categories: meta.categories || [],
+                    tags: meta.tags || []
+                };
+            }catch(e){
+                console.warn('Skipping', f.name);
+                return null;
+            }
+        }));
+
+        // Filter out nulls and sort
+        ALL_POSTS = ALL_POSTS.filter(p => p !== null);
+        ALL_POSTS.sort((a,b)=>{
+            const da = a.date ? Date.parse(a.date) : 0;
+            const db = b.date ? Date.parse(b.date) : 0;
+            return (db - da) || a.filename.localeCompare(b.filename);
+        });
+
+        renderPosts(ALL_POSTS);
+
+    }catch(err){
+        console.error(err);
+        listContainer.innerHTML = `<div class="text-center text-red-400 text-sm py-10">Failed to load.<br><span class="text-xs opacity-50">Check console or network.</span></div>`;
+    }
+}
+
+// Canvas Animation (unchanged)
+const canvas = document.getElementById('flowCanvas');
+const ctx = canvas.getContext && canvas.getContext('2d');
+let w,h,particles=[];
+function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
+function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(94,234,212,0.12)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
+if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
+
+// Init
+loadData();
+
 })();
 </script>
 </body>
