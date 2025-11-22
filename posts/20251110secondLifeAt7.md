@@ -40,7 +40,7 @@ The biggest thing I am doing, of course, is studying.
 I left university more than 10 years ago. Before coming here, I was plagued with doubts: Can I still memorize new concepts? Can I handle projects? Can I pull all-nighters and still show up for class the next morning? Basically, does my brain still work like that?
 
 To my surprise, I didn't just study—I became obsessed.
-Due to visa issues, I arrived a whole week late for the 4-week Java crash course. I was behind before I even started. My original plan was cautious: "Try it for 2 months, then decide if I stay for the full year."
+Due to visa issues, I arrived a whole week late for the 3-week Java crash course. I was behind before I even started. My original plan was cautious: "Try it for 2 months, then decide if I stay for the full year."
 But after just two weeks, the decision was made. I am staying.
 
 [END]
@@ -51,7 +51,7 @@ But after just two weeks, the decision was made. I am staying.
 我离开大学已经超过十年了。来这里之前，我充满自我怀疑：我还能记住新概念吗？我还能搞定项目吗？我还能熬夜之后第二天照常上课吗？本质上，我怀疑自己还能不能学习。
 
 令我惊讶的是，我不仅能学，我还着魔了。
-因为签证问题，那个为期四周的 Java 快进班，我迟到了整整一周。还没开始我就已经落后了。我最初的计划很谨慎：“先试两个月，再决定要不要读完这一年。”
+因为签证问题，那个为期三周的 Java 快进班，我迟到了整整一周。还没开始我就已经落后了。我最初的计划很谨慎：“先试两个月，再决定要不要读完这一年。”
 但仅仅过了两周，我就做出了决定。我要留下。
 [END]
 
