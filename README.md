@@ -27,7 +27,7 @@ This repository serves as a public journal documenting my intellectual transitio
 ## ⚙️ 部署与技术栈 / Deployment & Technology Stack
 This blog is built using **Markdown files** and is automatically deployed via **Cloudflare Pages** upon committing new content.
 
-* **博客网址 / Live URL:** flowstates.me
+* **博客网址 / Live URL:** **[心流花园/Flow States](https://flowstates.me)**
 * **部署方式 / Deployment:** Cloudflare Pages (Automated Continuous Integration/Continuous Delivery)
 
 ## 📧 联系与反馈 / Contact
