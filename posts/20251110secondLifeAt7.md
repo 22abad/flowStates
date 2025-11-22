@@ -2,7 +2,7 @@
 title: "The Great Experiment: Pivoting to a Second Life at 7 AM"
 title_zh: "伟大的实验：在清晨七点开启第二人生"
 date: 2025-11-10
-author: "Daniel"
+author: "22abad"
 categories: 
   - "Reflections"
   - "Life Transition"

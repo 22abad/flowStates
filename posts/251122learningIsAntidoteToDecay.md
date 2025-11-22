@@ -2,6 +2,7 @@
 title_en: "The 43-Year-Old Mind: Learning as the Only Antidote to Decay"
 title_zh: "四十三岁的思维：学习是抗击衰退的唯一解药"
 date: 2025-11-22
+author: "22abad"
 summary_en: "At 43, embracing Computer Science not just for career shift, but as a deliberate strategy to combat mental stagnation and maintain cognitive vitality."
 summary_zh: "四十三岁的思维：学习是抗击衰退的唯一解药。"
 categories:

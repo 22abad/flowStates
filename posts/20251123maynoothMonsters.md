@@ -2,7 +2,7 @@
 title: "The Red Line and the Reset: Coding, Caffeine, and the Wisdom of Stopping"
 title_zh: "红线与重启：代码、咖啡因与停下的智慧"
 date: 2025-11-17
-author: "Daniel"
+author: "22abad"
 categories: 
   - "Reflections"
   - "Learning Journey"

@@ -2,6 +2,7 @@
 title_en: "The Two-Month Shock Wave: Finding Flow in a New Logic"
 title_zh: "两个月的冲击波：在新的逻辑中找到心流"
 date: 2025-11-21
+author: "22abad"
 summary_en: "A deep exploration of personal reinvention—shifting from Law to Computer Science, rebuilding discipline, and finding flow through discomfort."
 summary_zh: "深入探讨个人重塑——从法律转向计算机科学，在不适中重建自律，并找到心流状态。"
 categories:

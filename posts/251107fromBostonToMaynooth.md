@@ -2,7 +2,7 @@
 title: "Fate's Detour: From Boston Rejection to Maynooth Rain"
 title_zh: "命运的改道：从波士顿的拒信到梅努斯的雨"
 date: 2025-11-07
-author: "Daniel"
+author: "22abad"
 categories: 
   - "Memoir"
   - "Reflections"
