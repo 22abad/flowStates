@@ -76,7 +76,7 @@ Three days later, I landed in Ireland.
 
 [EN]
 ## 4. The Java Shock
-On my fourth day in Ireland, I walked into the classroom.  
+On my second day in Ireland, I walked into the classroom.  
 I quickly realized the magnitude of my situation. I was a full week behind in an intensive three-week Java crash course.  
 I had zero background. I was completely clueless. The blow to my confidence was immense.  
 I sat there, listening to concepts I couldn't grasp, wondering if I had made a terrible mistake.
@@ -85,7 +85,7 @@ I sat there, listening to concepts I couldn't grasp, wondering if I had made a t
 
 [ZH]
 ## 4. Java 的当头一棒
-到爱尔兰的第四天，我走进了教室。  
+到爱尔兰的第二天，我走进了教室。  
 我才发现情况有多严重。这是一门为期三周的 Java 快进班，而我已经整整落后了一周。  
 我是零基础。我完全听不懂，完全没有头绪。  
 那种打击是巨大的。我坐在那里，听着那些我无法理解的概念，怀疑自己是否犯了一个可怕的错误。
