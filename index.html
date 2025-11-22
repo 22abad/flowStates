@@ -16,18 +16,9 @@
         @keyframes fadeIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:none} }
         a.post { text-decoration: none; }
         
-        /* Tag & Badge Styles */
+        /* Tag Styles */
         .tag-pill { transition: all 0.2s; }
         .tag-pill:hover { border-color: #5eead4; color: #5eead4; }
-        .cat-badge { 
-            position: absolute; top: 1.5rem; right: 1.5rem; 
-            font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.1em;
-            background: rgba(15, 23, 42, 0.8); border: 1px solid rgba(94, 234, 212, 0.3);
-            color: #2dd4bf; padding: 0.2rem 0.6rem; border-radius: 999px;
-            backdrop-filter: blur(4px); z-index: 30;
-        }
-        /* Line clamp for summary */
-        .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
     </style>
 </head>
 <body class="antialiased selection:bg-teal-500 selection:text-white">
@@ -65,7 +56,7 @@
             </div>
         </div>
 
-        <div id="post-list" class="space-y-6">
+        <div id="post-list" class="space-y-8">
             <div class="text-center opacity-50 text-sm italic py-10">Connecting to GitHub...</div>
         </div>
     </section>
@@ -126,6 +117,7 @@ window.clearFilter = function() {
 
 function createPostCard(post){
     const card = document.createElement('div');
+    // CSS: Added 'relative' for positioning
     card.className = 'post block group p-6 sm:p-8 rounded-xl bg-slate-800/30 hover:bg-slate-800/60 transition border border-slate-800 hover:border-slate-600 relative overflow-hidden shadow-sm hover:shadow-md';
 
     // Link Wrapper
@@ -135,42 +127,63 @@ function createPostCard(post){
     linkOverlay.className = 'absolute inset-0 z-0';
     card.appendChild(linkOverlay);
 
-    // 1. CATEGORY BADGE (Top Right)
+    // --- TOP META ROW (Badge + Date) ---
+    const topRow = document.createElement('div');
+    topRow.className = 'flex flex-wrap justify-between items-start mb-3 relative z-10 pointer-events-none gap-2';
+
+    // 1. CATEGORY BADGE 
     const cats = Array.isArray(post.categories) ? post.categories : (post.categories ? [post.categories] : []);
     if(cats.length > 0) {
         const badge = document.createElement('button');
-        badge.className = 'cat-badge hover:text-white hover:border-teal-400 transition cursor-pointer';
-        badge.textContent = cats[0]; // Show first category as badge
+        // Mobile: Static position | Desktop: Absolute top-right
+        // We use 'pointer-events-auto' so the button is clickable over the linkOverlay
+        badge.className = 'text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border border-teal-500/30 text-teal-400 bg-slate-900/50 backdrop-blur-sm hover:bg-teal-900/30 hover:text-white transition cursor-pointer pointer-events-auto sm:absolute sm:top-0 sm:right-0 sm:mt-8 sm:mr-8';
+        badge.textContent = cats[0];
         badge.onclick = (e) => { e.preventDefault(); e.stopPropagation(); window.filterPosts(cats[0]); };
-        card.appendChild(badge);
+        
+        // Wrap in div for mobile flow, but allow absolute on desktop
+        const badgeWrapper = document.createElement('div');
+        badgeWrapper.appendChild(badge);
+        topRow.appendChild(badgeWrapper);
+    } else {
+        topRow.appendChild(document.createElement('div')); // Spacer
     }
 
-    // 2. TITLE & DATE
-    const top = document.createElement('div');
-    top.className = 'flex justify-between items-start mb-3 relative z-10 pointer-events-none pr-10'; // pr-10 for badge space
+    // Date
+    const date = document.createElement('span'); 
+    date.className = 'text-xs font-mono opacity-40 whitespace-nowrap sm:absolute sm:top-0 sm:right-0 sm:mt-16 sm:mr-8'; // Position below badge on desktop
+    date.textContent = post.date || '';
+    // On mobile, date sits next to or below badge naturally. On desktop, we force it to right.
+    // Actually, for simpler mobile layout, let's just keep date in flow on mobile.
+    if(window.innerWidth < 640) { // Simple check or just use CSS classes
+       // Tailwind handles it: sm:absolute moves it out of flow on desktop
+    }
+    // Let's stick to flow for mobile, absolute for desktop for specific look
+    
+    // Re-structuring for cleaner mobile view:
+    // Remove previous append logic, let's do a clean separate Date div that changes based on screen
+    const mobileDate = document.createElement('div');
+    mobileDate.className = 'text-xs font-mono opacity-40 mb-2 sm:hidden';
+    mobileDate.textContent = post.date || '';
+    card.appendChild(mobileDate);
+
+    // 2. TITLE
+    const titleDiv = document.createElement('div');
+    titleDiv.className = 'relative z-10 pointer-events-none pr-0 sm:pr-20'; // Padding right on desktop to avoid badge overlap
 
     const h3 = document.createElement('h3');
-    h3.className = 'text-xl sm:text-2xl font-serif-en group-hover:text-teal-200 transition font-bold leading-tight text-slate-100';
+    h3.className = 'text-xl sm:text-2xl font-serif-en group-hover:text-teal-200 transition font-bold leading-tight text-slate-100 mb-3';
     
     const enTitle = document.createElement('span'); enTitle.className = 'content-en'; enTitle.textContent = post.title_en;
     const zhTitle = document.createElement('span'); zhTitle.className = 'content-zh hidden font-serif-cn'; zhTitle.textContent = post.title_zh || post.title_en;
     h3.appendChild(enTitle); h3.appendChild(zhTitle);
+    titleDiv.appendChild(h3);
+    card.appendChild(titleDiv);
 
-    const date = document.createElement('span'); 
-    date.className = 'text-xs font-mono opacity-40 whitespace-nowrap ml-4 mt-1 block sm:inline'; 
-    date.textContent = post.date || '';
-    
-    // Mobile Date adjustment
-    const titleRow = document.createElement('div');
-    titleRow.className = 'flex flex-col sm:flex-row sm:justify-between sm:items-baseline w-full';
-    titleRow.appendChild(h3);
-    titleRow.appendChild(date);
-    top.appendChild(titleRow);
-    card.appendChild(top);
-
-    // 3. SUMMARY (Optimized Typography)
+    // 3. SUMMARY (Full text, no clamping)
     const p = document.createElement('div'); 
-    p.className = 'text-sm sm:text-base opacity-70 font-light leading-relaxed mb-5 relative z-10 pointer-events-none line-clamp-3';
+    // Removed 'line-clamp-3' so full summary shows
+    p.className = 'text-sm sm:text-base opacity-70 font-light leading-relaxed mb-5 relative z-10 pointer-events-none';
     const pEn = document.createElement('span'); pEn.className = 'content-en'; pEn.textContent = post.summary_en || '';
     const pZh = document.createElement('span'); pZh.className = 'content-zh hidden'; pZh.textContent = post.summary_zh || '';
     p.appendChild(pEn); p.appendChild(pZh);
@@ -184,7 +197,7 @@ function createPostCard(post){
         tags.forEach(t => {
             const span = document.createElement('button');
             span.onclick = (e) => { e.preventDefault(); e.stopPropagation(); window.filterPosts(t); };
-            span.className = 'tag-pill text-[10px] uppercase tracking-wider px-2 py-1 border border-slate-700 text-slate-400 rounded hover:bg-slate-700 cursor-pointer';
+            span.className = 'tag-pill text-[10px] uppercase tracking-wider px-2 py-1 border border-slate-700 text-slate-400 rounded hover:bg-slate-700 cursor-pointer pointer-events-auto';
             span.textContent = '#' + t;
             metaRow.appendChild(span);
         });
