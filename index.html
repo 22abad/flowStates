@@ -16,24 +16,25 @@
         @keyframes fadeIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:none} }
         a.post { text-decoration: none; }
         
-        /* Tag Styles */
+        /* Tag & Badge Styles (Irish Green Tint) */
         .tag-pill { transition: all 0.2s; }
-        .tag-pill:hover { border-color: #5eead4; color: #5eead4; }
+        /* Hover color changed to Emerald Green */
+        .tag-pill:hover { border-color: #34d399; color: #34d399; } 
     </style>
 </head>
-<body class="antialiased selection:bg-teal-500 selection:text-white">
+<body class="antialiased selection:bg-emerald-500 selection:text-white">
 
 <canvas id="flowCanvas" aria-hidden="true"></canvas>
 
 <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-md bg-slate-900/40 border-b border-slate-800/50">
-    <div class="text-xl font-bold tracking-widest opacity-90 hover:text-teal-300 transition cursor-pointer" onclick="window.location.reload()">flowstates.me</div>
-    <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-teal-900/50 hover:border-teal-400 transition uppercase tracking-wide">SWITCH TO 中文</button>
+    <div class="text-xl font-bold tracking-widest opacity-90 hover:text-emerald-400 transition cursor-pointer" onclick="window.location.reload()">flowstates.me</div>
+    <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-emerald-900/50 hover:border-emerald-400 transition uppercase tracking-wide">SWITCH TO 中文</button>
 </nav>
 
 <main class="min-h-screen w-full max-w-2xl mx-auto px-4 sm:px-6 pt-32 pb-20 relative z-10">
     
     <article class="fade-in mb-16 text-center">
-        <h1 class="text-5xl sm:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-teal-200 to-blue-200">
+        <h1 class="text-5xl sm:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-300">
             <span class="content-en font-serif-en">Flow States</span>
             <span class="content-zh hidden font-serif-cn">心流时刻</span>
         </h1>
@@ -45,13 +46,13 @@
 
     <section id="blog-section" class="fade-in border-t border-slate-800 pt-10">
         <div class="flex justify-between items-end mb-8 px-2">
-            <h2 class="text-xs uppercase tracking-[0.2em] text-teal-500">
+            <h2 class="text-xs uppercase tracking-[0.2em] text-emerald-500">
                 <span class="content-en">Latest Logs</span>
                 <span class="content-zh hidden">最新日志</span>
             </h2>
             <div id="filter-indicator" class="hidden text-xs flex items-center gap-2">
                 <span class="opacity-60">Filtered by:</span>
-                <span id="active-filter-name" class="text-teal-300 font-bold border-b border-teal-300"></span>
+                <span id="active-filter-name" class="text-emerald-400 font-bold border-b border-emerald-400"></span>
                 <button onclick="clearFilter()" class="hover:text-red-400 ml-2 font-bold px-2" title="Clear Filter">✕</button>
             </div>
         </div>
@@ -62,7 +63,7 @@
     </section>
 </main>
 
-<footer class="w-full text-center opacity-40 text-xs uppercase tracking-widest pb-8">22abad @ Ireland</footer>
+<footer class="w-full text-center opacity-40 text-xs uppercase tracking-widest pb-8 relative z-10">22abad @ Ireland</footer>
 
 <script>
 let ALL_POSTS = []; 
@@ -117,62 +118,42 @@ window.clearFilter = function() {
 
 function createPostCard(post){
     const card = document.createElement('div');
-    // CSS: Added 'relative' for positioning
     card.className = 'post block group p-6 sm:p-8 rounded-xl bg-slate-800/30 hover:bg-slate-800/60 transition border border-slate-800 hover:border-slate-600 relative overflow-hidden shadow-sm hover:shadow-md';
 
-    // Link Wrapper
     const linkOverlay = document.createElement('a');
     const id = encodeURIComponent(post.filename.replace(/\.md$/i,''));
     linkOverlay.href = `post.html?id=${id}`;
     linkOverlay.className = 'absolute inset-0 z-0';
     card.appendChild(linkOverlay);
 
-    // --- TOP META ROW (Badge + Date) ---
     const topRow = document.createElement('div');
     topRow.className = 'flex flex-wrap justify-between items-start mb-3 relative z-10 pointer-events-none gap-2';
 
-    // 1. CATEGORY BADGE 
     const cats = Array.isArray(post.categories) ? post.categories : (post.categories ? [post.categories] : []);
     if(cats.length > 0) {
         const badge = document.createElement('button');
-        // Mobile: Static position | Desktop: Absolute top-right
-        // We use 'pointer-events-auto' so the button is clickable over the linkOverlay
-        badge.className = 'text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border border-teal-500/30 text-teal-400 bg-slate-900/50 backdrop-blur-sm hover:bg-teal-900/30 hover:text-white transition cursor-pointer pointer-events-auto sm:absolute sm:top-0 sm:right-0 sm:mt-8 sm:mr-8';
+        // Badge color changed to Emerald
+        badge.className = 'text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border border-emerald-500/30 text-emerald-400 bg-slate-900/50 backdrop-blur-sm hover:bg-emerald-900/30 hover:text-white transition cursor-pointer pointer-events-auto sm:absolute sm:top-0 sm:right-0 sm:mt-8 sm:mr-8';
         badge.textContent = cats[0];
         badge.onclick = (e) => { e.preventDefault(); e.stopPropagation(); window.filterPosts(cats[0]); };
-        
-        // Wrap in div for mobile flow, but allow absolute on desktop
         const badgeWrapper = document.createElement('div');
         badgeWrapper.appendChild(badge);
         topRow.appendChild(badgeWrapper);
     } else {
-        topRow.appendChild(document.createElement('div')); // Spacer
+        topRow.appendChild(document.createElement('div')); 
     }
 
-    // Date
-    const date = document.createElement('span'); 
-    date.className = 'text-xs font-mono opacity-40 whitespace-nowrap sm:absolute sm:top-0 sm:right-0 sm:mt-16 sm:mr-8'; // Position below badge on desktop
-    date.textContent = post.date || '';
-    // On mobile, date sits next to or below badge naturally. On desktop, we force it to right.
-    // Actually, for simpler mobile layout, let's just keep date in flow on mobile.
-    if(window.innerWidth < 640) { // Simple check or just use CSS classes
-       // Tailwind handles it: sm:absolute moves it out of flow on desktop
-    }
-    // Let's stick to flow for mobile, absolute for desktop for specific look
-    
-    // Re-structuring for cleaner mobile view:
-    // Remove previous append logic, let's do a clean separate Date div that changes based on screen
     const mobileDate = document.createElement('div');
     mobileDate.className = 'text-xs font-mono opacity-40 mb-2 sm:hidden';
     mobileDate.textContent = post.date || '';
     card.appendChild(mobileDate);
 
-    // 2. TITLE
     const titleDiv = document.createElement('div');
-    titleDiv.className = 'relative z-10 pointer-events-none pr-0 sm:pr-20'; // Padding right on desktop to avoid badge overlap
+    titleDiv.className = 'relative z-10 pointer-events-none pr-0 sm:pr-20';
 
     const h3 = document.createElement('h3');
-    h3.className = 'text-xl sm:text-2xl font-serif-en group-hover:text-teal-200 transition font-bold leading-tight text-slate-100 mb-3';
+    // Title hover color changed to Emerald
+    h3.className = 'text-xl sm:text-2xl font-serif-en group-hover:text-emerald-200 transition font-bold leading-tight text-slate-100 mb-3';
     
     const enTitle = document.createElement('span'); enTitle.className = 'content-en'; enTitle.textContent = post.title_en;
     const zhTitle = document.createElement('span'); zhTitle.className = 'content-zh hidden font-serif-cn'; zhTitle.textContent = post.title_zh || post.title_en;
@@ -180,16 +161,13 @@ function createPostCard(post){
     titleDiv.appendChild(h3);
     card.appendChild(titleDiv);
 
-    // 3. SUMMARY (Full text, no clamping)
     const p = document.createElement('div'); 
-    // Removed 'line-clamp-3' so full summary shows
     p.className = 'text-sm sm:text-base opacity-70 font-light leading-relaxed mb-5 relative z-10 pointer-events-none';
     const pEn = document.createElement('span'); pEn.className = 'content-en'; pEn.textContent = post.summary_en || '';
     const pZh = document.createElement('span'); pZh.className = 'content-zh hidden'; pZh.textContent = post.summary_zh || '';
     p.appendChild(pEn); p.appendChild(pZh);
     card.appendChild(p);
 
-    // 4. TAGS (Bottom)
     const tags = Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []);
     if(tags.length > 0) {
         const metaRow = document.createElement('div');
@@ -259,11 +237,12 @@ async function loadData(){
     }
 }
 
+// Canvas Animation - Background particle color changed to faint Emerald
 const canvas = document.getElementById('flowCanvas');
 const ctx = canvas.getContext && canvas.getContext('2d');
 let w,h,particles=[];
 function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
-function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(94,234,212,0.12)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
+function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(52, 211, 153, 0.15)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
 if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
 
 loadData();
