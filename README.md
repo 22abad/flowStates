@@ -27,4 +27,4 @@ This repository serves as a public journal documenting my intellectual transitio
 
 如果您对我的学习旅程有任何疑问、反馈或合作意向，请随时通过以下方式联系我：
 
-* **Email:** dong@2abad.com
+* **Email:** dong@22abad.com
