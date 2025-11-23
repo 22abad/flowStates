@@ -19,22 +19,25 @@
         .fade-in { animation: fadeIn 1s ease-out both; }
         @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
 
-        /* --- Markdown Typography Improvements (Irish Green Theme) --- */
+        /* --- Markdown Typography Improvements --- */
         .prose { font-size: 1.125rem; line-height: 1.9; } 
         
-        .prose h1:first-child { display: none; } 
+        /* FIX: Correctly hide duplicate H1 inside language wrappers */
+        .content-en > h1:first-child,
+        .content-zh > h1:first-child { display: none; } 
         
-        .prose h1, .prose h2, .prose h3 { color: #f1f5f9; margin-top: 2.5em; margin-bottom: 0.8em; font-weight: 600; letter-spacing: -0.02em; }
+        /* Headings */
+        .prose h1, .prose h2, .prose h3 { color: #f1f5f9; margin-top: 2.5em; margin-bottom: 1em; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
         .prose h1 { font-size: 2.25em; }
-        /* H2 color changed to light Emerald */
-        .prose h2 { font-size: 1.75em; border-bottom: 1px solid #334155; padding-bottom: 0.3em; color: #a7f3d0; }
-        /* H3 color changed to brighter Emerald */
-        .prose h3 { font-size: 1.4em; color: #6ee7b7; }
+        .prose h2 { font-size: 1.75em; border-bottom: 1px solid #334155; padding-bottom: 0.3em; color: #a7f3d0; } /* Emerald-200 */
+        .prose h3 { font-size: 1.4em; color: #6ee7b7; margin-top: 2em; } /* Emerald-300 */
         
-        .prose p { margin-bottom: 1.5em; opacity: 0.9; }
+        /* Paragraphs & Lists */
+        .prose p { margin-bottom: 1.5em; opacity: 0.9; display: block; } /* Ensure block display */
         .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; color: #cbd5e1; }
+        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1.5em; color: #cbd5e1; }
         
-        /* Blockquote style changed to Emerald */
+        /* Blockquote (Emerald Style) */
         .prose blockquote { 
             border-left: 4px solid #34d399; 
             background: rgba(52, 211, 153, 0.1);
@@ -45,16 +48,17 @@
             color: #e2e8f0;
         }
         
-        /* Inline code color changed to Emerald */
+        /* Code Blocks */
         .prose code { background: #1e293b; padding: 0.2em 0.4em; rounded: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #34d399; border: 1px solid #334155; }
         .prose pre { background: #020617; padding: 1.5em; overflow-x: auto; border-radius: 8px; margin-bottom: 2em; border: 1px solid #1e293b; }
         .prose pre code { background: transparent; padding: 0; border: none; color: inherit; }
+        
+        /* Links */
         .prose strong { color: #fff; font-weight: 700; }
-        /* Link color changed to Emerald */
         .prose a { color: #34d399; text-decoration: underline; text-decoration-color: #34d399; text-underline-offset: 3px; }
         .prose a:hover { color: #fff; }
 
-        /* Tag/Badge Styles (Emerald) */
+        /* Badges */
         .cat-badge { 
             font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em;
             background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3);
@@ -94,12 +98,11 @@
     </header>
 
     <article id="post-body" class="prose fade-in font-serif-en text-slate-300">
-    <div class="text-center opacity-50 italic py-20">
-        <span class="content-en">Retrieving memory...</span>
-        <span class="content-zh hidden">正在读取记忆...</span>
-    </div>
-</article>
-
+        <div class="text-center opacity-50 italic py-20">
+            <span class="content-en">Retrieving memory...</span>
+            <span class="content-zh hidden">正在读取记忆...</span>
+        </div>
+    </article>
 
 </main>
 
@@ -143,20 +146,34 @@
         result.body = raw.slice(m[0].length); return result;
     }
 
+    // FIX: Improved Logic to ensure proper Markdown spacing
     function renderBodyContent(rawBody) {
         const enRegex = /\[EN\]([\s\S]*?)\[END\]/g;
         const zhRegex = /\[ZH\]([\s\S]*?)\[END\]/g;
-        let enContent = '', zhContent = '', match;
-        while ((match = enRegex.exec(rawBody)) !== null) enContent += match[1] + '\n\n';
-        while ((match = zhRegex.exec(rawBody)) !== null) zhContent += match[1] + '\n\n';
+
+        let enContent = '';
+        let zhContent = '';
+        let match;
+
+        // Add double newlines to ensure headers are parsed correctly
+        while ((match = enRegex.exec(rawBody)) !== null) {
+            enContent += '\n\n' + match[1].trim() + '\n\n'; 
+        }
+
+        while ((match = zhRegex.exec(rawBody)) !== null) {
+            zhContent += '\n\n' + match[1].trim() + '\n\n';
+        }
 
         let html = '';
+
+        // Parse and wrap in language divs
         if(enContent || zhContent) {
             if(enContent) html += `<div class="content-en">${marked.parse(enContent)}</div>`;
             if(zhContent) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhContent)}</div>`;
         } else {
             html += `<div class="content-en">${marked.parse(rawBody)}</div>`;
         }
+
         document.getElementById('post-body').innerHTML = html;
     }
 
@@ -205,7 +222,6 @@
         }
     }
 
-    // Canvas Animation - Background particle color changed to faint Emerald
     const canvas = document.getElementById('flowCanvas');
     const ctx = canvas.getContext && canvas.getContext('2d');
     let w,h,particles=[];
