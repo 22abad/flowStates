@@ -90,7 +90,7 @@ while (j > 0 && s.charAt(i) != s.charAt(j)) {
     j = next[j - 1];
 }
 */
-
+```
 [END]
 
 [ZH]
@@ -102,6 +102,7 @@ LeetCode 459: KMP 算法中的“幸运” Bug
 2. 代码与深度复盘
 在二刷过程中，我写下了如下代码。它神奇地通过了测试，但包含逻辑漏洞。为了方便阅读，我将代码与深度分析合并在下方。
 
+```java
 class Solution {
     public boolean repeatedSubstringPattern(String s) {
         int j = 0; 
@@ -166,5 +167,5 @@ while (j > 0 && s.charAt(i) != s.charAt(j)) {
     j = next[j - 1];
 }
 */
-
+```
 [END]
