@@ -1,7 +1,7 @@
 ---
 title: "The Subtle Alliance: Building a Fortress of Intimacy from Scratch"
 title_zh: "微妙的同盟：没有任何血缘关系的我们，如何结成最亲密的战友"
-date: 2025-11-24
+date: 2025-11-26
 author: "22abad"
 categories: 
   - "Relationships"

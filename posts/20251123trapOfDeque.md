@@ -1,7 +1,7 @@
 ---
 title: "Monotonic Queue: Why We Store Indices and The Trap of Deque APIs"
 title_zh: "单调队列：为什么存下标？以及 Deque API 的方向陷阱"
-date: 2025-11-23
+date: 2025-11-24
 author: "Dong"
 categories: 
   - "CS"
