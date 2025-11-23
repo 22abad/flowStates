@@ -78,3 +78,4 @@ while (!deque.isEmpty() && deque.peek() < i - k + 1) {
 while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
     deque.pollLast(); // 显式操作队尾
 }
+[END]
