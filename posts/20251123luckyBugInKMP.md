@@ -2,7 +2,7 @@
 title: "LeetCode 459: The 'Lucky' Bug in KMP — Why Logic Matters More Than AC"
 title_zh: "LeetCode 459: KMP 算法中的“幸运” Bug —— 为什么逻辑比 AC 更重要"
 date: 2025-11-23
-author: "Dong"
+author: "22abad"
 categories: 
   - "CS"
   - "LeetCode"
