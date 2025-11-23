@@ -147,6 +147,7 @@
     }
 
     // FIX: Improved Logic to ensure proper Markdown spacing
+    // FIX: Robust renderer that prevents empty body
     function renderBodyContent(rawBody) {
         const enRegex = /\[EN\]([\s\S]*?)\[END\]/g;
         const zhRegex = /\[ZH\]([\s\S]*?)\[END\]/g;
@@ -155,26 +156,47 @@
         let zhContent = '';
         let match;
 
-        // Add double newlines to ensure headers are parsed correctly
-        while ((match = enRegex.exec(rawBody)) !== null) {
-            enContent += '\n\n' + match[1].trim() + '\n\n'; 
-        }
-
-        while ((match = zhRegex.exec(rawBody)) !== null) {
-            zhContent += '\n\n' + match[1].trim() + '\n\n';
-        }
+        // Extract all blocks
+        while ((match = enRegex.exec(rawBody)) !== null) enContent += match[1] + '\n\n';
+        while ((match = zhRegex.exec(rawBody)) !== null) zhContent += match[1] + '\n\n';
 
         let html = '';
+        const parsedRaw = marked.parse(rawBody);
 
-        // Parse and wrap in language divs
-        if(enContent || zhContent) {
-            if(enContent) html += `<div class="content-en">${marked.parse(enContent)}</div>`;
-            if(zhContent) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhContent)}</div>`;
-        } else {
-            html += `<div class="content-en">${marked.parse(rawBody)}</div>`;
+        // Scenario 1: Tags were found
+        if (enContent || zhContent) {
+            // Render English
+            if (enContent) {
+                html += `<div class="content-en">${marked.parse(enContent)}</div>`;
+            } else {
+                // If no English block, use raw body or placeholder
+                html += `<div class="content-en">${parsedRaw}</div>`;
+            }
+
+            // Render Chinese
+            if (zhContent) {
+                html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhContent)}</div>`;
+            } else {
+                // SAFETY FALLBACK: If User is in Chinese mode but no [ZH] block found,
+                // show English content instead of a blank screen.
+                const contentToShow = enContent ? marked.parse(enContent) : parsedRaw;
+                html += `<div class="content-zh hidden font-serif-cn opacity-80">`;
+                html += `<p class="text-sm text-slate-500 mb-4 italic">此处暂无中文译文，显示原文：</p>`;
+                html += contentToShow;
+                html += `</div>`;
+            }
+        } 
+        // Scenario 2: No tags found at all (Plain Markdown file)
+        else {
+            // Fill BOTH containers with the same raw content
+            html += `<div class="content-en">${parsedRaw}</div>`;
+            html += `<div class="content-zh hidden font-serif-cn">${parsedRaw}</div>`;
         }
 
         document.getElementById('post-body').innerHTML = html;
+        
+        // Re-apply visibility based on current language state
+        updateLang();
     }
 
     async function loadPost(){
