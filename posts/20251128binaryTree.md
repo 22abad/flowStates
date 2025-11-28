@@ -305,7 +305,7 @@ class Solution {
             // Trick: Move root's left subtree to minNode's left
             // 技巧: 把root的左子树，嫁接到继承人的左边
             minNode.left = root.left; 
-            return root.right; // 右孩子上位
+            return root.right; // Replace root with right child
         }
     }
 }
