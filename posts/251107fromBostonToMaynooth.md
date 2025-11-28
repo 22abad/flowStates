@@ -2,7 +2,7 @@
 title: "Fate's Detour: From Boston Rejection to Maynooth Rain"
 title_zh: "命运的改道：从波士顿的拒信到梅努斯的雨"
 date: 2025-11-07
-author: "Dong"
+author: "22abad"
 categories: 
   - "Memoir"
   - "Reflections"
@@ -18,7 +18,7 @@ summary_zh: "来爱尔兰正好两个月。回首这段混乱的旅程：被吊�
 [EN]
 # Fate's Detour: From Boston Rejection to Maynooth Rain
 
-![Eolas Building|600](https://assets.flowstates.me/img/2025/11/20251128eolas.jpg)
+![Eolas Building|600](https://assets.flowstates.me/2025/20251128eolas.jpg)
 *(The Eolas Building, where the journey began)*
 
 ## 1. The Door Slammed Shut
@@ -32,7 +32,7 @@ The road I had mapped out for years instantly vanished.
 [ZH]
 # 命运的改道：从波士顿的拒信到梅努斯的雨
 
-![Eolas 大楼|600](https://assets.flowstates.me/img/2025/11/20251128eolas.jpg)
+![Eolas 大楼|600](https://assets.flowstates.me/2025/20251128eolas.jpg)
 *(Eolas 大楼，一切开始的地方)*
 
 ## 1. 被狠狠关上的门
