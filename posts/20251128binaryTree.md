@@ -1,3 +1,4 @@
+
 ---
 title: "Binary Tree Elite Squad: The Only 4 Problems You Need for Mastery (Comprehensive Edition)"
 title_zh: "二叉树特种兵：二刷只需搞定这 4 道母题（全解版）"
@@ -11,8 +12,8 @@ tags:
   - "Patterns"
   - "LeetCode"
   - "Java"
-summary_en: "A comprehensive guide to 4 foundational Binary Tree problems. Includes Recursive, Iterative, and Unified solutions for each. Mastering these patterns allows you to solve almost any tree problem."
-summary_zh: "二叉树 4 道母题的终极全解指南。每道题包含递归、迭代、统一迭代等多种解法。吃透这些模式，足以应对绝大多数二叉树问题。"
+summary_en: "A strategic selection of 4 Binary Tree problems for the second pass. Mastering these covers Traversal (Iterative), Construction, LCA, and BST Modification. Quality over quantity. Deep understanding over rote memorization."
+summary_zh: "为二刷精心挑选的 4 道二叉树母题。精通这些将覆盖迭代遍历、构造、最近公共祖先和 BST 修改。重质量轻数量，重深度理解轻死记硬背。"
 ---
 
 ![Binary Tree Strategy|600](https://assets.flowstates.me/2025/20251128binaryTree.jpg)
@@ -25,7 +26,7 @@ Binary Trees essentially test only two things:
 1.  **Traversal Order**: Can you visit nodes in the exact order you want? (Recursion is easy; Iteration is the test).
 2.  **Structure Manipulation**: Can you change links or build nodes based on logic?
 
-If you master the following 4 problems and their variations, you master the Tree.
+If you master the following 4 problems, you master the Tree.
 [END]
 
 [ZH]
@@ -36,26 +37,26 @@ If you master the following 4 problems and their variations, you master the Tree
 1.  **遍历顺序**：你能按你想要的顺序访问节点吗？（递归很简单，迭代才是试金石）。
 2.  **结构操作**：你能根据逻辑修改指针或构建节点吗？
 
-搞定下面这 4 道题及其变种，二叉树你就通关了。
+搞定下面这 4 道，二叉树你就通关了。
 [END]
 
 ---
 
 [EN]
 ## 1. The Foundation: Traversal (Pre/In/Post)
-* **Problem**: LeetCode 94 / 144 / 145.
+* **Problem**: [LeetCode 94. Binary Tree Inorder Traversal](https://leetcode.cn/problems/binary-tree-inorder-traversal/) / [144](https://leetcode.cn/problems/binary-tree-preorder-traversal/) / [145](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
 * **Goal**: Master both Recursion and Iteration.
 [END]
 
 [ZH]
 ## 1. 地基：遍历（前/中/后序）
-* **对应题目**: LeetCode 94 / 144 / 145。
+* **对应题目**: [LeetCode 94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/) / [144](https://leetcode.cn/problems/binary-tree-preorder-traversal/) / [145](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
 * **目标**: 同时掌握递归和迭代。
 [END]
 
-### Solution 1: Recursion (The Basic) / 递归法（基础）
-
 ```java
+// Solution 1: Recursion (The Basic)
+// 解法 1：递归法（基础 - 以中序为例）
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
@@ -72,18 +73,16 @@ class Solution {
         // Post-order: res.add(node.val);
     }
 }
-```
-### Solution 2: Standard Iteration (Stack) / 标准迭代法（栈）
+````
 
-[ZH] 这是最直观的迭代法，模拟递归栈。前序最简单，中序需要指针辅助，后序最难（通常用双栈法或反转前序法）。这里展示**中序**的标准迭代。 [END]
-
-
-
-```Java
+```java
+// Solution 2: Standard Iteration (Stack)
+// 解法 2：标准迭代法（栈 - 以中序为例）
+// 思路：一路向左钻到底，撞墙了就回头处理，然后转向右边。
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
-        Stack<TreeNode> stack = new Stack<>(); // Deque<TreeNode> stack = new ArrayDeque<>();
+        Stack<TreeNode> stack = new Stack<>();
         TreeNode curr = root;
         
         while (curr != null || !stack.isEmpty()) {
@@ -104,13 +103,10 @@ class Solution {
 }
 ```
 
-### Solution 3: Unified Iteration (Marker Method) / 统一迭代法（标记法）
-
-[ZH] 这是**最强通用模板**。只需要调整入栈顺序，就能通吃前中后序，逻辑完全一致。 核心思想：用 `null` 标记“来过但未处理”的节点。 [END]
-
-
-```Java
-// Unified Iterative Method (Marker Style)
+```java
+// Solution 3: Unified Iteration (Marker Method)
+// 解法 3：统一迭代法（标记法）- 万能模板
+// 思路：用 null 标记“来过但未处理”的节点。只需交换 push 顺序即可实现前中后序。
 class Solution {
     public List<Integer> inorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
@@ -127,10 +123,8 @@ class Solution {
                 // Stack Order (Reverse): Right -> Center -> Left
                 
                 if (node.right != null) stack.push(node.right);  // Right
-                
                 stack.push(node);                                // Center
                 stack.push(null);                                // ⚡️ MARKER (Not visited yet)
-                
                 if (node.left != null) stack.push(node.left);    // Left
                 
             } else {
@@ -144,30 +138,30 @@ class Solution {
 }
 ```
 
----
+-----
 
 [EN]
 
-## 2. The Construction: Build Tree (Pre + In)
+## 2\. The Construction: Build Tree (Pre + In)
 
-- **Problem**: LeetCode 105.
-    
-- **Why**: The ultimate test of **Index Manipulation** and **Recursion**. You must split arrays into "Left Subtree" and "Right Subtree" precisely. [END]
-    
+  * **Problem**: [LeetCode 105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+  * **Why**: The ultimate test of **Index Manipulation** and **Recursion**. You must split arrays into "Left Subtree" and "Right Subtree" precisely.
+    [END]
 
 [ZH]
 
-## 2. 构造：从前序与中序构造二叉树
+## 2\. 构造：从前序与中序构造二叉树
 
-- **对应题目**: LeetCode 105。
-    
-- **理由**: 这是对 **数组下标** 和 **递归拆解** 的终极考验。你必须精准地计算出左子树和右子树在数组中的范围。 [END]
-    
+  * **对应题目**: [LeetCode 105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+  * **理由**: 这是对 **数组下标** 和 **递归拆解** 的终极考验。你必须精准地计算出左子树和右子树在数组中的范围。
+    [END]
 
+<!-- end list -->
 
-```Java
+```java
 class Solution {
     // Map speeds up finding index in inorder array (O(1))
+    // Map 加速查找根节点下标
     Map<Integer, Integer> map = new HashMap<>();
 
     public TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -191,6 +185,7 @@ class Solution {
         int index = map.get(rootVal);
         
         // 3. Calculate Left Subtree Size (Crucial!)
+        // ⚡️ 关键点：计算左子树长度
         int leftSize = index - inStart;
 
         // 4. Recursion
@@ -209,46 +204,47 @@ class Solution {
 }
 ```
 
----
+-----
 
 [EN]
 
-## 3. The Logic: Lowest Common Ancestor (LCA)
+## 3\. The Logic: Lowest Common Ancestor (LCA)
 
-- **Problem**: LeetCode 236.
-    
-- **Why**: The pinnacle of **Post-order Traversal** (Bottom-up). You need information from children to make a decision at the parent. [END]
-    
+  * **Problem**: [LeetCode 236. Lowest Common Ancestor of a Binary Tree](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+  * **Why**: The pinnacle of **Post-order Traversal** (Bottom-up). You need information from children to make a decision at the parent.
+    [END]
 
 [ZH]
 
-## 3. 逻辑：最近公共祖先 (LCA)
+## 3\. 逻辑：最近公共祖先 (LCA)
 
-- **对应题目**: LeetCode 236。
-    
-- **理由**: 这是 **后序遍历 (Bottom-up)** 的巅峰。你需要收集左右孩子的返回值，然后在父节点做决策。逻辑极其精简。 [END]
-    
+  * **对应题目**: [LeetCode 236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+  * **理由**: 这是 **后序遍历 (Bottom-up)** 的巅峰。你需要收集左右孩子的返回值，然后在父节点做决策。逻辑极其精简。
+    [END]
 
+<!-- end list -->
 
-
-```Java
+```java
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
         // 1. Termination
         // Found p or q, or hit bottom -> return self
+        // 终止条件：到底了，或者找到目标了 -> 返回自己
         if (root == null || root == p || root == q) return root;
 
         // 2. Recursion (Go verify left and right subtrees)
+        // 递归去左右找
         TreeNode left = lowestCommonAncestor(root.left, p, q);
         TreeNode right = lowestCommonAncestor(root.right, p, q);
 
         // 3. Logic (Backtracking / Post-order processing)
         
-        // If both sides returned non-null, it means p is on one side and q is on the other.
-        // Current node is the LCA!
+        // If both sides returned non-null, it means p and q are on different sides -> Current is LCA
+        // 左右各找到一个，说明 p 和 q 分居两侧 -> 当前节点就是 LCA
         if (left != null && right != null) return root; 
         
         // If only one side returned something, pass it up.
+        // 只有一边找到了，说明 LCA 在那一边，往上传
         if (left != null) return left;   
         if (right != null) return right; 
         
@@ -258,36 +254,33 @@ class Solution {
 }
 ```
 
----
+-----
 
 [EN]
 
-## 4. The Operation: Delete Node in BST
+## 4\. The Operation: Delete Node in BST
 
-- **Problem**: LeetCode 450.
-    
-- **Why**: The comprehensive exam for BST. It combines **Search** and **Pointer Manipulation**. The tricky part is handling a node with two children. [END]
-    
+  * **Problem**: [LeetCode 450. Delete Node in a BST](https://leetcode.cn/problems/delete-node-in-a-bst/)
+  * **Why**: The comprehensive exam for BST. It combines **Search** and **Pointer Manipulation**. The tricky part is handling a node with two children.
+    [END]
 
 [ZH]
 
-## 4. 操作：删除 BST 中的节点
+## 4\. 操作：删除 BST 中的节点
 
-- **对应题目**: LeetCode 450。
-    
-- **理由**: BST 操作的综合大题。结合了 **搜索** 和 **指针操作**。最难的是处理“双子节点”的情况——需要找到右子树的最小值来“继位”。 [END]
-    
+  * **对应题目**: [LeetCode 450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
+  * **理由**: BST 操作的综合大题。结合了 **搜索** 和 **指针操作**。最难的是处理“双子节点”的情况——需要找到右子树的最小值来“继位”。
+    [END]
 
-### Solution 1: Recursive (Standard) / 递归法（标准）
+<!-- end list -->
 
-
-
-```Java
+```java
+// Solution 1: Recursive (Standard) / 递归法（标准）
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
         if (root == null) return null;
 
-        // 1. Search
+        // 1. Search / 搜索
         if (root.val > key) {
             root.left = deleteNode(root.left, key);
             return root;
@@ -295,19 +288,22 @@ class Solution {
             root.right = deleteNode(root.right, key);
             return root;
         } else {
-            // 2. Found: Delete Logic
+            // 2. Found: Delete Logic / 找到了：删除逻辑
             
             // Case A: Leaf or One Child (Directly return the other child)
+            // 情况 A: 叶子或单孩子 (直接让孩子继位)
             if (root.left == null) return root.right;
             if (root.right == null) return root.left;
 
             // Case B: Two Children
+            // 情况 B: 双孩子 (最难点)
             // Strategy: Find the MIN node in the RIGHT subtree (Successor)
+            // 策略: 找到右子树中的最小值 (继承人)
             TreeNode minNode = root.right;
             while (minNode.left != null) minNode = minNode.left;
             
             // Trick: Move root's left subtree to minNode's left
-            // (This changes tree structure but keeps BST property)
+            // 技巧: 把root的左子树，嫁接到继承人的左边
             minNode.left = root.left; 
             return root.right; // Replace root with right child
         }
@@ -315,21 +311,18 @@ class Solution {
 }
 ```
 
-### Solution 2: Iterative (Hardcore) / 迭代法（硬核）
-
-[ZH] 迭代法删除 BST 节点非常繁琐，因为你需要维护 `parent` 指针。面试中通常写递归即可，但了解迭代逻辑有助于理解指针操作。 [END]
-
-
-
-```Java
+```java
+// Solution 2: Iterative (Hardcore) / 迭代法（硬核，供参考）
+// Requires parent pointer maintenance.
+// 需要维护父节点指针，逻辑较繁琐。
 class Solution {
     public TreeNode deleteNode(TreeNode root, int key) {
         if (root == null) return null;
         
         TreeNode cur = root;
-        TreeNode pre = null; // Parent node
+        TreeNode pre = null; // Parent node / 父节点
         
-        // 1. Find the node
+        // 1. Find the node / 寻找
         while (cur != null) {
             if (cur.val == key) break;
             pre = cur;
@@ -338,15 +331,15 @@ class Solution {
         }
         if (cur == null) return root; // Not found
 
-        // 2. Delete logic
-        // If root is the target
+        // 2. Delete logic / 删除
+        // If root is the target / 如果删除的是根
         if (pre == null) return deleteOneNode(cur);
         
-        // If target is left child
+        // If target is left child / 如果删除左孩子
         if (pre.left != null && pre.left.val == key) {
             pre.left = deleteOneNode(cur);
         }
-        // If target is right child
+        // If target is right child / 如果删除右孩子
         if (pre.right != null && pre.right.val == key) {
             pre.right = deleteOneNode(cur);
         }
@@ -359,6 +352,7 @@ class Solution {
         if (target.right == null) return target.left;
         
         // Put target.left to the leftmost of target.right
+        // 把左孩子挂到右子树的最左边
         TreeNode cur = target.right;
         while (cur.left != null) cur = cur.left;
         cur.left = target.left;
@@ -367,4 +361,3 @@ class Solution {
     }
 }
 ```
-
