@@ -44,13 +44,13 @@ If you master the following 4 problems, you master the Tree.
 
 [EN]
 ## 1. The Foundation: Traversal (Pre/In/Post)
-* **Problem**: [LeetCode 94. Binary Tree Inorder Traversal](https://leetcode.cn/problems/binary-tree-inorder-traversal/) / [144](https://leetcode.cn/problems/binary-tree-preorder-traversal/) / [145](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+* **Problem**: LeetCode 94 / 144 / 145.
 * **Goal**: Master both Recursion and Iteration.
 [END]
 
 [ZH]
 ## 1. 地基：遍历（前/中/后序）
-* **对应题目**: [LeetCode 94. 二叉树的中序遍历](https://leetcode.cn/problems/binary-tree-inorder-traversal/) / [144](https://leetcode.cn/problems/binary-tree-preorder-traversal/) / [145](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+* **对应题目**: LeetCode 94 / 144 / 145。
 * **目标**: 同时掌握递归和迭代。
 [END]
 
@@ -86,12 +86,12 @@ class Solution {
         TreeNode curr = root;
         
         while (curr != null || !stack.isEmpty()) {
-            // 1. Reach the leftmost node
+            // 1. Reach the leftmost node (一路向左)
             if (curr != null) {
                 stack.push(curr);
-                curr = curr.left; // Go left
+                curr = curr.left; 
             } 
-            // 2. Process the node
+            // 2. Process the node (到头了，弹出处理)
             else {
                 curr = stack.pop();
                 res.add(curr.val); // Record (Center)
@@ -144,7 +144,7 @@ class Solution {
 
 ## 2\. The Construction: Build Tree (Pre + In)
 
-  * **Problem**: [LeetCode 105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+  * **Problem**: LeetCode 105.
   * **Why**: The ultimate test of **Index Manipulation** and **Recursion**. You must split arrays into "Left Subtree" and "Right Subtree" precisely.
     [END]
 
@@ -152,7 +152,7 @@ class Solution {
 
 ## 2\. 构造：从前序与中序构造二叉树
 
-  * **对应题目**: [LeetCode 105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+  * **对应题目**: LeetCode 105。
   * **理由**: 这是对 **数组下标** 和 **递归拆解** 的终极考验。你必须精准地计算出左子树和右子树在数组中的范围。
     [END]
 
@@ -210,7 +210,7 @@ class Solution {
 
 ## 3\. The Logic: Lowest Common Ancestor (LCA)
 
-  * **Problem**: [LeetCode 236. Lowest Common Ancestor of a Binary Tree](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+  * **Problem**: LeetCode 236.
   * **Why**: The pinnacle of **Post-order Traversal** (Bottom-up). You need information from children to make a decision at the parent.
     [END]
 
@@ -218,7 +218,7 @@ class Solution {
 
 ## 3\. 逻辑：最近公共祖先 (LCA)
 
-  * **对应题目**: [LeetCode 236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+  * **对应题目**: LeetCode 236。
   * **理由**: 这是 **后序遍历 (Bottom-up)** 的巅峰。你需要收集左右孩子的返回值，然后在父节点做决策。逻辑极其精简。
     [END]
 
@@ -260,7 +260,7 @@ class Solution {
 
 ## 4\. The Operation: Delete Node in BST
 
-  * **Problem**: [LeetCode 450. Delete Node in a BST](https://leetcode.cn/problems/delete-node-in-a-bst/)
+  * **Problem**: LeetCode 450.
   * **Why**: The comprehensive exam for BST. It combines **Search** and **Pointer Manipulation**. The tricky part is handling a node with two children.
     [END]
 
@@ -268,7 +268,7 @@ class Solution {
 
 ## 4\. 操作：删除 BST 中的节点
 
-  * **对应题目**: [LeetCode 450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
+  * **对应题目**: LeetCode 450。
   * **理由**: BST 操作的综合大题。结合了 **搜索** 和 **指针操作**。最难的是处理“双子节点”的情况——需要找到右子树的最小值来“继位”。
     [END]
 
@@ -305,7 +305,7 @@ class Solution {
             // Trick: Move root's left subtree to minNode's left
             // 技巧: 把root的左子树，嫁接到继承人的左边
             minNode.left = root.left; 
-            return root.right; // Replace root with right child
+            return root.right; // 右孩子上位
         }
     }
 }
@@ -349,7 +349,7 @@ class Solution {
     // Helper: Delete a specific node and rearrange children
     private TreeNode deleteOneNode(TreeNode target) {
         if (target == null) return null;
-        if (target.right == null) return target.left;
+        if (target.right == null) return target.left; // 只有左孩子
         
         // Put target.left to the leftmost of target.right
         // 把左孩子挂到右子树的最左边
