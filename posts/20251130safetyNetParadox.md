@@ -18,7 +18,7 @@ summary_zh: "拥有“B计划”（有效的律师执照）并没有让我在学
 
 [EN]
 
-![Pressure with Safety Net|600](https://assets.flowstates.me/2025/20251130safetyNetParadoxt.jpg)
+![Pressure with Safety Net|600](https://assets.flowstates.me/2025/20251130safetyNetParadox.jpg)
 
 # The Safety Net Paradox: How My Lawyer License Fuels My Coding Drive
 
@@ -45,7 +45,7 @@ My legal background isn't dead weight. It's the solid ground beneath my feet tha
 [END]
 
 [ZH]
-![Pressure with Safety Net|600](https://assets.flowstates.me/2025/20251130safetyNetParadoxt.jpg)
+![Pressure with Safety Net|600](https://assets.flowstates.me/2025/20251130safetyNetParadox.jpg)
 # 安全网悖论：我的律师执照如何成为我编程的动力
 
 在上一篇文章中，我谈到了 43 岁学习编程的激烈挣扎，把它比作我的旧自我与新工程思维之间的一场战斗。我用“法槌敲下，键盘亮起”这样一个充满戏剧性的画面作为结尾，象征着与过去的决裂。
