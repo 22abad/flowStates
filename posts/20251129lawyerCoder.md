@@ -15,10 +15,9 @@ tags:
 summary_en: "A reflection triggered by a frustrating argument with an AI. Why missing the 'Golden Age' of the internet might be my greatest luck, and how my legal background fits perfectly into the AI era. The essence of engineering is not perfection, but managing imperfection."
 summary_zh: "一场与 AI 的“争吵”引发的职业反思。为什么错过了互联网的黄金十年可能是我最大的幸运？法律背景如何完美契合 AI 时代？工程的本质不是追求完美，而是驾驭不完美。"
 ---
-
+[EN]
 ![Lawyer to Coder Transition|600](https://assets.flowstates.me/2025/20251129lawyerCoder.jpg)
 
-[EN]
 # The Lawyer, The Coder, and The Imperfect AI
 
 ## 1. The Argument with the Machine
@@ -30,6 +29,7 @@ But in the silence after the rage, I realized something profound. This friction�
 [END]
 
 [ZH]
+![Lawyer to Coder Transition|600](https://assets.flowstates.me/2025/20251129lawyerCoder.jpg)
 # 43岁的律师与不完美的AI
 
 ## 1. 与机器的争吵
