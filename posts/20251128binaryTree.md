@@ -367,7 +367,9 @@ class Solution {
 [END]
 
 [ZH]
+
 ![Binary Tree Strategy|600](https://assets.flowstates.me/2025/20251128binaryTree.jpg)
+
 # 战略：为什么选这几道？
 
 我们没时间把那 30 道题重刷一遍。我们要打**七寸**。
