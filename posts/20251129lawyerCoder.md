@@ -16,7 +16,7 @@ summary_en: "A reflection triggered by a frustrating argument with an AI. Why mi
 summary_zh: "一场与 AI 的“争吵”引发的职业反思。为什么错过了互联网的黄金十年可能是我最大的幸运？法律背景如何完美契合 AI 时代？工程的本质不是追求完美，而是驾驭不完美。"
 ---
 
-![Lawyer to Coder Transition|600](https://assets.flowstates.me/2025/20251129lawyer_coder_ai.jpg)
+![Lawyer to Coder Transition|600](https://assets.flowstates.me/2025/20251129lawyerCoder.jpg)
 
 [EN]
 # The Lawyer, The Coder, and The Imperfect AI
