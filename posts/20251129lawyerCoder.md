@@ -76,7 +76,7 @@ The job of a modern engineer isn't just "Inventing" (writing every line from scr
 We are the architects with the blueprint. AI is the powerful but clumsy crane.
 Our value lies in the ability to guide this clumsy giant, to debug its hallucinations, and to force it to produce the result we need.
 That struggle *is* the work.
-I have accepted my past, and I have accepted the imperfection of my tools. The gavel is down, the keyboard is clacking. My path of creation has just begun.
+I have accepted my past, and I have accepted the imperfection of my tools. The gavel strikes down; the keyboard lights up. My path of creation has just begun.
 
 [END]
 
