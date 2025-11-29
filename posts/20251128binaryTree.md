@@ -23,7 +23,6 @@ summary_zh: "二叉树二刷终极指南。覆盖遍历、构造、最近公共�
 We don't have time to re-do all 30 problems. We need to hit the **Vital Points**.
 If you master the following 5 problems and their variations (Recursion vs. Iteration), you master the Tree.
 
----
 
 ## 1. The Foundation: Traversal (Pre/In/Post)
 * **Problem**: [LeetCode 94 (In)](https://leetcode.cn/problems/binary-tree-inorder-traversal/) / [144 (Pre)](https://leetcode.cn/problems/binary-tree-preorder-traversal/) / [145 (Post)](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
@@ -47,7 +46,7 @@ class Solution {
         // Post-order position: res.add(node.val);
     }
 }
-````
+```
 
 ### Solution 2: Standard Iteration (Stack)
 
@@ -111,7 +110,6 @@ class Solution {
 }
 ```
 
------
 
 ## 2\. The Construction: Build Tree (Pre + In)
 
@@ -189,7 +187,6 @@ class Solution {
 }
 ```
 
------
 
 ## 3\. The Logic: Lowest Common Ancestor (LCA)
 
@@ -258,7 +255,6 @@ class Solution {
 }
 ```
 
------
 
 ## 4\. Bonus: Validate Binary Search Tree (BST)
 
@@ -305,7 +301,6 @@ class Solution {
 }
 ```
 
------
 
 ## 5\. The Operation: Delete Node in BST
 
@@ -383,7 +378,6 @@ class Solution {
 
 搞定下面这 5 道题及其变种，二叉树你就通关了。
 
------
 
 ## 1\. 地基：遍历（前/中/后序）
 
@@ -477,7 +471,6 @@ class Solution {
 }
 ```
 
------
 
 ## 2\. 构造：从前序与中序构造二叉树
 
@@ -563,7 +556,6 @@ class Solution {
 }
 ```
 
------
 
 ## 3\. 逻辑：最近公共祖先 (LCA)
 
@@ -638,8 +630,6 @@ class Solution {
 }
 ```
 
------
-
 ## 4\. 补充：验证二叉搜索树 (BST)
 
   * **对应题目**: [LeetCode 98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
@@ -690,7 +680,6 @@ class Solution {
 }
 ```
 
------
 
 ## 5\. 操作：删除 BST 中的节点
 
