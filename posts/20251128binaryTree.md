@@ -25,7 +25,7 @@ If you master the following 5 problems and their variations (Recursion vs. Itera
 
 
 ## 1. The Foundation: Traversal (Pre/In/Post)
-* **Problem**: [LeetCode 94 (In)](https://leetcode.cn/problems/binary-tree-inorder-traversal/) / [144 (Pre)](https://leetcode.cn/problems/binary-tree-preorder-traversal/) / [145 (Post)](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+* **Problem**: [LeetCode 94 (In)](https://leetcode.com/problems/binary-tree-inorder-traversal/) / [144 (Pre)](https://leetcode.com/problems/binary-tree-preorder-traversal/) / [145 (Post)](https://leetcode.com/problems/binary-tree-postorder-traversal/)
 * **Goal**: Master both Recursion and Iteration. The **Unified Style** is key.
 
 ### Solution 1: Recursion (Standard)
@@ -113,7 +113,7 @@ class Solution {
 
 ## 2\. The Construction: Build Tree (Pre + In)
 
-  * **Problem**: [LeetCode 105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+  * **Problem**: [LeetCode 105. Construct Binary Tree from Preorder and Inorder Traversal](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
   * **Why**: The ultimate test of **Index Manipulation**.
 
 ### Solution 1: Recursion with Map (Optimized)
@@ -190,7 +190,7 @@ class Solution {
 
 ## 3\. The Logic: Lowest Common Ancestor (LCA)
 
-  * **Problem**: [LeetCode 236. Lowest Common Ancestor of a Binary Tree](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+  * **Problem**: [LeetCode 236. Lowest Common Ancestor of a Binary Tree](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
   * **Why**: Post-order traversal (Bottom-up) logic.
 
 ### Solution 1: Recursion (DFS)
@@ -258,7 +258,7 @@ class Solution {
 
 ## 4\. Bonus: Validate Binary Search Tree (BST)
 
-  * **Problem**: [LeetCode 98. Validate Binary Search Tree](https://leetcode.cn/problems/validate-binary-search-tree/)
+  * **Problem**: [LeetCode 98. Validate Binary Search Tree](https://leetcode.com/problems/validate-binary-search-tree/)
   * **Why**: The "Hello World" of BST properties.
 
 ### Solution 1: Recursion (Range Limit)
@@ -304,7 +304,7 @@ class Solution {
 
 ## 5\. The Operation: Delete Node in BST
 
-  * **Problem**: [LeetCode 450. Delete Node in a BST](https://leetcode.cn/problems/delete-node-in-a-bst/)
+  * **Problem**: [LeetCode 450. Delete Node in a BST](https://leetcode.com/problems/delete-node-in-a-bst/)
   * **Why**: Complex pointer manipulation.
 
 ### Solution 1: Recursion (Standard)
@@ -384,7 +384,7 @@ class Solution {
 
 ## 1\. 地基：遍历（前/中/后序）
 
-  * **对应题目**: [LeetCode 94 (中)](https://leetcode.cn/problems/binary-tree-inorder-traversal/) / [144 (前)](https://leetcode.cn/problems/binary-tree-preorder-traversal/) / [145 (后)](https://leetcode.cn/problems/binary-tree-postorder-traversal/)
+  * **对应题目**: [LeetCode 94 (中)](https://leetcode.com/problems/binary-tree-inorder-traversal/) / [144 (前)](https://leetcode.com/problems/binary-tree-preorder-traversal/) / [145 (后)](https://leetcode.com/problems/binary-tree-postorder-traversal/)
   * **目标**: 同时掌握递归和迭代。重点掌握**统一迭代法（标记法）**，它是解决所有遍历问题的万能钥匙。
 
 ### 解法 1：递归法（基础）
@@ -477,7 +477,7 @@ class Solution {
 
 ## 2\. 构造：从前序与中序构造二叉树
 
-  * **对应题目**: [LeetCode 105. 从前序与中序遍历序列构造二叉树](https://leetcode.cn/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
+  * **对应题目**: [LeetCode 105. 从前序与中序遍历序列构造二叉树](https://leetcode.com/problems/construct-binary-tree-from-preorder-and-inorder-traversal/)
   * **理由**: 这是对 **数组下标** 和 **递归拆解** 的终极考验。你必须精准地计算出左子树和右子树在数组中的范围。
 
 ### 解法 1：递归 + Map 优化
@@ -562,7 +562,7 @@ class Solution {
 
 ## 3\. 逻辑：最近公共祖先 (LCA)
 
-  * **对应题目**: [LeetCode 236. 二叉树的最近公共祖先](https://leetcode.cn/problems/lowest-common-ancestor-of-a-binary-tree/)
+  * **对应题目**: [LeetCode 236. 二叉树的最近公共祖先](https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-tree/)
   * **理由**: 这是 **后序遍历 (Bottom-up)** 的巅峰。你需要收集左右孩子的返回值，然后在父节点做决策。逻辑极其精简。
 
 ### 解法 1：递归法 (DFS)
@@ -635,7 +635,7 @@ class Solution {
 
 ## 4\. 补充：验证二叉搜索树 (BST)
 
-  * **对应题目**: [LeetCode 98. 验证二叉搜索树](https://leetcode.cn/problems/validate-binary-search-tree/)
+  * **对应题目**: [LeetCode 98. 验证二叉搜索树](https://leetcode.com/problems/validate-binary-search-tree/)
   * **理由**: BST 的入门必修课。考察对 **有效取值范围** 和 **中序遍历有序性** 的理解。
 
 ### 解法 1：递归法（区间界定）
@@ -686,7 +686,7 @@ class Solution {
 
 ## 5\. 操作：删除 BST 中的节点
 
-  * **对应题目**: [LeetCode 450. 删除二叉搜索树中的节点](https://leetcode.cn/problems/delete-node-in-a-bst/)
+  * **对应题目**: [LeetCode 450. 删除二叉搜索树中的节点](https://leetcode.com/problems/delete-node-in-a-bst/)
   * **理由**: BST 操作的综合大题。结合了 **搜索** 和 **指针操作**。最难的是处理“双子节点”的情况——需要找到右子树的最小值来“继位”。
 
 ### 解法 1: 递归法（推荐）
