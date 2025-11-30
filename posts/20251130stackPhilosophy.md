@@ -1,5 +1,3 @@
-
-
 ---
 title: "Cracking the Stack: The Philosophy Behind Standard vs. Unified Iteration"
 title_zh: "破解栈的哲学：标准迭代 vs 统一迭代的底层逻辑差异"
@@ -74,8 +72,6 @@ Because the "Time to Collect" is different for each order, the code structure *m
     * 中序：弹栈*后*收集（回来再拿）。
     * 后序：更复杂。
 因为每种遍历“收割的时机”不同，所以代码结构**必须**不同。这就导致了难以记忆。
-[END]
-
 ```java
 // Standard Inorder: Logic depends on pointer movement
 while (curr != null || !stack.isEmpty()) {
@@ -89,6 +85,9 @@ while (curr != null || !stack.isEmpty()) {
     }
 }
 ```
+[END]
+
+
 [EN]
 
 2. Unified Iteration: Harvest by "State"
@@ -107,27 +106,6 @@ Yes: The next node in the stack is ready to be harvested. Collect it.
 No: It's not ready. Push it back with a marker, and push its children according to the order (Right-Center-Left).
 
 This decouples "Traversal" from "Collection". That is why it is unified.
-
-[END]
-
-[ZH]
-
-2. 统一迭代：靠“状态”收割
-统一迭代法（标记法）改变了游戏规则。 栈不再只是路径记录器，它变成了一个任务列表。 我们显式地标记节点的状态：
-
-没有 NULL 标记的节点：“我还需要先去看看你的孩子。”（处理中状态）
-
-紧跟 NULL 标记的节点：“我已经看过你的孩子了，你是成品了。”（收割状态）
-
-收割黄金法则： 我们从不关心时机。我们只找 标记 (NULL)。
-
-弹出一个元素。是 NULL 吗？
-
-是：说明栈里紧接着的那个节点是可以收割的。拿走它（res.add）。
-
-否：说明它还生着呢。把它放回去，贴个 NULL 标签，然后把它的孩子按规矩（右-中-左）塞进去。
-
-这彻底解耦了“遍历”和“收割”。 这就是为什么它能统一。 [END]
 
 ```Java
 
@@ -151,3 +129,48 @@ while (!stack.isEmpty()) {
     }
 }
 ```
+
+[END]
+
+[ZH]
+
+2. 统一迭代：靠“状态”收割
+统一迭代法（标记法）改变了游戏规则。 栈不再只是路径记录器，它变成了一个任务列表。 我们显式地标记节点的状态：
+
+没有 NULL 标记的节点：“我还需要先去看看你的孩子。”（处理中状态）
+
+紧跟 NULL 标记的节点：“我已经看过你的孩子了，你是成品了。”（收割状态）
+
+收割黄金法则： 我们从不关心时机。我们只找 标记 (NULL)。
+
+弹出一个元素。是 NULL 吗？
+
+是：说明栈里紧接着的那个节点是可以收割的。拿走它（res.add）。
+
+否：说明它还生着呢。把它放回去，贴个 NULL 标签，然后把它的孩子按规矩（右-中-左）塞进去。
+
+这彻底解耦了“遍历”和“收割”。 这就是为什么它能统一。 
+
+```Java
+
+// Unified: Logic depends on the MARKER
+while (!stack.isEmpty()) {
+    TreeNode node = stack.peek();
+    if (node != null) {
+        stack.pop(); 
+        // Push Order determines Traversal Order (Right-Center-Left -> Inorder)
+        if (node.right != null) stack.push(node.right);
+        
+        stack.push(node); 
+        stack.push(null); // <--- The State Marker
+        
+        if (node.left != null) stack.push(node.left);
+        
+    } else {
+        stack.pop(); // Remove Marker
+        node = stack.pop(); // The node is ready
+        res.add(node.val); // <--- Harvest Condition: Always here
+    }
+}
+```
+[END]
