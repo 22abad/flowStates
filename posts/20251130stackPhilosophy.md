@@ -29,7 +29,6 @@ Three different logics for one tree? That's messy.
 Then comes the **Unified Iteration (Marker Method)**. Suddenly, one logic rules them all.
 But why? What is the fundamental difference?
 Today, I figured out the "Secret of Collection."
-
 [END]
 
 [ZH]
@@ -60,18 +59,6 @@ We push nodes as we walk.
     * For Postorder, it's even more complex.
 Because the "Time to Collect" is different for each order, the code structure *must* be different.
 
-[END]
-
-[ZH]
-## 1. 标准迭代：靠“时机”收割
-在标准迭代（特别是中序）中，栈是用来**记录路径**的。
-我们边走边压栈。
-* **规则**：我们只有在左路走到头，**弹栈（Pop）** 的时候，才去收集它的值（加入 `res`）。
-* **问题**：我们依赖的是**动作发生的时机**。
-    * 前序：压栈*前*收集（进门就拿）。
-    * 中序：弹栈*后*收集（回来再拿）。
-    * 后序：更复杂。
-因为每种遍历“收割的时机”不同，所以代码结构**必须**不同。这就导致了难以记忆。
 ```java
 // Standard Inorder: Logic depends on pointer movement
 while (curr != null || !stack.isEmpty()) {
@@ -87,6 +74,36 @@ while (curr != null || !stack.isEmpty()) {
 ```
 [END]
 
+[ZH]
+
+1. 标准迭代：靠“时机”收割
+在标准迭代（特别是中序）中，栈是用来记录路径的。 我们边走边压栈。
+
+规则：我们只有在左路走到头，弹栈（Pop） 的时候，才去收集它的值（加入 res）。
+
+问题：我们依赖的是动作发生的时机。
+
+前序：压栈前收集（进门就拿）。
+
+中序：弹栈后收集（回来再拿）。
+
+后序：更复杂。 因为每种遍历“收割的时机”不同，所以代码结构必须不同。这就导致了难以记忆。
+
+```Java
+
+// 标准中序迭代：逻辑依赖指针移动
+while (curr != null || !stack.isEmpty()) {
+    if (curr != null) {
+        stack.push(curr);
+        curr = curr.left; // 向左走
+    } else {
+        curr = stack.pop();
+        res.add(curr.val); // <--- 收割时机：左边走完回来时
+        curr = curr.right;
+    }
+}
+```
+[END]
 
 [EN]
 
@@ -129,7 +146,6 @@ while (!stack.isEmpty()) {
     }
 }
 ```
-
 [END]
 
 [ZH]
@@ -149,27 +165,27 @@ while (!stack.isEmpty()) {
 
 否：说明它还生着呢。把它放回去，贴个 NULL 标签，然后把它的孩子按规矩（右-中-左）塞进去。
 
-这彻底解耦了“遍历”和“收割”。 这就是为什么它能统一。 
+这彻底解耦了“遍历”和“收割”。 这就是为什么它能统一。
 
 ```Java
 
-// Unified: Logic depends on the MARKER
+// 统一迭代：逻辑依赖 标记 (MARKER)
 while (!stack.isEmpty()) {
     TreeNode node = stack.peek();
     if (node != null) {
         stack.pop(); 
-        // Push Order determines Traversal Order (Right-Center-Left -> Inorder)
+        // 入栈顺序决定遍历顺序 (右-中-左 -> 中序)
         if (node.right != null) stack.push(node.right);
         
         stack.push(node); 
-        stack.push(null); // <--- The State Marker
+        stack.push(null); // <--- 状态标记
         
         if (node.left != null) stack.push(node.left);
         
     } else {
-        stack.pop(); // Remove Marker
-        node = stack.pop(); // The node is ready
-        res.add(node.val); // <--- Harvest Condition: Always here
+        stack.pop(); // 弹出标记
+        node = stack.pop(); // 这个节点是熟的
+        res.add(node.val); // <--- 收割条件：永远在这里
     }
 }
 ```
