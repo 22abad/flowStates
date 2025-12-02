@@ -17,7 +17,7 @@ summary_zh: "43岁这年，我不只是换了个职业；我强行重启了我�
 
 
 [EN]
-![Brain Rewiring|600](https://your-r2-link/20251202brain_rewiring.jpg)
+![Brain Rewiring|600](https://assets.flowstates.me/20251202brain_rewiring.jpg)
 # The Glitch
 
 Recently, I realized something terrifying and liberating: I stopped caring.
@@ -70,7 +70,7 @@ The experiment continues. The code is compiling.
 [END]
 
 [ZH]
-![Brain Rewiring|600](https://your-r2-link/20251202brain_rewiring.jpg)
+![Brain Rewiring|600](https://assets.flowstates.me/20251202brain_rewiring.jpg)
 # 系统故障
 
 最近，我意识到了一个既可怕又自由的事实：我不再在乎了。
