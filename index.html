@@ -16,10 +16,18 @@
         @keyframes fadeIn { from{opacity:0; transform:translateY(20px)} to{opacity:1; transform:none} }
         a.post { text-decoration: none; }
         
-        /* Tag & Badge Styles (Irish Green Tint) */
         .tag-pill { transition: all 0.2s; }
-        /* Hover color changed to Emerald Green */
-        .tag-pill:hover { border-color: #34d399; color: #34d399; } 
+        .tag-pill:hover { border-color: #34d399; color: #34d399; }
+        
+        /* Thumbnail Styles */
+        .thumb-box {
+            width: 80px; height: 80px; flex-shrink: 0; border-radius: 8px; 
+            overflow: hidden; background: #1e293b; margin-left: 1rem;
+            display: none; /* Hidden by default */
+        }
+        .thumb-box.has-img { display: block; }
+        .thumb-box img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: opacity 0.3s; }
+        .post:hover .thumb-box img { opacity: 1; }
     </style>
 </head>
 <body class="antialiased selection:bg-emerald-500 selection:text-white">
@@ -32,7 +40,6 @@
 </nav>
 
 <main class="min-h-screen w-full max-w-2xl mx-auto px-4 sm:px-6 pt-32 pb-20 relative z-10">
-    
     <article class="fade-in mb-16 text-center">
         <h1 class="text-5xl sm:text-6xl font-bold mb-8 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-teal-300 to-blue-300">
             <span class="content-en font-serif-en">Flow States</span>
@@ -58,12 +65,11 @@
         </div>
 
         <div id="post-list" class="space-y-8">
-    <div class="text-center opacity-50 text-sm italic py-10">
-        <span class="content-en">Connecting to memory...</span>
-        <span class="content-zh hidden">正在连接记忆...</span>
-    </div>
-</div>
-
+            <div class="text-center opacity-50 text-sm italic py-10">
+                <span class="content-en">Connecting to memory...</span>
+                <span class="content-zh hidden">正在连接记忆...</span>
+            </div>
+        </div>
     </section>
 </main>
 
@@ -104,6 +110,13 @@ function parseFrontMatter(raw){
     result.body = raw.slice(m[0].length); return result;
 }
 
+// Helper to extract first image from markdown body
+function extractFirstImage(markdown) {
+    const imgRegex = /!\[.*?\]\((.*?)\)/;
+    const match = markdown.match(imgRegex);
+    return match ? match[1] : null;
+}
+
 window.filterPosts = function(tag) {
     const filtered = ALL_POSTS.filter(p => {
         const cats = Array.isArray(p.categories) ? p.categories : [p.categories];
@@ -130,48 +143,62 @@ function createPostCard(post){
     linkOverlay.className = 'absolute inset-0 z-0';
     card.appendChild(linkOverlay);
 
+    // Top Row
     const topRow = document.createElement('div');
     topRow.className = 'flex flex-wrap justify-between items-start mb-3 relative z-10 pointer-events-none gap-2';
 
     const cats = Array.isArray(post.categories) ? post.categories : (post.categories ? [post.categories] : []);
     if(cats.length > 0) {
         const badge = document.createElement('button');
-        // Badge color changed to Emerald
         badge.className = 'text-[10px] uppercase tracking-widest px-2 py-1 rounded-full border border-emerald-500/30 text-emerald-400 bg-slate-900/50 backdrop-blur-sm hover:bg-emerald-900/30 hover:text-white transition cursor-pointer pointer-events-auto sm:absolute sm:top-0 sm:right-0 sm:mt-8 sm:mr-8';
         badge.textContent = cats[0];
         badge.onclick = (e) => { e.preventDefault(); e.stopPropagation(); window.filterPosts(cats[0]); };
         const badgeWrapper = document.createElement('div');
         badgeWrapper.appendChild(badge);
         topRow.appendChild(badgeWrapper);
-    } else {
-        topRow.appendChild(document.createElement('div')); 
-    }
+    } else { topRow.appendChild(document.createElement('div')); }
 
     const mobileDate = document.createElement('div');
     mobileDate.className = 'text-xs font-mono opacity-40 mb-2 sm:hidden';
     mobileDate.textContent = post.date || '';
     card.appendChild(mobileDate);
 
+    // Title
     const titleDiv = document.createElement('div');
     titleDiv.className = 'relative z-10 pointer-events-none pr-0 sm:pr-20';
-
     const h3 = document.createElement('h3');
-    // Title hover color changed to Emerald
     h3.className = 'text-xl sm:text-2xl font-serif-en group-hover:text-emerald-200 transition font-bold leading-tight text-slate-100 mb-3';
-    
     const enTitle = document.createElement('span'); enTitle.className = 'content-en'; enTitle.textContent = post.title_en;
     const zhTitle = document.createElement('span'); zhTitle.className = 'content-zh hidden font-serif-cn'; zhTitle.textContent = post.title_zh || post.title_en;
     h3.appendChild(enTitle); h3.appendChild(zhTitle);
     titleDiv.appendChild(h3);
     card.appendChild(titleDiv);
 
+    // Content Row (Summary + Thumbnail)
+    const contentRow = document.createElement('div');
+    contentRow.className = 'flex justify-between items-start relative z-10 pointer-events-none mb-5';
+
+    // Summary
     const p = document.createElement('div'); 
-    p.className = 'text-sm sm:text-base opacity-70 font-light leading-relaxed mb-5 relative z-10 pointer-events-none';
+    p.className = 'text-sm sm:text-base opacity-70 font-light leading-relaxed flex-1';
     const pEn = document.createElement('span'); pEn.className = 'content-en'; pEn.textContent = post.summary_en || '';
     const pZh = document.createElement('span'); pZh.className = 'content-zh hidden'; pZh.textContent = post.summary_zh || '';
     p.appendChild(pEn); p.appendChild(pZh);
-    card.appendChild(p);
+    contentRow.appendChild(p);
 
+    // Thumbnail (New Feature)
+    const thumbBox = document.createElement('div');
+    thumbBox.className = 'thumb-box';
+    if (post.thumbnail) {
+        thumbBox.classList.add('has-img');
+        const img = document.createElement('img');
+        img.src = post.thumbnail;
+        thumbBox.appendChild(img);
+    }
+    contentRow.appendChild(thumbBox);
+    card.appendChild(contentRow);
+
+    // Tags
     const tags = Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []);
     if(tags.length > 0) {
         const metaRow = document.createElement('div');
@@ -185,7 +212,6 @@ function createPostCard(post){
         });
         card.appendChild(metaRow);
     }
-
     return card;
 }
 
@@ -216,6 +242,9 @@ async function loadData(){
                 const text = await txtRes.text();
                 const parsed = parseFrontMatter(text);
                 const meta = parsed.meta || {};
+                // Extract image from body
+                const thumb = extractFirstImage(parsed.body);
+                
                 return {
                     filename: f.name,
                     title_en: meta.title_en || meta.title || f.name.replace(/\.md$/,''),
@@ -224,7 +253,8 @@ async function loadData(){
                     summary_en: meta.summary_en || meta.summary || '',
                     summary_zh: meta.summary_zh || '',
                     categories: meta.categories || [],
-                    tags: meta.tags || []
+                    tags: meta.tags || [],
+                    thumbnail: thumb // Store the extracted image URL
                 };
             }catch(e){ return null; }
         }));
@@ -241,7 +271,6 @@ async function loadData(){
     }
 }
 
-// Canvas Animation - Background particle color changed to faint Emerald
 const canvas = document.getElementById('flowCanvas');
 const ctx = canvas.getContext && canvas.getContext('2d');
 let w,h,particles=[];
