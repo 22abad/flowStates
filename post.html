@@ -8,6 +8,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
+    
     <style>
         :root{--bg:#0f172a;--muted:#94a3b8}
         body { background-color: var(--bg); color: #e2e8f0; overflow-x: hidden; }
@@ -19,20 +23,20 @@
         .fade-in { animation: fadeIn 1s ease-out both; }
         @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
 
-        /* Reading Progress Bar */
+        /* 🔥 Feature: Reading Progress Bar */
         #progress-bar {
             position: fixed; top: 0; left: 0; height: 3px; background: #34d399;
             width: 0%; z-index: 100; transition: width 0.1s;
         }
 
-        /* Copy Button Styles */
+        /* 🔥 Feature: Copy Button Styles */
         .code-wrapper { position: relative; margin-bottom: 1.5em; }
         .copy-btn {
             position: absolute; top: 0.5em; right: 0.5em;
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
             color: #94a3b8; font-size: 0.75rem; padding: 0.2em 0.6em;
             border-radius: 4px; cursor: pointer; transition: all 0.2s;
-            font-family: 'JetBrains Mono', monospace;
+            font-family: 'JetBrains Mono', monospace; z-index: 10;
         }
         .copy-btn:hover { background: rgba(52, 211, 153, 0.2); color: #34d399; border-color: #34d399; }
 
@@ -55,9 +59,16 @@
             border-radius: 0 8px 8px 0; font-style: italic; color: #e2e8f0;
         }
         
+        /* Code Blocks - Let Prism handle colors */
         .prose code { background: #1e293b; padding: 0.2em 0.4em; rounded: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #34d399; border: 1px solid #334155; }
-        .prose pre { background: #020617; padding: 1.5em; overflow-x: auto; border-radius: 8px; margin-bottom: 0; border: 1px solid #1e293b; }
+        
+        /* Wrapper for code blocks */
+        .prose pre { 
+            background: #1d1f21; /* Prism Tomorrow bg */
+            padding: 1.5em; overflow-x: auto; border-radius: 8px; margin-bottom: 0; border: 1px solid #334155; 
+        }
         .prose pre code { background: transparent; padding: 0; border: none; color: inherit; }
+        
         .prose strong { color: #fff; font-weight: 700; }
         .prose a { color: #34d399; text-decoration: underline; text-decoration-color: #34d399; text-underline-offset: 3px; }
         .prose a:hover { color: #fff; }
@@ -141,16 +152,13 @@
     // Inject Copy Buttons after render
     function addCopyButtons() {
         document.querySelectorAll('pre').forEach(pre => {
-            // Check if already wrapped
             if(pre.parentNode.classList.contains('code-wrapper')) return;
             
-            // Create wrapper
             const wrapper = document.createElement('div');
             wrapper.className = 'code-wrapper';
             pre.parentNode.insertBefore(wrapper, pre);
             wrapper.appendChild(pre);
             
-            // Create button
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.innerText = 'Copy';
@@ -192,59 +200,11 @@
         }
 
         document.getElementById('post-body').innerHTML = html;
+        
+        // Re-apply visibility & Add Features
         updateLang();
-        addCopyButtons(); // Trigger copy button injection
+        addCopyButtons(); 
+        if (window.Prism) window.Prism.highlightAll(); // 🔥 Apply Syntax Highlighting
     }
 
     async function loadPost(){
-        const filename = getQueryParam('id');
-        if(!filename) { window.location.href = 'index.html'; return; }
-        try {
-            const fileUrl = `${POSTS_FOLDER}/${decodeURIComponent(filename)}.md`;
-            const res = await fetch(fileUrl);
-            if(!res.ok) throw new Error(`Post not found: ${res.status}`);
-            const text = await res.text();
-            const data = parseFrontMatter(text);
-            const meta = data.meta;
-
-            document.title = (meta.title_en || meta.title) + ' | Flow States';
-            document.getElementById('title-en').textContent = meta.title_en || meta.title;
-            document.getElementById('title-zh').textContent = meta.title_zh || meta.title_en;
-            document.getElementById('post-date').textContent = meta.date || '';
-
-            const catsContainer = document.getElementById('post-cats'); catsContainer.innerHTML = '';
-            const cats = Array.isArray(meta.categories) ? meta.categories : (meta.categories ? [meta.categories] : []);
-            cats.forEach(c => { const span = document.createElement('span'); span.className = 'cat-badge'; span.textContent = c; catsContainer.appendChild(span); });
-
-            const tagsContainer = document.getElementById('post-tags'); tagsContainer.innerHTML = '';
-            const tags = Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []);
-            tags.forEach(t => { const span = document.createElement('span'); span.className = 'tag-pill'; span.textContent = '#' + t; tagsContainer.appendChild(span); });
-
-            renderBodyContent(data.body);
-
-        } catch(e) {
-            console.error(e);
-            document.getElementById('post-body').innerHTML = `<div class="text-red-400 py-10 text-center"><p class="text-lg font-bold mb-2">Memory Retrieval Failed</p><p class="text-sm opacity-70">${e.message}</p><a href="index.html" class="underline mt-4 inline-block hover:text-white">Return to Main</a></div>`;
-        }
-    }
-
-    // Progress Bar Logic
-    window.addEventListener('scroll', () => {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (scrollTop / scrollHeight) * 100;
-        document.getElementById('progress-bar').style.width = scrolled + "%";
-    });
-
-    const canvas = document.getElementById('flowCanvas');
-    const ctx = canvas.getContext && canvas.getContext('2d');
-    let w,h,particles=[];
-    function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
-    function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(52, 211, 153, 0.15)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
-    if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
-
-    loadPost();
-})();
-</script>
-</body>
-</html>
