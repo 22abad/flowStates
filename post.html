@@ -6,6 +6,7 @@
     <title>Flow Log | flowstates.me</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     
     <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
@@ -23,13 +24,13 @@
         .fade-in { animation: fadeIn 1s ease-out both; }
         @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
 
-        /* 🔥 Feature: Reading Progress Bar */
+        /* Reading Progress Bar */
         #progress-bar {
             position: fixed; top: 0; left: 0; height: 3px; background: #34d399;
             width: 0%; z-index: 100; transition: width 0.1s;
         }
 
-        /* 🔥 Feature: Copy Button Styles */
+        /* Copy Button Styles */
         .code-wrapper { position: relative; margin-bottom: 1.5em; }
         .copy-btn {
             position: absolute; top: 0.5em; right: 0.5em;
@@ -59,12 +60,12 @@
             border-radius: 0 8px 8px 0; font-style: italic; color: #e2e8f0;
         }
         
-        /* Code Blocks - Let Prism handle colors */
+        /* Code Blocks - Prism Style Override */
         .prose code { background: #1e293b; padding: 0.2em 0.4em; rounded: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #34d399; border: 1px solid #334155; }
         
         /* Wrapper for code blocks */
         .prose pre { 
-            background: #1d1f21; /* Prism Tomorrow bg */
+            background: #1d1f21 !important; 
             padding: 1.5em; overflow-x: auto; border-radius: 8px; margin-bottom: 0; border: 1px solid #334155; 
         }
         .prose pre code { background: transparent; padding: 0; border: none; color: inherit; }
@@ -80,7 +81,8 @@
 </head>
 <body class="antialiased selection:bg-emerald-500 selection:text-white">
 
-<div id="progress-bar"></div> <canvas id="flowCanvas" aria-hidden="true"></canvas>
+<div id="progress-bar"></div>
+<canvas id="flowCanvas" aria-hidden="true"></canvas>
 
 <nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-md bg-slate-900/60 border-b border-slate-800/50">
     <a href="index.html" class="group text-lg font-bold tracking-widest opacity-90 hover:text-emerald-400 transition flex items-center gap-2">
@@ -149,20 +151,17 @@
         result.body = raw.slice(m[0].length); return result;
     }
 
-    // Inject Copy Buttons after render
+    // Inject Copy Buttons
     function addCopyButtons() {
         document.querySelectorAll('pre').forEach(pre => {
             if(pre.parentNode.classList.contains('code-wrapper')) return;
-            
             const wrapper = document.createElement('div');
             wrapper.className = 'code-wrapper';
             pre.parentNode.insertBefore(wrapper, pre);
             wrapper.appendChild(pre);
-            
             const btn = document.createElement('button');
             btn.className = 'copy-btn';
             btn.innerText = 'Copy';
-            
             btn.addEventListener('click', () => {
                 const code = pre.querySelector('code').innerText;
                 navigator.clipboard.writeText(code).then(() => {
@@ -170,41 +169,14 @@
                     setTimeout(() => btn.innerText = 'Copy', 2000);
                 });
             });
-            
             wrapper.appendChild(btn);
         });
     }
 
+    // Render Body
     function renderBodyContent(rawBody) {
         const enRegex = /\[EN\]([\s\S]*?)\[END\]/g;
         const zhRegex = /\[ZH\]([\s\S]*?)\[END\]/g;
         let enContent = '', zhContent = '';
         let match;
-        while ((match = enRegex.exec(rawBody)) !== null) enContent += match[1] + '\n\n';
-        while ((match = zhRegex.exec(rawBody)) !== null) zhContent += match[1] + '\n\n';
-
-        let html = '';
-        const parsedRaw = marked.parse(rawBody);
-
-        if (enContent || zhContent) {
-            if (enContent) html += `<div class="content-en">${marked.parse(enContent)}</div>`;
-            else html += `<div class="content-en">${parsedRaw}</div>`;
-            
-            if (zhContent) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhContent)}</div>`;
-            else {
-                const contentToShow = enContent ? marked.parse(enContent) : parsedRaw;
-                html += `<div class="content-zh hidden font-serif-cn opacity-80"><p class="text-sm text-slate-500 mb-4 italic">此处暂无中文译文，显示原文：</p>${contentToShow}</div>`;
-            }
-        } else {
-            html += `<div class="content-en">${parsedRaw}</div><div class="content-zh hidden font-serif-cn">${parsedRaw}</div>`;
-        }
-
-        document.getElementById('post-body').innerHTML = html;
-        
-        // Re-apply visibility & Add Features
-        updateLang();
-        addCopyButtons(); 
-        if (window.Prism) window.Prism.highlightAll(); // 🔥 Apply Syntax Highlighting
-    }
-
-    async function loadPost(){
+        while ((match = enRegex.exec(rawBody)) !== null) en
