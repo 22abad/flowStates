@@ -204,7 +204,10 @@
         if(!filename) { window.location.href = 'index.html'; return; }
 
         try {
-            const fileUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/${POSTS_FOLDER}/${decodeURIComponent(filename)}.md`;
+            // const fileUrl = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${GITHUB_REPO}/main/$
+            // 直接请求当前域名下的 posts 文件夹
+            const fileUrl = `${POSTS_FOLDER}/${decodeURIComponent(filename)}.md`;
+            {POSTS_FOLDER}/${decodeURIComponent(filename)}.md`;
             const res = await fetch(fileUrl);
             if(!res.ok) throw new Error('Post not found');
             const text = await res.text();
