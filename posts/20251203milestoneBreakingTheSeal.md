@@ -90,7 +90,7 @@ A good start is 90% of success. And today, I finally started.
 
 ---
 [EN]
-## 3. Epilogue: Inverting the Proverb
+# 3. Inverting the Proverb
 There is an old Chinese saying: *"The journey of a hundred miles is half complete at ninety."* (行百里者半九十). It warns us that the final stretch is the hardest.
 
 But today, I realized the opposite is true for us builders.
@@ -106,7 +106,7 @@ Don't worry about the last 10 miles. Worry about the first step.
 [END]
 
 [ZH]
-## 3. 尾声：反转古谚
+# 3. 反转古谚
 中国有句古话叫“行百里者半九十”。它的意思是，事情越接近终点越艰难。
 
 但今天，我意识到对于我们这些建设者来说，事实恰恰相反。
