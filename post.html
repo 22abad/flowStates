@@ -179,4 +179,83 @@
         const zhRegex = /\[ZH\]([\s\S]*?)\[END\]/g;
         let enContent = '', zhContent = '';
         let match;
-        while ((match = enRegex.exec(rawBody)) !== null) en
+        while ((match = enRegex.exec(rawBody)) !== null) enContent += match[1] + '\n\n';
+        while ((match = zhRegex.exec(rawBody)) !== null) zhContent += match[1] + '\n\n';
+
+        let html = '';
+        const parsedRaw = marked.parse(rawBody);
+
+        if (enContent || zhContent) {
+            if (enContent) html += `<div class="content-en">${marked.parse(enContent)}</div>`;
+            else html += `<div class="content-en">${parsedRaw}</div>`;
+            
+            if (zhContent) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhContent)}</div>`;
+            else {
+                const contentToShow = enContent ? marked.parse(enContent) : parsedRaw;
+                html += `<div class="content-zh hidden font-serif-cn opacity-80"><p class="text-sm text-slate-500 mb-4 italic">此处暂无中文译文，显示原文：</p>${contentToShow}</div>`;
+            }
+        } else {
+            html += `<div class="content-en">${parsedRaw}</div><div class="content-zh hidden font-serif-cn">${parsedRaw}</div>`;
+        }
+
+        document.getElementById('post-body').innerHTML = html;
+        
+        // Finalize Features
+        updateLang();
+        addCopyButtons(); 
+        if (window.Prism) window.Prism.highlightAll(); // Highlight Code
+    }
+
+    async function loadPost(){
+        const filename = getQueryParam('id');
+        if(!filename) { window.location.href = 'index.html'; return; }
+        try {
+            const fileUrl = `${POSTS_FOLDER}/${decodeURIComponent(filename)}.md`;
+            const res = await fetch(fileUrl);
+            if(!res.ok) throw new Error(`Post not found: ${res.status}`);
+            const text = await res.text();
+            const data = parseFrontMatter(text);
+            const meta = data.meta;
+
+            document.title = (meta.title_en || meta.title) + ' | Flow States';
+            document.getElementById('title-en').textContent = meta.title_en || meta.title;
+            document.getElementById('title-zh').textContent = meta.title_zh || meta.title_en;
+            document.getElementById('post-date').textContent = meta.date || '';
+
+            const catsContainer = document.getElementById('post-cats'); catsContainer.innerHTML = '';
+            const cats = Array.isArray(meta.categories) ? meta.categories : (meta.categories ? [meta.categories] : []);
+            cats.forEach(c => { const span = document.createElement('span'); span.className = 'cat-badge'; span.textContent = c; catsContainer.appendChild(span); });
+
+            const tagsContainer = document.getElementById('post-tags'); tagsContainer.innerHTML = '';
+            const tags = Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []);
+            tags.forEach(t => { const span = document.createElement('span'); span.className = 'tag-pill'; span.textContent = '#' + t; tagsContainer.appendChild(span); });
+
+            renderBodyContent(data.body);
+
+        } catch(e) {
+            console.error(e);
+            document.getElementById('post-body').innerHTML = `<div class="text-red-400 py-10 text-center"><p class="text-lg font-bold mb-2">Memory Retrieval Failed</p><p class="text-sm opacity-70">${e.message}</p><a href="index.html" class="underline mt-4 inline-block hover:text-white">Return to Main</a></div>`;
+        }
+    }
+
+    // Progress Bar Logic
+    window.addEventListener('scroll', () => {
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (scrollTop / scrollHeight) * 100;
+        document.getElementById('progress-bar').style.width = scrolled + "%";
+    });
+
+    // Canvas Logic
+    const canvas = document.getElementById('flowCanvas');
+    const ctx = canvas.getContext && canvas.getContext('2d');
+    let w,h,particles=[];
+    function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
+    function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(52, 211, 153, 0.15)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
+    if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
+
+    loadPost();
+})();
+</script>
+</body>
+</html>
