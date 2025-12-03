@@ -15,7 +15,7 @@ summary_en: "Celebrating a milestone: independently solving a LeetCode Medium pr
 summary_zh: "庆祝一个里程碑：在两个月的磨练后，第一次完全独立解出一道 LeetCode Medium 题。反思从“抄代码”到“真懂”的旅程，以及为什么对自己诚实是捅破最后一层窗户纸的关键。"
 ---
 
-![Breaking the Seal|600](https://assets.flowstates.me/2025/12/breaking_the_seal.jpg)
+![Breaking the Seal|600](https://assets.flowstates.me/2025/breaking_the_seal.jpg)
 
 [EN]
 # The Milestone
