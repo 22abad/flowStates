@@ -1,7 +1,7 @@
 ---
 title: "Teaching the AI to Teach Me: The Loop of Deep Understanding"
 title_zh: "教 AI 教会我：深度理解的闭环"
-date: 2025-11-24
+date: 2025-12-03
 author: "Dong"
 categories: 
   - "Learning Method"
