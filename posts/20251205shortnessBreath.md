@@ -19,6 +19,7 @@ summary_zh: "复盘与一位博士生45分钟的高强度对话。尽管我紧�
 
 
 [EN]
+![High-Intensity Intellectual Exchange|600](https://assets.flowstates.me/2025/20251205_high_intensity_talk.jpg)
 # The Friday Pact
 
 ## 1. The Breathless 45 Minutes
@@ -30,6 +31,7 @@ We spoke at a rapid-fire pace. He was fast. I was fast (out of nerves). It was l
 [END]
 
 [ZH]
+![High-Intensity Intellectual Exchange|600](https://assets.flowstates.me/2025/20251205_high_intensity_talk.jpg)
 # 周五之约
 
 ## 1. 窒息的45分钟
