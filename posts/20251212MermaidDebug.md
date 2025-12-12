@@ -10,9 +10,9 @@ summary_zh: 深度复盘一个棘手的 Bug：Mermaid 图表在双语切换中�
 ---
 
 [EN]
-![The Ripple Effect|600](https://assets.flowstates.me/2025/20251212MermaidDebug.jpg)
-# 🕵️ The Case of the Vanishing Diagrams
 
+# 🕵️ The Case of the Vanishing Diagrams
+![The Ripple Effect|600](https://assets.flowstates.me/2025/20251212MermaidDebug.jpg)
 While building **HDIPERS.LOG**, I encountered a classic yet frustrating frontend bug. The site supports bilingual switching (English/Chinese). Everything worked fine until I added **Mermaid.js** flowcharts.
 
 ### 🛑 The Symptom
@@ -111,9 +111,9 @@ JavaScript execution and UI Rendering are mutually exclusive.
 [END]
 
 [ZH]
-![The Ripple Effect|600](https://assets.flowstates.me/2025/20251212MermaidDebug.jpg)
-# 🕵️ 图表消失之谜：前端渲染机制与 Mermaid 的深度调试复盘
 
+# 🕵️ 图表消失之谜：前端渲染机制与 Mermaid 的深度调试复盘
+![The Ripple Effect|600](https://assets.flowstates.me/2025/20251212MermaidDebug.jpg)
 在构建 **HDIPERS.LOG** 的过程中，我遇到了一个经典但令人抓狂的前端 Bug。网站支持中英双语切换，一切看起来都很完美，直到我引入了 **Mermaid.js** 流程图。
 
 ### 🛑 故障现象
