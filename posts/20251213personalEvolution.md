@@ -61,8 +61,8 @@ These aren't just random chat logs. They represent three dimensions of a complet
 - Part I: The Logical High Ground — [Jump](#part-i)
 - Part II: The Commander Mode — [Jump](#part-ii)
 - Part III: The Identity Shift — [Jump](#part-iii)
-- Final Thoughts (EN) — [Jump](#final-thoughts-en)
-- 最后的思考 (ZH) — [跳转](#final-thoughts-zh)
+- Final Thoughts — [Jump](#final-thoughts-en)
+
 
 <a id="part-i"></a>
 
@@ -84,8 +84,7 @@ I was struggling with DFA (Deterministic Finite Automaton) construction, feeling
 - 第一部分：逻辑高地 — [跳转](#part-i)
 - 第二部分：指挥官模式 — [跳转](#part-ii)
 - 第三部分：身份转变 — [跳转](#part-iii)
-- 最后的思考（英文）— [跳转](#final-thoughts-en)
-- 最后的思考（中文）— [跳转](#final-thoughts-zh)
+- 最后的思考 — [跳转](#final-thoughts-zh)
 
 ## 🎯 第一部分：逻辑高地 - 一切豁然开朗的时刻
 
