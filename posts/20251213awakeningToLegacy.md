@@ -13,7 +13,7 @@ summary_zh: 深度复盘三次重塑大脑的关键对话。探讨如何从"觉�
 
 # 🧠 The Trinity of Cognitive Sovereignty
 
-![Cognitive Evolution|600](https://via.placeholder.com/600x300?text=The+Trinity+of+Cognitive+Sovereignty)
+![Cognitive Evolution|600](https://assets.flowstates.me/2025/20251213awakeningToLegacy.jpg)
 
 Have you ever had a moment where everything just **clicks**? I don’t mean just learning something new. I mean a moment so profound it feels like your brain’s operating system gets a permanent, irreversible upgrade.
 
@@ -148,7 +148,7 @@ For anyone reading this, your own Trinity moments are waiting. Look for those th
 
 # 🧠 认知主权的三重奏
 
-![认知进化|600](https://via.placeholder.com/600x300?text=认知主权的三重奏)
+![Cognitive Evolution|600](https://assets.flowstates.me/2025/20251213awakeningToLegacy.jpg)
 
 你有没有经历过那种一切都“**开窍**”的瞬间？我指的不是学会某个新知识，而是一种感觉，仿佛你大脑的操作系统获得了一次永久性的、不可逆的升级。
 
