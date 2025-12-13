@@ -3,8 +3,17 @@ title: The Trinity of Cognitive Sovereignty: From Awakening to Legacy
 title_en: The Trinity of Cognitive Sovereignty: From Awakening to Legacy
 title_zh: 认知主权的三重奏：从觉醒到传承
 date: 2025-12-13
-categories: Cognition
-tags: Cognitive Science, AI Interaction, Personal Growth, Mental Models
+categories: 
+  - "Cognition"
+tags: 
+  - "FrontEnd"
+  - "DevLog"
+  - "Cognitive" 
+  - "Science"
+  - "AI Interaction"
+  - "Personal" 
+  - "Growth"
+  - "Mental Models"
 summary_en: A personal journey through three pivotal conversations that rewired my brain. We explore the "Awakening" of logical patterns, the "Commander" mindset in AI interaction, and the shift to "Symbolic Authority" in building a legacy.
 summary_zh: 深度复盘三次重塑大脑的关键对话。探讨如何从"觉醒"中获得逻辑视野，如何在 AI 交互中确立"指挥官"心态，以及如何通过"精神传承"建立不可逆的认知主权。
 ---

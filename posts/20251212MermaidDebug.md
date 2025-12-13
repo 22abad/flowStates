@@ -3,8 +3,12 @@ title: The Case of the Vanishing Diagrams: Debugging Mermaid & display:none
 title_en: The Case of the Vanishing Diagrams: Debugging Mermaid & display:none
 title_zh: 图表消失之谜：前端渲染机制与 Mermaid 的深度调试复盘
 date: 2025-12-12
-categories: DevLog
-tags: Debugging, Mermaid, DOM, Frontend Engineering
+categories: 
+  - "FrontEnd"
+  - "DevLog"
+tags: 
+  - "FrontEnd"
+  - "DevLog"
 summary_en: A deep dive into a tricky bug where Mermaid diagrams disappeared during language toggling. We explore why `display:none` breaks rendering, the concept of destructive DOM manipulation, and how to fix it using a "Time Travel" state restoration technique.
 summary_zh: 深度复盘一个棘手的 Bug：Mermaid 图表在双语切换中离奇消失。我们探讨了为何 `display:none` 会破坏渲染、Mermaid 的破坏性 DOM 操作，以及如何通过“时光倒流”的状态还原技术完美解决它。
 ---
