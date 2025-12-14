@@ -1,6 +1,11 @@
 ---
 title: "My Journey: Building a Private AI Study Assistant for My University Courses"
 date: 2025-12-14
+categories:
+  - "Personal Growth"
+  - "Learning Method"
+  - "AI & Humans"
+  - "Reflections"
 tags:
   - AI
   - RAG
