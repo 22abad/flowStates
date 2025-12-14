@@ -1,5 +1,6 @@
 ---
 title: "My Private AI Evolution: Building a Local RAG Study Assistant for University"
+title_zh:"我的私有 AI 进化史：为大学课程构建一个本地 RAG 学习助手"
 date: 2025-12-14
 categories:
   - "Personal Growth"
@@ -99,9 +100,10 @@ What started as a simple question about a database eventually evolved into a dee
 [END]
 
 [ZH]
-![Private AI Study Assistant|600](https://assets.flowstates.me/2025/20251214privateAIStudyAssistant.jpg)
 
 # 我的私有 AI 进化史：为大学课程构建一个本地 RAG 学习助手
+
+![Private AI Study Assistant|600](https://assets.flowstates.me/2025/20251214privateAIStudyAssistant.jpg)
 
 > 这一切，始于一个看似简单的问题，最终却演变成了一场对本地 AI、私有知识库和开发者工作流的深度探索。这是一个关于我如何从对学校古老数据库的困惑，进化到构建一个完全运行在自己机器上的、强大的私有 AI 学习助手的硬核故事。
 
