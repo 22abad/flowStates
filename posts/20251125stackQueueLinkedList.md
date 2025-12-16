@@ -1,217 +1,77 @@
 ---
-title: "Java Collections Demystified: Stack, Queue, Deque, and Why 'Stack' Is Dead"
-title_zh: "Java 集合框架解惑：Stack、Queue、Deque，以及为什么 Stack 已死"
+title: "Java Collections Architecture: Stack, Queue, and Deque"
+title_zh: "Java 集合架构：Stack、Queue 与 Deque"
 date: 2025-11-25
-author: "Dong"
+author: "Dong Li"
 categories: 
-  - "CS"
-  - "Java"
+  - "Java Architecture"
+  - "Data Structures"
+  - "Best Practices"
 tags:
-  - "Data Structure"
-  - "Best Practice"
-  - "Interview Prep"
-summary_en: "A professional, precise explanation of why Java's Stack class is obsolete, how Deque replaces it, and how Interface vs. Implementation resolves common beginner confusion."
-summary_zh: "一次专业而清晰的讲解：为什么 Java 的 Stack 已经过时？为什么应该使用 Deque？接口与实现的分离如何解决初学者最常遇到的困惑？"
+  - "Java"
+  - "Collections Framework"
+  - "API Design"
+  - "Legacy Code"
+summary_en: "A technical analysis of why the legacy `Stack` class should be avoided in favor of the `Deque` interface. Examining the architectural decisions in the Java Collections Framework and the separation of interface and implementation."
+summary_zh: "技术分析：为何应弃用传统的 `Stack` 类而改用 `Deque` 接口。探讨 Java 集合框架中的架构决策以及接口与实现的分离。"
 ---
 
 [EN]
-# Java Collections Demystified  
-### Stack, Queue, Deque — and Why `Stack` Is Already Dead
+# Java Collections Architecture: The Evolution of LIFO
 
-Java beginners (my past self included) often stumble into this puzzling error:
+## 1. The Legacy Artifact: `java.util.Stack`
+In the early days of Java (JDK 1.0), the Collections Framework as we know it did not exist. The `Stack` class was introduced as an extension of `Vector`.
+This inheritance hierarchy—`Stack extends Vector`—is now widely considered an architectural flaw.
+Because `Vector` is synchronized (thread-safe), every operation on a `Stack` incurs the overhead of acquiring a lock. In a single-threaded context, this is unnecessary performance degradation.
+Furthermore, exposing random access methods (from `Vector`) violates the principle of a Stack (LIFO) abstraction.
 
-```java
-// ❌ Compile Error: incompatible types
-Stack<TreeNode> stack = new LinkedList<>();
-```
-
-At first glance, both *look* like stacks. LinkedList even supports push/pop.  
-So… why does this fail?
-
-## 1. The Core Confusion: Class ≠ Behavior
-Here’s the truth:
-
-- `Stack` is a **specific class** (from 1995, JDK 1.0).
-- `LinkedList` is a **different class**.
-- They share **zero inheritance relationship**.
-
-A LinkedList **can behave like** a stack,  
-but it **is not** a Stack in Java’s type system.
-
-It’s like writing:
-
-```
-CassettePlayer player = new MP3Player();
-```
-
-Both play music, but one is not the other.  
-Identity matters.
-
-[END]
-
-[ZH]
-# Java 集合框架解惑  
-### Stack、Queue、Deque —— 以及为什么 Stack 已经过时
-
-许多 Java 初学者（包括曾经的我）经常遇到这样让人摸不着头脑的错误：
+## 2. The Modern Interface: `java.util.Deque`
+Since Java 1.6, the correct way to represent a Last-In-First-Out (LIFO) stack is via the `Deque` (Double Ended Queue) interface.
+The documentation explicitly states: *"A more complete and consistent set of LIFO stack operations is provided by the Deque interface and its implementations, which should be used in preference to this class."*
 
 ```java
-// ❌ 编译错误：类型不兼容
-Stack<TreeNode> stack = new LinkedList<>();
-```
+// The Legacy Way (Avoid)
+Stack<Integer> stack = new Stack<>();
 
-表面上，两者都“能当栈用”，LinkedList 甚至内置 push/pop。  
-那为什么不能赋值？
-
-## 1. 困惑的根源：类 ≠ 行为
-原因其实很简单：
-
-- `Stack` 是一个 **具体类**（1995 年产物）。
-- `LinkedList` 是另一种 **具体类**。
-- 二者 **没有继承关系**。
-
-LinkedList **能像** 栈一样工作，  
-但在 Java 类型系统中，它 **不是** 栈。
-
-这就像你试图写：
-
-```
-磁带机 player = MP3 播放器；
-```
-
-虽然都能放歌，但本质上是两种完全不同的机器。
-
-[END]
-
-[EN]
-## 2. The Modern Solution: Interface (Identity) vs Implementation (Body)
-
-To fix the confusion, we separate:
-
-- **Identity** → Interface  
-- **Body** → Implementation class  
-
-For stack behavior (LIFO),  
-Java’s modern identity is **Deque** (Double-Ended Queue).
-
-### ✔ Correct Ways to Declare a Stack
-
-```java
-// Option A — Fastest, recommended
+// The Modern Way (Preferred)
 Deque<Integer> stack = new ArrayDeque<>();
-
-// Option B — Linked-list based, if nodes matter
-Deque<Integer> stack = new LinkedList<>();
 ```
 
-Here:
+## 3. Implementation Choices: `ArrayDeque` vs `LinkedList`
+When instantiating a `Deque`, developers typically choose between `ArrayDeque` and `LinkedList`.
+*   **`ArrayDeque`**: Backed by a resizable array. It is generally faster and more memory-efficient than `LinkedList` because it avoids the overhead of node allocation and has better cache locality. It does not support `null` elements.
+*   **`LinkedList`**: A doubly-linked list. It implements both `List` and `Deque`. It is useful if you need to remove elements from the interior of the collection during iteration, but for standard stack operations, `ArrayDeque` is superior.
 
-- `Deque` = **contract** (“I behave like a stack/queue”)
-- `ArrayDeque` / `LinkedList` = **workers** (actual data structures)
-
-This is the essence of *clean API design*.
+**Conclusion**: Treat `Stack` as a historical artifact. Embrace the interface-based design of `Deque`.
 
 [END]
 
 [ZH]
-## 2. 现代解决方案：接口（身份） vs 实现（肉体）
+# Java 集合架构：LIFO 的演变
 
-要解决困惑，需要分清：
+## 1. 遗留产物：`java.util.Stack`
+在 Java 的早期（JDK 1.0），我们熟知的集合框架（Collections Framework）尚未存在。`Stack` 类作为 `Vector` 的扩展被引入。
+这种继承层次结构——`Stack extends Vector`——现在被广泛认为是一个架构缺陷。
+由于 `Vector` 是同步的（线程安全），`Stack` 上的每个操作都会产生获取锁的开销。在单线程上下文中，这是不必要的性能损耗。
+此外，暴露随机访问方法（来自 `Vector`）违反了栈（LIFO）抽象的原则。
 
-- **身份**：接口  
-- **肉体**：实现类  
-
-对于“栈”（后进先出）的需求，  
-Java 现代推荐使用的身份是 **Deque**。
-
-### ✔ Java 中声明栈的正确方式
+## 2. 现代接口：`java.util.Deque`
+自 Java 1.6 以来，表示后进先出（LIFO）栈的正确方式是通过 `Deque`（双端队列）接口。
+文档明确指出：*“Deque 接口及其实现提供了一组更完整和一致的 LIFO 栈操作，应优先使用它们而非此类。”*
 
 ```java
-// 方案 A — 基于数组（最快，强烈推荐）
+// 传统方式（避免）
+Stack<Integer> stack = new Stack<>();
+
+// 现代方式（推荐）
 Deque<Integer> stack = new ArrayDeque<>();
-
-// 方案 B — 基于链表（如果你需要节点操作）
-Deque<Integer> stack = new LinkedList<>();
 ```
 
-在这里：
+## 3. 实现选择：`ArrayDeque` vs `LinkedList`
+在实例化 `Deque` 时，开发人员通常在 `ArrayDeque` 和 `LinkedList` 之间进行选择。
+*   **`ArrayDeque`**：由可调整大小的数组支持。它通常比 `LinkedList` 更快且内存效率更高，因为它避免了节点分配的开销，并且具有更好的缓存局部性。它不支持 `null` 元素。
+*   **`LinkedList`**：双向链表。它同时实现了 `List` 和 `Deque`。如果你需要在迭代期间从集合内部删除元素，它很有用，但对于标准的栈操作，`ArrayDeque` 更优越。
 
-- `Deque` = **合同、角色**
-- `ArrayDeque` / `LinkedList` = **真正干活的工人**
-
-这体现了 Java 清晰 API 设计的核心思想。
-
-[END]
-
-[EN]
-## 3. Why the `Stack` Class Is Officially Dead
-
-You *can* still write:
-
-```java
-Stack<Integer> s = new Stack<>();
-```
-
-But you *shouldn’t*.
-
-### Why?
-
-- `Stack` inherits from `Vector`
-- `Vector` is fully **synchronized**
-- Synchronization = unnecessary overhead  
-  (especially for LeetCode or single-thread usage)
-
-Even Oracle's documentation explicitly recommends:
-
-> “Use `Deque` instead of `Stack`.”
-
-### Summary Table
-
-| Goal (Behavior)     | Interface | Implementation            |
-|---------------------|-----------|---------------------------|
-| Dynamic Array       | List      | ArrayList                 |
-| Linked List         | List      | LinkedList                |
-| Stack (LIFO)        | Deque     | ArrayDeque (recommended)  |
-| Queue (FIFO)        | Queue     | LinkedList / ArrayDeque   |
-
-Stop using `Stack`.  
-Use `Deque`.  
-Your future self will thank you.
-
-[END]
-
-[ZH]
-## 3. 为什么 `Stack` 类已经“死掉”？
-
-你当然可以写：
-
-```java
-Stack<Integer> s = new Stack<>();
-```
-
-但你不该这样做。
-
-### 原因如下：
-
-- `Stack` 继承自 `Vector`
-- `Vector` 的所有方法都是 **同步的**
-- 同步意味着 **性能低下**  
-  （尤其在单线程算法场景中）
-
-甚至 Oracle 官方文档都明确建议：
-
-> “请使用 Deque 来替代 Stack。”
-
-### 总结表格
-
-| 目标（行为）         | 接口       | 实现类                      |
-|----------------------|------------|-----------------------------|
-| 动态数组             | List       | ArrayList                   |
-| 链表结构             | List       | LinkedList                  |
-| 栈（后进先出）       | Deque      | ArrayDeque（推荐）          |
-| 队列（先进先出）     | Queue      | LinkedList / ArrayDeque     |
-
-别再用 `Stack` 了。  
-拥抱 `Deque` 吧。
+**结论**：将 `Stack` 视为历史遗留物。拥抱 `Deque` 的基于接口的设计。
 
 [END]

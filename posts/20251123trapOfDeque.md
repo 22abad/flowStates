@@ -1,80 +1,92 @@
 ---
-title: "Monotonic Queue: Why We Store Indices and The Trap of Deque APIs"
-title_zh: "单调队列：为什么存下标？以及 Deque API 的方向陷阱"
+title: "Data Structure Design: The Monotonic Queue Pattern"
+title_zh: "数据结构设计：单调队列模式"
 date: 2025-11-24
-author: "Dong"
+author: "Dong Li"
 categories: 
-  - "CS"
-  - "LeetCode"
+  - "Data Structures"
+  - "Algorithm Design"
 tags:
-  - "Algorithm"
   - "Monotonic Queue"
-  - "Java"
-  - "Data Structure"
-summary_en: "Reflecting on the Sliding Window Maximum problem. Realizing that storing indices (not values) in the Deque is the key to handling window boundaries. Also, a crucial reminder about Java's Deque API directions."
-summary_zh: "复盘“滑动窗口最大值”问题。深刻领悟单调队列中存储“下标”而非“数值”的必要性，以及对 Java Deque API 操作方向（队头 vs 队尾）的精准把控。"
+  - "Deque"
+  - "Java API"
+  - "State Management"
+summary_en: "Analyzing the Sliding Window Maximum problem. Discussing the critical design decision of storing indices versus values for state management, and clarifying the semantics of Java's Deque API."
+summary_zh: "分析滑动窗口最大值问题。讨论用于状态管理的存储下标与存储数值的关键设计决策，并阐明 Java Deque API 的语义。"
 ---
 
 [EN]
-# Monotonic Queue: Why We Store Indices and The Trap of Deque APIs
+# Data Structure Design: The Monotonic Queue Pattern
 
-## 1. The "Index vs. Value" Epiphany
-In the **Sliding Window Maximum** problem, beginners often instinctively store the **values** (`nums[i]`) in the queue.
-However, I realized today that storing **indices** (`i`) is the only way to solve the "expiration" problem.
+## 1. State Management: Index vs. Value
+In the **Sliding Window Maximum** problem, a common pitfall is storing **values** (`nums[i]`) in the queue.
+However, effective state management requires storing **indices** (`i`). This is the only way to accurately handle the "expiration" state.
 
-* **If we store values:** We know *what* the max is, but we don't know *where* it is. When the window slides, we can't tell if the max value has fallen out of the left boundary (`i - k`).
-* **If we store indices:** We have everything.
-    * **Value?** Just call `nums[index]`.
-    * **Position?** Just check `index`.
-    * **Expiration?** Check if `index < i - k + 1`.
+*   **Storing Values:** Provides the *magnitude* but lacks the *temporal* context. When the window slides, it is impossible to determine if the maximum value has exited the left boundary (`i - k`).
+*   **Storing Indices:** Provides complete state information.
+    *   **Magnitude:** Accessible via `nums[index]`.
+    *   **Position:** Accessible via `index`.
+    *   **Expiration:** Determinable via `index < i - k + 1`.
 
-**Key Takeaway:** In sliding window problems, **Index > Value**. The index carries position information, which is the lifeline of the window.
+**Design Principle:** In sliding window contexts, **Index > Value**. The index encapsulates temporal/positional data, which is critical for window validity.
 
-## 2. Mastering Deque APIs: Head vs. Tail
-Java's `Deque` (Double Ended Queue) is powerful but confusing. Today I solidified the default behaviors:
+## 2. API Semantics: Head vs. Tail
+Java's `Deque` (Double Ended Queue) interface requires precise semantic understanding.
 
-* **Default = Head:** Methods like `peek()`, `poll()`, `remove()` all operate on the **HEAD** (the oldest element, the maximum candidate).
-* **Explicit = Tail:** Only methods with "Last" (e.g., `peekLast()`, `pollLast()`) operate on the **TAIL** (the newest element, the one being compared).
+*   **Implicit = Head:** Methods like `peek()`, `poll()`, `remove()` operate on the **HEAD** (the oldest element, the candidate for maximum).
+*   **Explicit = Tail:** Methods with the "Last" suffix (e.g., `peekLast()`, `pollLast()`) operate on the **TAIL** (the newest element, the candidate for insertion).
 
 **The Monotonic Queue Logic:**
-1.  **Head (Oldest):** Responsible for rules. If it's expired (out of window), kick it out (`poll()`).
-2.  **Tail (Newest):** Responsible for competition. If the new guy is stronger (`nums[i]`), kick the weak ones out (`pollLast()`).
+1.  **Head (Oldest):** Responsible for **Validity**. If the index is expired (out of window), remove it (`poll()`).
+2.  **Tail (Newest):** Responsible for **Monotonicity**. If the new element (`nums[i]`) is greater than the tail, remove the tail (`pollLast()`) to maintain the decreasing order.
 
+```java
+// 1. Validity Check (Head)
+// Note: Storing index allows this check
+while (!deque.isEmpty() && deque.peek() < i - k + 1) {
+    deque.poll(); // Default operates on Head
+}
+
+// 2. Monotonicity Maintenance (Tail)
+while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
+    deque.pollLast(); // Explicitly operates on Tail
+}
+```
 [END]
 
 [ZH]
-# 单调队列：为什么存下标？以及 Deque API 的方向陷阱
+# 数据结构设计：单调队列模式
 
-## 1. “存下标”的顿悟
-在解决**滑动窗口最大值**问题时，直觉往往让我们在队列里存**数值**（`nums[i]`）。
-但我今天彻底明白了，只有存**下标**（`i`），才能完美解决“元素过期”的问题。
+## 1. 状态管理：下标 vs. 数值
+在**滑动窗口最大值**问题中，一个常见的陷阱是在队列中存储**数值**（`nums[i]`）。
+然而，有效的状态管理需要存储**下标**（`i`）。这是准确处理“过期”状态的唯一方法。
 
-* **如果存数值：** 我们知道最大值是“谁”，但不知道它在“哪”。当窗口滑动时，我们无法判断这个最大值是不是已经滑出了左边界（`i - k`）。
-* **如果存下标：** 我们全都有了。
-    * **要数值？** `nums[index]` 一查就有。
-    * **要位置？** `index` 就在手边。
-    * **判断过期？** 直接看 `index < i - k + 1`。
+*   **存储数值：** 提供*大小*但缺乏*时间*上下文。当窗口滑动时，无法确定最大值是否已退出左边界（`i - k`）。
+*   **存储下标：** 提供完整的状态信息。
+    *   **大小：** 通过 `nums[index]` 访问。
+    *   **位置：** 通过 `index` 访问。
+    *   **过期：** 通过 `index < i - k + 1` 确定。
 
-**核心心法：** 在滑动窗口类题目中，**下标 > 数值**。下标携带了位置信息，那是窗口的生命线。
+**设计原则：** 在滑动窗口上下文中，**下标 > 数值**。下标封装了时间/位置数据，这对窗口有效性至关重要。
 
-## 2. 拿捏 Deque API：队头还是队尾？
-Java 的 `Deque`（双端队列）很强大，但也容易晕。今天我把它的默认行为彻底钉死了：
+## 2. API 语义：队头 vs. 队尾
+Java 的 `Deque`（双端队列）接口需要精确的语义理解。
 
-* **默认 = 队头 (Head)：** 像 `peek()`, `poll()`, `remove()` 这些不带后缀的方法，默认都是操作**队头**（也就是最老的元素，当前窗口的最大值）。
-* **显式 = 队尾 (Tail)：** 只有带 "Last" 的方法（如 `peekLast()`, `pollLast()`），才是操作**队尾**（也就是最新进来的元素，正在进行比较的元素）。
+*   **隐式 = 队头 (Head)：** 像 `peek()`, `poll()`, `remove()` 这样的方法操作**队头**（最老的元素，最大值的候选者）。
+*   **显式 = 队尾 (Tail)：** 带有 "Last" 后缀的方法（如 `peekLast()`, `pollLast()`）操作**队尾**（最新的元素，插入的候选者）。
 
-**单调队列的铁律：**
-1.  **队头（老大哥）**：负责守规矩。如果位置过期了（滑出窗口），直接走人 (`poll()`)。
-2.  **队尾（新挑战者）**：负责拼实力。如果新来的 (`nums[i]`) 比队尾强，队尾的弱鸡就得滚蛋 (`pollLast()`)。
+**单调队列逻辑：**
+1.  **队头（最老）：** 负责**有效性**。如果下标过期（超出窗口），将其移除 (`poll()`)。
+2.  **队尾（最新）：** 负责**单调性**。如果新元素 (`nums[i]`) 大于队尾，移除队尾 (`pollLast()`) 以保持递减顺序。
 
 ```java
-// 1. 检查队头霸主是否已经“过期”（滑出窗口左边界）
-// 注意：这里存的是 index！
+// 1. 有效性检查（队头）
+// 注意：存储下标允许此检查
 while (!deque.isEmpty() && deque.peek() < i - k + 1) {
     deque.poll(); // 默认操作队头
 }
 
-// 2. 维护单调递减：如果新来的比队尾的大，清洗无用数据
+// 2. 单调性维护（队尾）
 while (!deque.isEmpty() && nums[deque.peekLast()] < nums[i]) {
     deque.pollLast(); // 显式操作队尾
 }

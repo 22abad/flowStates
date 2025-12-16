@@ -1,0 +1,35 @@
+Subject: Reflection on HDIP Journey and Student Collaboration Project (hdipers.22abad.com)
+
+Dear Joseph,
+
+I hope this email finds you well.
+
+I am writing to share some updates on my learning journey in the Higher Diploma program and to follow up on a conversation Mark (PhD candidate in AI-assisted education) had with you regarding our student collaboration project.
+
+**1. From Confusion to Clarity: My Learning Evolution**
+Coming from a non-CS background (Law), the initial transition was challenging. However, over the past few months, I've experienced a significant shift in how I approach computer science. I've moved from simply trying to "memorize code" to understanding the underlying logic and patterns. This "aha moment" has been transformative for my confidence and ability to solve problems. I have been documenting this personal transformation and my reflections on learning methods on my blog: [flowstates.me](https://flowstates.me).
+
+**2. Embracing AI as a Learning Partner**
+A key part of this evolution has been learning how to effectively use AI tools. Instead of using them to just "get answers," I've learned to use them as a "Socratic tutor" to challenge my understanding, debug my logic, and explore the "why" behind the code. This has turned the learning process from a passive intake of information into an active, dynamic dialogue.
+
+**3. Student Collaboration: hdipers.22abad.com**
+Inspired by this progress, I realized that learning should be a social activity. I collaborated with my classmates (such as Yuliia) and Mark to build a resource sharing platform: [hdipers.22abad.com](https://hdipers.22abad.com).
+
+The goal of this project is to:
+- **Consolidate Knowledge**: We create "cheatsheets" and summaries for exams. For example, Yuliia contributed a comprehensive SQL Cheat Sheet for CS130, and we have similar resources for CS385.
+- **Practice Engineering**: Currently, my classmates provide the core content, which I integrate and deploy. Over the next two weeks, as we prepare for our three final exams in January, we plan to transition to a full **Git/GitHub** workflow. This will allow us to simulate a real software engineering environment where we review each other's code and manage contributions directly, preparing us for future assignments and the job market next year.
+- **Maximize Social Impact**: We want to help other students who might be struggling with the same concepts we found difficult. By open-sourcing our notes, we hope to foster a culture of peer-to-peer learning.
+
+Mark mentioned that you were interested in seeing this project and discussing student collaboration. I would be delighted to hear your feedback on the website or discuss how we can further encourage this kind of collaborative learning within the course.
+
+Thank you for your guidance and for creating such a supportive learning environment.
+
+Best regards,
+
+Dong Li
+Student Number: 25255673
+Higher Diploma in Science in Computing (Software Development)
+
+Project: https://hdipers.22abad.com
+Personal Blog: https://flowstates.me
+GitHub: https://github.com/22abad

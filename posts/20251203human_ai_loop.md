@@ -1,43 +1,45 @@
 ---
-title: "Teaching the AI to Teach Me: The Loop of Deep Understanding"
-title_zh: "教 AI 教会我：深度理解的闭环"
+title: "Active Learning with AI: The Importance of Precision Questioning"
+title_zh: "AI 辅助下的主动学习：精准提问的重要性"
 date: 2025-12-03
-author: "Dong"
-categories: 
-  - "Learning Method"
-  - "AI & Humans"
-  - "Reflections"
-tags:
+author: "Dong Li"
+categories:
+  - "Learning Methodology"
+  - "AI Interaction"
   - "Metacognition"
+tags:
+  - "Critical Thinking"
   - "Backtracking"
   - "Prompt Engineering"
   - "Growth"
-summary_en: "Reflecting on my breakthrough in understanding Backtracking. Realizing that AI is not just an answer machine, but a sparring partner. To get the best answers, I must ask harder questions, which requires me to deepen my own understanding first. It's 'Teaching benefits teachers and students alike' in the AI era."
-summary_zh: "反思我在回溯算法上的突破。意识到 AI 不仅仅是答题机，更是陪练。为了得到最好的答案，我必须提出更难的问题，但这要求我自己先加深理解。这就是 AI 时代的“教学相长”。"
+summary_en: "Reflecting on a breakthrough in understanding the Backtracking algorithm. Realizing that AI is most effective when treated as a sparring partner rather than an answer machine. Deep understanding comes from refining one's own questions."
+summary_zh: "反思在理解回溯算法过程中的突破。意识到当把 AI 视为陪练伙伴而非答题机时，它才最有效。深度的理解源于不断打磨自己的问题。"
 ---
-
-
 
 [EN]
 ![Human AI Collaboration|600](https://assets.flowstates.me/2025/human_ai_loop.jpg)
-# Teaching the AI to Teach Me
 
-## 1. The Art of "Demanding More"
+# Active Learning with AI
+
+## 1. The Art of Precision Questioning
+
 Today, I finally cracked the Backtracking algorithm. But the real victory wasn't the code; it was the conversation that led to it.
 I realized that AI can help me understand, but passive consumption isn't enough.
 Standard explanations are often generic. To get that "Inception-style" metaphor that finally clicked for me, I had to push the AI. I had to say, "No, that's not clear enough. Explain the relationship between the `for` loop and the recursion again."
 
 **This is the new "Teaching benefits teachers and students alike" (教学相长).**
-To ask a high-quality question, I must first have a high-quality doubt. I need to know *exactly* where I am stuck.
+To ask a high-quality question, I must first have a high-quality doubt. I need to know _exactly_ where I am stuck.
 By demanding more from the AI, I am actually demanding more from myself. I am training myself to dissect logic until I find the flaw. I am not just a user; I am an active director of my own learning.
 
 [END]
 
 [ZH]
 ![Human AI Collaboration|600](https://assets.flowstates.me/2025/human_ai_loop.jpg)
-# 教 AI 教会我
+
+# AI 辅助下的主动学习
 
 ## 1. “得寸进尺”的艺术
+
 今天，我终于彻底搞懂了回溯算法。但真正的胜利不在于代码，而在于通往代码的那场对话。
 我意识到，AI 确实能帮我理解，但被动地接收是远远不够的。
 标准的解释往往是通用的、平庸的。为了得到那个让我瞬间顿悟的“盗梦空间”比喻，我必须逼迫 AI。我必须说：“不，这还不够清楚。再给我解释一遍 `for` 循环和递归的关系。”
@@ -50,11 +52,14 @@ By demanding more from the AI, I am actually demanding more from myself. I am tr
 ---
 
 [EN]
+
 # 2. The "Kink" in the Hose
+
 Every complex concept—whether it's KMP, Binary Trees, or Backtracking—isn't equally hard everywhere.
 It usually has just 1 or 2 "Kinks" (拐点).
-* For Backtracking, the kink was realizing that "Reality is BFS, Dream is DFS."
-* For KMP, it was the rollback logic of `j`.
+
+- For Backtracking, the kink was realizing that "Reality is BFS, Dream is DFS."
+- For KMP, it was the rollback logic of `j`.
 
 Most people stop when they hit the kink. They memorize the code and move on.
 But my strategy is to attack the kink.
@@ -63,11 +68,14 @@ We need to straighten out these specific twisting points. Once that knot is unti
 [END]
 
 [ZH]
+
 # 2. 水管上的那个“结”
+
 任何复杂的知识点——无论是 KMP、二叉树还是回溯——并不是处处都难。
 它们通常只有 1 到 2 个**“拐点”**（Kinks）。
-* 对于回溯，这个拐点就是领悟“现实是广搜，梦境是深搜”。
-* 对于 KMP，是 `j` 的回退逻辑。
+
+- 对于回溯，这个拐点就是领悟“现实是广搜，梦境是深搜”。
+- 对于 KMP，是 `j` 的回退逻辑。
 
 大多数人撞到拐点就停了。他们背下代码，然后继续赶路。
 但我的策略是：**死磕那个拐点**。

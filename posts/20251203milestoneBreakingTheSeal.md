@@ -1,102 +1,117 @@
 ---
-title: "Breaking the Seal: My First Truly Independent 'Medium' Victory"
-title_zh: "捅破那层窗户纸：我第一次真正独立攻克 Medium 题"
+title: "From Imitation to Independence: A LeetCode Milestone"
+title_zh: "从模仿到独立：LeetCode 学习的一个里程碑"
 date: 2025-12-03
 author: "Dong"
-categories: 
+categories:
   - "Milestone"
   - "Growth"
   - "LeetCode"
 tags:
-  - "Breakthrough"
-  - "Honesty"
+  - "Learning Process"
+  - "Reflection"
   - "Persistence"
-summary_en: "Celebrating a milestone: independently solving a LeetCode Medium problem for the first time after two months of grinding. Reflecting on the journey from 'copying' to 'understanding,' and why being honest with oneself is the key to breaking through the final barrier."
-summary_zh: "庆祝一个里程碑：在两个月的磨练后，第一次完全独立解出一道 LeetCode Medium 题。反思从“抄代码”到“真懂”的旅程，以及为什么对自己诚实是捅破最后一层窗户纸的关键。"
+summary_en: "Reflecting on the transition from following tutorials to independently solving a Medium-level problem. A look at the role of repetition, honesty in self-assessment, and the gradual accumulation of skills."
+summary_zh: "反思从跟随教程到独立解决 Medium 难度问题的转变。探讨重复练习、诚实的自我评估以及技能逐步积累在学习过程中的作用。"
 ---
-
-
 
 [EN]
 ![Breaking the Seal|600](https://assets.flowstates.me/2025/breaking_the_seal.jpg)
-# The Milestone
 
-Today, December 3rd, marks a pivotal moment in my coding journey.
-I solved a LeetCode Medium problem (BST to Greater Sum Tree) completely on my own. No tutorials, no AI hints, no peeking at solutions. Just me and the logic.
+# A Significant Step
 
-For a veteran programmer, this is nothing. But for me, a 43-year-old ex-lawyer who started from zero on October 11th, this is everything.
-It’s been nearly two months. I knew I was close. I could read code, I could understand logic, but writing it out independently felt like there was a thin, invisible wall blocking me.
-Today, I punched through that wall.
+Today marks a significant step in my learning process.
+I solved a LeetCode Medium problem (BST to Greater Sum Tree) independently—without tutorials or hints.
+
+For an experienced developer, this is routine. But for someone who started coding in October, it represents a shift from passive understanding to active problem-solving.
+It has been a two-month journey of building foundations. I could follow logic before, but today I successfully translated that logic into code on my own.
+It marks the transition from understanding the theory to applying it in practice.
 
 [END]
 
 [ZH]
 ![Breaking the Seal|600](https://assets.flowstates.me/2025/breaking_the_seal.jpg)
-# 里程碑
 
-今天，12月3日，是我编程之旅的一个关键时刻。
-我完全独立地解出了一道 LeetCode Medium 题（二叉搜索树转累加树）。没有看教程，没有问 AI，没有偷看答案。只有我和逻辑。
+# 重要的一步
 
-对于一个资深程序员来说，这不算什么。但对于我，一个从10月11日零基础起步的43岁前律师来说，这就是一切。
-快两个月了。我知道我很接近了。我能读懂代码，能理解逻辑，但在独立写出来之前，总感觉有一层看不见的薄墙挡着我。
-今天，我一拳打穿了这堵墙。
+今天是学习过程中的一个重要台阶。
+我独立解决了一道 LeetCode Medium 题目（二叉搜索树转累加树），没有依赖教程或提示。
+
+对于经验丰富的开发者来说，这是日常。但对于十月份才开始编程的人来说，这代表了从被动理解到主动解决问题的转变。
+这是两个月打基础的成果。以前我能看懂逻辑，但今天我成功地将逻辑独立转化为代码。
+这标志着从理解理论到实际应用的转变。
 [END]
 
 ---
 
 [EN]
-# 1. The Meaning of "Copying"
-Looking back at my submission history, I see "Accepted" records from a month ago.
-I know the truth: those were basically "copied." I understood the logic, but I typed them out with the solution open on another screen.
-At the time, I thought it was meaningless. But now I see differently.
-Those "copied" submissions were the background noise for today's clarity. They were the necessary friction.
-**The meaning of failure (or copying) lies in its contrast with success.** Without that feeling of "I'm faking it," the joy of "I actually did it" wouldn't be so sweet.
+
+# 1. The Role of Repetition
+
+Looking back at my earlier submissions, many were completed with guidance or by studying solutions.
+At the time, it felt like I wasn't truly learning. However, I now realize that phase was essential.
+Those guided attempts were about pattern recognition and syntax familiarity. They provided the necessary context for today's independent solution.
+The contrast between "following along" and "doing it yourself" highlights the progress made. It validates the effort put into those initial, repetitive practice sessions.
 
 [END]
 
 [ZH]
-# 1. “抄写”的意义
-回头看我的提交记录，我看到了一个月前的“通过”记录。
-我知道真相：那些基本属于“抄”下来的。我懂逻辑，但我是在另一个屏幕开着答案的情况下敲出来的。
-当时，我觉得那是没有意义的。但现在我看待它的方式变了。
-那些“抄写”的记录，是今天清晰时刻的背景音。它们是必要的摩擦力。
-**失败（或者说抄写）的意义，在于它与成功的对比。** 如果没有那种“我在假装会”的心虚感，今天这种“我真做到了”的快感就不会如此甜美。
+
+# 1. 重复练习的作用
+
+回顾早期的提交记录，很多都是在指导下或通过研究答案完成的。
+当时感觉自己并没有真正学会。但我现在意识到，那个阶段是必不可少的。
+那些引导式的练习是为了识别模式和熟悉语法。它们为今天的独立解题提供了必要的语境。
+“跟随练习”与“独立完成”之间的对比，清晰地展示了进步的轨迹。这也验证了早期那些重复性练习的价值。
 [END]
 
 ---
 
 [EN]
-# 2. Radical Honesty
-The most important lesson I've learned isn't about Binary Trees or Stacks. It's about **Honesty**.
-Failure isn't scary. Being slow isn't scary.
-What's scary is being dishonest—especially with yourself.
-If I had kept pretending I "knew" it because I copied the code, I would never have broken through.
-I admitted I was weak. I admitted I needed to memorize templates. I admitted I needed help.
-And because I was honest about my ignorance, I finally earned my knowledge.
 
-A good start is 90% of success. And today, I finally started.
+# 2. Intellectual Honesty
+
+A key realization has been the importance of intellectual honesty.
+It is easy to convince oneself that reading a solution is the same as understanding it.
+Acknowledging the gap between "recognizing the code" and "writing the code" was crucial.
+By admitting what I didn't know and focusing on the basics (even memorizing patterns initially), I built the confidence to eventually discard the training wheels.
+True progress comes from accurately assessing one's own understanding.
 
 [END]
 
 [ZH]
-# 2. 极致的诚实
-我学到的最重要的一课，不是关于二叉树或栈的，而是关于**诚实**。
-失败不可怕。慢也不可怕。
-可怕的是不诚实——尤其是对自己不诚实。
-如果我一直因为抄了代码就假装自己“会了”，我永远也无法突破。
-我承认我很弱。我承认我需要背模版。我承认我需要帮助。
-正因为我对自己的无知保持了诚实，我才终于赢得了我的知识。
 
-好的开始是成功的 90%。而今天，我终于开始了。
+# 2. 智识诚实
+
+一个关键的感悟是“智识诚实”的重要性。
+很容易让自己相信，看懂答案就等于掌握了知识。
+承认“认得代码”和“写出代码”之间的差距至关重要。
+通过承认自己的不足并专注于基础（甚至最初是背诵模式），我建立了最终摆脱辅助轮的信心。
+真正的进步源于对自己理解程度的准确评估。
 [END]
 
 ---
-[EN]
-# 3. Inverting the Proverb
-There is an old Chinese saying: *"The journey of a hundred miles is half complete at ninety."* (行百里者半九十). It warns us that the final stretch is the hardest.
 
-But today, I realized the opposite is true for us builders.
-**The moment you actually start, you are 90% done.**
+[EN]
+
+# 3. The First Step
+
+There is a saying about the difficulty of the final stretch.
+But in learning a new skill, often the hardest part is reaching the point of independent application.
+Once you can solve one problem on your own, the path forward becomes clearer.
+This isn't the end, but it's a valid start.
+
+[END]
+
+[ZH]
+
+# 3. 坚实的起点
+
+常言道“行百里者半九十”，强调最后的艰难。
+但在学习新技能时，往往最难的是达到能够独立应用的那个点。
+一旦能独立解决一个问题，前方的道路就变得清晰了。
+这不是终点，而是一个坚实的起点。
+[END]
 
 In physics, **Static Friction** (the force needed to get an object moving) is always greater than **Kinetic Friction** (the force to keep it moving).
 The anxiety before opening the IDE, the hesitation before stepping onto the cold train platform, the fear before the exam starts—that is the massive Static Friction.
@@ -108,7 +123,9 @@ Don't worry about the last 10 miles. Worry about the first step.
 [END]
 
 [ZH]
+
 # 3. 反转古谚
+
 中国有句古话叫“行百里者半九十”。它的意思是，事情越接近终点越艰难。
 
 但今天，我意识到对于我们这些建设者来说，事实恰恰相反。

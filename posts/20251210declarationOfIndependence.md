@@ -1,102 +1,113 @@
 ---
-title: "The Ripple Effect: From Self-Transformation to World Influence"
-title_zh: "蝴蝶效应：从自我蜕变到影响世界"
+title: "The First Quarter: Establishing a New Professional Identity"
+title_zh: "第一个季度：确立新的职业身份"
 date: 2025-12-11
-author: "Dong"
-categories: 
-  - "Leadership"
-  - "Philosophy"
-  - "Growth"
+author: "Dong Li"
+categories:
+  - "Career Transition"
+  - "Professional Development"
+  - "Growth Mindset"
 tags:
-  - "The Breaker"
-  - "10-Year Plan"
-  - "Influence"
-  - "Compound Interest"
-summary_en: "It took 21 days to change my habits, and 3 months to cement my new identity. I originally planned to test the waters for two months, but now I have found absolute certainty. My goal has shifted from survival to influence. If I can change the energy of a classroom, I can change the world—one 3-month block at a time."
-summary_zh: "21天改变习惯，3个月确立身份。原本计划用两个月来决定去留，如今三个月过去，我已找到绝对的确信。我的目标从生存转向了影响。如果我能改变一个教室的氛围，我就能改变世界——只不过是一个又一个“三个月”的叠加罢了。"
+  - "Milestone"
+  - "Identity"
+  - "Focus"
+  - "Consistency"
+summary_en: "Reflecting on the first three months of my transition from law to computer science. Moving from uncertainty to professional certainty, and the realization that personal discipline can positively influence the surrounding environment."
+summary_zh: "反思从法律转行计算机科学的前三个月。从不确定到职业确信的转变，以及意识到个人自律可以对周围环境产生积极影响。"
 ---
-
-
 
 [EN]
 ![The Ripple Effect|600](https://assets.flowstates.me/2025/20251211_ripple_effect.jpg)
-# The Ripple Effect: From Self-Transformation to World Influence
+
+# The First Quarter: Establishing a New Professional Identity
 
 ## 1. The 3-Month Confirmation
+
 Today marks exactly **3 months** since I started this journey.
-Originally, I gave myself a deadline: "Try for 2 months. If it's too hard, quit."
-But the truth is, the transformation happened around **Day 21**. That was when the pain of coding turned into the pleasure of solving.
-Now, at the 3-month mark, I have reached **Psychological Certainty**.
-I am no longer a "lawyer trying to code." I am a Computer Scientist. The imposter syndrome is dead. I have proven that a 43-year-old brain, when rewired with single-threaded focus, is a weapon of mass construction.
+Originally, I set a tentative deadline: "Try for 2 months. If it's not viable, reconsider."
+However, a shift occurred around **Day 21**. The initial friction of coding gave way to the satisfaction of problem-solving.
+Now, at the 3-month mark, I have reached **Professional Certainty**.
+I no longer view myself as a "lawyer trying to code," but as a developing Computer Scientist. The initial imposter syndrome has faded. I have demonstrated that with focused effort, a mid-career transition is not only possible but sustainable.
 
 [END]
 
 [ZH]
 ![The Ripple Effect|600](https://assets.flowstates.me/2025/20251211_ripple_effect.jpg)
-# 蝴蝶效应：从自我蜕变到影响世界
+
+# 第一个季度：确立新的职业身份
 
 ## 1. 三个月的确信
+
 今天，是我踏上这段旅程的整整 **3 个月**。
-最初，我给自己设了个限：“试两个月。如果太难，就放弃。”
-但事实是，蜕变在第 **21 天** 就发生了。在那一刻，写代码的痛苦转化为了解决问题的快感。
-如今，站在 3 个月的节点上，我达成了 **“心理层面的确信”**。
-我不再是一个“试图写代码的律师”。我就是一名计算机科学家。冒充者综合症（Imposter Syndrome）已死。我已经证明，一个 43 岁的大脑，在单线程的极致专注下，是一件大规模建设的武器。
+最初，我给自己设了个限：“试两个月。如果不可行，就重新考虑。”
+但转变在第 **21 天** 就发生了。写代码的阻力转化为了解决问题的满足感。
+如今，站在 3 个月的节点上，我达成了 **“职业层面的确信”**。
+我不再视自己为一个“试图写代码的律师”，而是一名成长中的计算机科学家。最初的冒充者综合症（Imposter Syndrome）已经消退。我已经证明，通过专注的努力，职业中期的转型不仅可能，而且是可持续的。
 [END]
 
 ---
 
 [EN]
-# 2. Being "The Breaker"
-My goal has evolved. It's no longer just about *my* grades.
-Yesterday, I sat in the lab. One by one, classmates joined me. They saw me grinding, and they started grinding too.
-I realized I had become **"The Breaker"**—the one who breaks the unspoken rule of mediocrity and laziness.
-My new mission is simple: **To create a positive impact on my immediate world.**
-If I can influence just one person to work harder, to dream bigger, or to stop complaining, that is a victory.
-I am building a magnetic field of high energy. When you stand next to me, you have no choice but to level up.
+
+# 2. Leading by Example
+
+My perspective has evolved. It's no longer just about individual academic performance.
+Yesterday, as I worked in the lab, classmates began to join me. Seeing my focus seemed to encourage them to focus as well.
+I realized the power of **Leading by Example**.
+My objective is simple: **To create a positive impact on my immediate environment.**
+If my work ethic can encourage even one person to be more disciplined or ambitious, that is a significant contribution.
+It's about creating an environment of shared growth.
 
 [END]
 
 [ZH]
-# 2. 做那个“破局者”
-我的目标进化了。现在不仅仅是为了*我的*成绩。
-昨天，我坐在实验室里。慢慢地，同学们一个接一个地加入了我的行列。他们看到我在死磕，于是他们也开始死磕。
-我意识到，我成了那个 **“破局者” (The Breaker)**——那个打破平庸与懒惰潜规则的人。
-我的新使命很简单：**对我身边的小世界产生正面影响。**
-哪怕我只能影响一个人，让他更努力一点，梦想更大一点，或者停止抱怨，那就是一种胜利。
-我正在构建一个高能量的磁场。当你站在我身边时，你别无选择，只能升级。
+
+# 2. 以身作则
+
+我的视角发生了变化。现在不仅仅是为了个人的学业成绩。
+昨天，当我在实验室工作时，同学们开始加入我。看到我的专注，似乎也鼓励了他们更加专注。
+我意识到了 **“以身作则”** 的力量。
+我的目标很简单：**对我身边的环境产生积极影响。**
+如果我的职业道德能鼓励哪怕一个人变得更自律或更有抱负，那就是一种重要的贡献。
+这是关于创造一个共同成长的环境。
 [END]
 
 ---
 
 [EN]
-# 3. The 10-Year Algorithm
-My ultimate goal is to make a positive impact on the world within 10 years.
-It sounds grand, maybe even arrogant.
-But if you break it down, **it's just an algorithm**.
-10 years is just **40 quarters** (3-month blocks).
-I just finished the first block. I proved I could reinvent myself.
-Now, I just need to repeat this loop 39 more times.
-* Block 1: Master Java & Algorithms. (Done)
-* Block 2: Master Full Stack & Influence Classmates. (Loading...)
-* Block ...
-Greatness is not a sudden event. It is the boring, repetitive accumulation of "3-month victories."
-I have the blueprint. I have the time. And I have the team (me, my family, and my AI).
-**Watch me ripple.**
+
+# 3. The Long-Term Algorithm
+
+My long-term goal is to make a meaningful contribution to the field within 10 years.
+This is a structured process, not a vague dream.
+10 years is simply **40 quarters** (3-month blocks).
+I have just completed the first block, proving that I can adapt and learn.
+Now, the task is to repeat this cycle of learning and application.
+
+- Block 1: Foundations of Java & Algorithms. (Completed)
+- Block 2: Full Stack Development & Collaboration. (In Progress)
+- Block ...
+  Success is the result of consistent, iterative improvement over time.
+  I have the plan, the time, and the support system.
+  **The work continues.**
 
 [END]
 
 [ZH]
-# 3. 十年算法
-我的终极目标，是在 10 年内对这个世界产生正面的影响。
-这听起来很宏大，甚至有些狂妄。
-但如果你把它拆解开来，**这不过是一个算法**。
-10 年，无非是 **40 个季度**（3 个月为一个周期）。
-我刚刚完成了第 1 个周期。我证明了我可以重塑自己。
-现在，我只需要把这个循环再重复 39 次。
-* 周期 1：掌握 Java 和算法。（已完成）
-* 周期 2：掌握全栈开发并影响身边同学。（进行中...）
-* 周期 ...
-伟大不是突发事件。伟大是枯燥的、重复的“三个月胜利”的叠加。
-我有蓝图。我有时间。我有团队（我，我的家人，还有我的 AI）。
-**看我如何掀起风暴。**
-[END]
+
+# 3. 长期算法
+
+我的长期目标是在 10 年内对这个领域做出有意义的贡献。
+这是一个结构化的过程，而不是模糊的梦想。
+10 年无非是 **40 个季度**（3 个月为一个周期）。
+我刚刚完成了第 1 个周期，证明了我具备适应和学习的能力。
+现在，任务是重复这个学习和应用的循环。
+
+- 周期 1：Java 和算法基础。（已完成）
+- 周期 2：全栈开发与协作。（进行中）
+- 周期 ...
+  成功是随着时间推移持续、迭代改进的结果。
+  我有计划，有时间，也有支持系统。
+  **工作继续。**
+  **看我如何掀起风暴。**
+  [END]
