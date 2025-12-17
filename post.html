@@ -1,261 +1,526 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Flow Log | flowstates.me</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
-    
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@300;500;700&family=JetBrains+Mono&display=swap"
+      rel="stylesheet"
+    />
+
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+      rel="stylesheet"
+    />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-java.min.js"></script>
-    
+
     <style>
-        :root{--bg:#0f172a;--muted:#94a3b8}
-        body { background-color: var(--bg); color: #e2e8f0; overflow-x: hidden; }
-        .font-serif-en { font-family: 'Lora', serif; }
-        .font-serif-cn { font-family: 'Noto Serif SC', serif; }
-        .font-mono { font-family: 'JetBrains Mono', monospace; }
-        
-        #flowCanvas { position: fixed; inset:0; width:100%; height:100%; z-index:-1; opacity:0.6; }
-        .fade-in { animation: fadeIn 1s ease-out both; }
-        @keyframes fadeIn { from{opacity:0; transform:translateY(10px)} to{opacity:1; transform:none} }
+      :root {
+        --bg: #0f172a;
+        --muted: #94a3b8;
+      }
+      body {
+        background-color: var(--bg);
+        color: #e2e8f0;
+        overflow-x: hidden;
+      }
+      .font-serif-en {
+        font-family: "Lora", serif;
+      }
+      .font-serif-cn {
+        font-family: "Noto Serif SC", serif;
+      }
+      .font-mono {
+        font-family: "JetBrains Mono", monospace;
+      }
 
-        /* Reading Progress Bar */
-        #progress-bar {
-            position: fixed; top: 0; left: 0; height: 3px; background: #34d399;
-            width: 0%; z-index: 100; transition: width 0.1s;
+      #flowCanvas {
+        position: fixed;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: 0.6;
+      }
+      .fade-in {
+        animation: fadeIn 1s ease-out both;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
         }
+        to {
+          opacity: 1;
+          transform: none;
+        }
+      }
 
-        /* Copy Button Styles */
-        .code-wrapper { position: relative; margin-bottom: 1.5em; }
-        .copy-btn {
-            position: absolute; top: 0.5em; right: 0.5em;
-            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
-            color: #94a3b8; font-size: 0.75rem; padding: 0.2em 0.6em;
-            border-radius: 4px; cursor: pointer; transition: all 0.2s;
-            font-family: 'JetBrains Mono', monospace; z-index: 10;
-        }
-        .copy-btn:hover { background: rgba(52, 211, 153, 0.2); color: #34d399; border-color: #34d399; }
+      /* Reading Progress Bar */
+      #progress-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 3px;
+        background: #34d399;
+        width: 0%;
+        z-index: 100;
+        transition: width 0.1s;
+      }
 
-        /* Prose & Typography */
-        .prose { font-size: 1.125rem; line-height: 1.9; } 
-        .content-en > h1:first-child, .content-zh > h1:first-child { display: none; } 
-        .prose h1, .prose h2, .prose h3 { color: #f1f5f9; margin-top: 2.5em; margin-bottom: 1em; font-weight: 600; letter-spacing: -0.02em; line-height: 1.3; }
-        .prose h1 { font-size: 2.25em; color: #fff; border-bottom: 1px solid #334155; padding-bottom: 0.5em; }
-        .prose h2 { font-size: 1.75em; border-bottom: 1px solid #334155; padding-bottom: 0.3em; color: #a7f3d0; } 
-        .prose h3 { font-size: 1.4em; color: #6ee7b7; margin-top: 2em; } 
-        
-        .prose p { margin-bottom: 1.5em; opacity: 0.9; display: block; } 
-        .prose ul { list-style-type: disc; padding-left: 1.5em; margin-bottom: 1.5em; color: #cbd5e1; }
-        .prose ol { list-style-type: decimal; padding-left: 1.5em; margin-bottom: 1.5em; color: #cbd5e1; }
-        
-        .prose blockquote { 
-            border-left: 4px solid #34d399; 
-            background: rgba(52, 211, 153, 0.1);
-            padding: 1rem 1.5rem; margin: 2rem 0;
-            border-radius: 0 8px 8px 0; font-style: italic; color: #e2e8f0;
-        }
-        
-        /* Code Blocks - Prism Style Override */
-        .prose code { background: #1e293b; padding: 0.2em 0.4em; rounded: 4px; font-family: 'JetBrains Mono', monospace; font-size: 0.85em; color: #34d399; border: 1px solid #334155; }
-        
-        /* Wrapper for code blocks */
-        .prose pre { 
-            background: #1d1f21 !important; 
-            padding: 1.5em; overflow-x: auto; border-radius: 8px; margin-bottom: 0; border: 1px solid #334155; 
-        }
-        .prose pre code { background: transparent; padding: 0; border: none; color: inherit; }
-        
-        .prose strong { color: #fff; font-weight: 700; }
-        .prose a { color: #34d399; text-decoration: underline; text-decoration-color: #34d399; text-underline-offset: 3px; }
-        .prose a:hover { color: #fff; }
-        .prose img { border-radius: 8px; margin: 2rem auto; max-width: 100%; border: 1px solid #334155; }
+      /* Copy Button Styles */
+      .code-wrapper {
+        position: relative;
+        margin-bottom: 1.5em;
+      }
+      .copy-btn {
+        position: absolute;
+        top: 0.5em;
+        right: 0.5em;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: #94a3b8;
+        font-size: 0.75rem;
+        padding: 0.2em 0.6em;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-family: "JetBrains Mono", monospace;
+        z-index: 10;
+      }
+      .copy-btn:hover {
+        background: rgba(52, 211, 153, 0.2);
+        color: #34d399;
+        border-color: #34d399;
+      }
 
-        .cat-badge { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; background: rgba(52, 211, 153, 0.1); border: 1px solid rgba(52, 211, 153, 0.3); color: #34d399; padding: 0.3rem 0.8rem; border-radius: 999px; }
-        .tag-pill { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; border: 1px solid #475569; color: #94a3b8; padding: 0.2rem 0.6rem; border-radius: 4px; }
+      /* Prose & Typography */
+      .prose {
+        font-size: 1.125rem;
+        line-height: 1.9;
+      }
+      .content-en > h1:first-child,
+      .content-zh > h1:first-child {
+        display: none;
+      }
+      .prose h1,
+      .prose h2,
+      .prose h3 {
+        color: #f1f5f9;
+        margin-top: 2.5em;
+        margin-bottom: 1em;
+        font-weight: 600;
+        letter-spacing: -0.02em;
+        line-height: 1.3;
+      }
+      .prose h1 {
+        font-size: 2.25em;
+        color: #fff;
+        border-bottom: 1px solid #334155;
+        padding-bottom: 0.5em;
+      }
+      .prose h2 {
+        font-size: 1.75em;
+        border-bottom: 1px solid #334155;
+        padding-bottom: 0.3em;
+        color: #a7f3d0;
+      }
+      .prose h3 {
+        font-size: 1.4em;
+        color: #6ee7b7;
+        margin-top: 2em;
+      }
+
+      .prose p {
+        margin-bottom: 1.5em;
+        opacity: 0.9;
+        display: block;
+      }
+      .prose ul {
+        list-style-type: disc;
+        padding-left: 1.5em;
+        margin-bottom: 1.5em;
+        color: #cbd5e1;
+      }
+      .prose ol {
+        list-style-type: decimal;
+        padding-left: 1.5em;
+        margin-bottom: 1.5em;
+        color: #cbd5e1;
+      }
+
+      .prose blockquote {
+        border-left: 4px solid #34d399;
+        background: rgba(52, 211, 153, 0.1);
+        padding: 1rem 1.5rem;
+        margin: 2rem 0;
+        border-radius: 0 8px 8px 0;
+        font-style: italic;
+        color: #e2e8f0;
+      }
+
+      /* Code Blocks - Prism Style Override */
+      .prose code {
+        background: #1e293b;
+        padding: 0.2em 0.4em;
+        rounded: 4px;
+        font-family: "JetBrains Mono", monospace;
+        font-size: 0.85em;
+        color: #34d399;
+        border: 1px solid #334155;
+      }
+
+      /* Wrapper for code blocks */
+      .prose pre {
+        background: #1d1f21 !important;
+        padding: 1.5em;
+        overflow-x: auto;
+        border-radius: 8px;
+        margin-bottom: 0;
+        border: 1px solid #334155;
+      }
+      .prose pre code {
+        background: transparent;
+        padding: 0;
+        border: none;
+        color: inherit;
+      }
+
+      .prose strong {
+        color: #fff;
+        font-weight: 700;
+      }
+      .prose a {
+        color: #34d399;
+        text-decoration: underline;
+        text-decoration-color: #34d399;
+        text-underline-offset: 3px;
+      }
+      .prose a:hover {
+        color: #fff;
+      }
+      .prose img {
+        border-radius: 8px;
+        margin: 2rem auto;
+        max-width: 100%;
+        border: 1px solid #334155;
+      }
+
+      .cat-badge {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        background: rgba(52, 211, 153, 0.1);
+        border: 1px solid rgba(52, 211, 153, 0.3);
+        color: #34d399;
+        padding: 0.3rem 0.8rem;
+        border-radius: 999px;
+      }
+      .tag-pill {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border: 1px solid #475569;
+        color: #94a3b8;
+        padding: 0.2rem 0.6rem;
+        border-radius: 4px;
+      }
     </style>
-</head>
-<body class="antialiased selection:bg-emerald-500 selection:text-white">
+  </head>
+  <body class="antialiased selection:bg-emerald-500 selection:text-white">
+    <div id="progress-bar"></div>
+    <canvas id="flowCanvas" aria-hidden="true"></canvas>
 
-<div id="progress-bar"></div>
-<canvas id="flowCanvas" aria-hidden="true"></canvas>
+    <nav
+      class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-md bg-slate-900/60 border-b border-slate-800/50"
+    >
+      <a
+        href="index.html"
+        class="group text-lg font-bold tracking-widest opacity-90 hover:text-emerald-400 transition flex items-center gap-2"
+      >
+        <span
+          class="group-hover:-translate-x-1 transition-transform duration-300"
+          >←</span
+        >
+        BACK
+      </a>
+      <button
+        id="langToggle"
+        class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-emerald-900/50 hover:border-emerald-400 transition uppercase tracking-wide"
+      >
+        SWITCH TO 中文
+      </button>
+    </nav>
 
-<nav class="fixed top-0 w-full p-6 flex justify-between items-center z-50 backdrop-blur-md bg-slate-900/60 border-b border-slate-800/50">
-    <a href="index.html" class="group text-lg font-bold tracking-widest opacity-90 hover:text-emerald-400 transition flex items-center gap-2">
-        <span class="group-hover:-translate-x-1 transition-transform duration-300">←</span> BACK
-    </a>
-    <button id="langToggle" class="px-4 py-1 border border-slate-500 rounded-full text-xs hover:bg-emerald-900/50 hover:border-emerald-400 transition uppercase tracking-wide">SWITCH TO 中文</button>
-</nav>
-
-<main class="min-h-screen max-w-3xl mx-auto px-6 py-32 relative z-10">
-    <header class="fade-in mb-12 pb-8 border-b border-slate-800">
+    <main class="min-h-screen max-w-3xl mx-auto px-6 py-32 relative z-10">
+      <header class="fade-in mb-12 pb-8 border-b border-slate-800">
         <div class="flex flex-wrap items-center gap-4 mb-6">
-            <span id="post-date" class="text-xs font-mono text-slate-500 uppercase tracking-widest">Loading...</span>
-            <div id="post-cats" class="flex gap-2"></div>
+          <span
+            id="post-date"
+            class="text-xs font-mono text-slate-500 uppercase tracking-widest"
+            >Loading...</span
+          >
+          <div id="post-cats" class="flex gap-2"></div>
         </div>
-        <h1 class="text-3xl sm:text-5xl font-bold text-slate-100 leading-tight mb-6">
-            <span id="title-en" class="content-en font-serif-en block"></span>
-            <span id="title-zh" class="content-zh hidden font-serif-cn block mt-2 opacity-90"></span>
+        <h1
+          class="text-3xl sm:text-5xl font-bold text-slate-100 leading-tight mb-6"
+        >
+          <span id="title-en" class="content-en font-serif-en block"></span>
+          <span
+            id="title-zh"
+            class="content-zh hidden font-serif-cn block mt-2 opacity-90"
+          ></span>
         </h1>
         <div id="post-tags" class="flex flex-wrap gap-2 opacity-80"></div>
-    </header>
+      </header>
 
-    <article id="post-body" class="prose fade-in font-serif-en text-slate-300">
+      <article
+        id="post-body"
+        class="prose fade-in font-serif-en text-slate-300"
+      >
         <div class="text-center opacity-50 italic py-20">
-            <span class="content-en">Retrieving memory...</span>
-            <span class="content-zh hidden">正在读取记忆...</span>
+          <span class="content-en">Retrieving memory...</span>
+          <span class="content-zh hidden">正在读取记忆...</span>
         </div>
-    </article>
-</main>
+      </article>
+    </main>
 
-<footer class="w-full text-center opacity-40 text-xs uppercase tracking-widest pb-8 relative z-10">22abad @ Ireland</footer>
+    <footer
+      class="w-full text-center opacity-40 text-xs uppercase tracking-widest pb-8 relative z-10"
+    >
+      22abad @ Ireland
+    </footer>
 
-<script>
-(function(){
-    const GITHUB_USERNAME = '22abad';
-    const GITHUB_REPO = 'flowStates';
-    const POSTS_FOLDER = 'posts';
+    <script>
+      (function () {
+        const GITHUB_USERNAME = "22abad";
+        const GITHUB_REPO = "flowStates";
+        const POSTS_FOLDER = "posts";
 
-    const toggleBtn = document.getElementById('langToggle');
-    let isEnglish = true;
-    function updateLang() {
-        document.querySelectorAll('.content-en').forEach(el => el.classList.toggle('hidden', !isEnglish));
-        document.querySelectorAll('.content-zh').forEach(el => el.classList.toggle('hidden', isEnglish));
-        toggleBtn.textContent = isEnglish ? 'SWITCH TO 中文' : 'SWITCH TO ENGLISH';
-    }
-    toggleBtn.addEventListener('click', ()=>{ isEnglish = !isEnglish; updateLang(); });
+        const toggleBtn = document.getElementById("langToggle");
+        const storedLang = localStorage.getItem("flowstates_lang");
+        let isEnglish = storedLang === null ? true : storedLang === "en";
 
-    function getQueryParam(name) { return new URLSearchParams(window.location.search).get(name); }
-
-    function parseFrontMatter(raw){
-        const result = {meta:{}, body: raw};
-        const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
-        if(!m) return result;
-        const head = m[1]; const lines = head.split(/\r?\n/); let currentKey = null;
-        lines.forEach(line => {
-            if(!line.trim()) return;
-            if(line.trim().startsWith('-') && currentKey) {
-                let val = line.trim().replace(/^-\s*/, '').trim();
-                if(/^['"].*['"]$/.test(val)) val = val.slice(1,-1);
-                if(!Array.isArray(result.meta[currentKey])) result.meta[currentKey] = [];
-                result.meta[currentKey].push(val);
-            } else if(line.includes(':')) {
-                const idx = line.indexOf(':'); const key = line.slice(0, idx).trim(); let val = line.slice(idx+1).trim(); currentKey = key;
-                if(val) { if(/^['"].*['"]$/.test(val)) val = val.slice(1,-1); result.meta[key] = val; } else { result.meta[key] = []; }
-            }
+        function updateLang() {
+          document
+            .querySelectorAll(".content-en")
+            .forEach((el) => el.classList.toggle("hidden", !isEnglish));
+          document
+            .querySelectorAll(".content-zh")
+            .forEach((el) => el.classList.toggle("hidden", isEnglish));
+          toggleBtn.textContent = isEnglish
+            ? "SWITCH TO 中文"
+            : "SWITCH TO ENGLISH";
+          localStorage.setItem("flowstates_lang", isEnglish ? "en" : "zh");
+        }
+        toggleBtn.addEventListener("click", () => {
+          isEnglish = !isEnglish;
+          updateLang();
         });
-        result.body = raw.slice(m[0].length); return result;
-    }
 
-    // Inject Copy Buttons
-    function addCopyButtons() {
-        document.querySelectorAll('pre').forEach(pre => {
-            if(pre.parentNode.classList.contains('code-wrapper')) return;
-            const wrapper = document.createElement('div');
-            wrapper.className = 'code-wrapper';
-            pre.parentNode.insertBefore(wrapper, pre);
-            wrapper.appendChild(pre);
-            const btn = document.createElement('button');
-            btn.className = 'copy-btn';
-            btn.innerText = 'Copy';
-            btn.addEventListener('click', () => {
-                const code = pre.querySelector('code').innerText;
-                navigator.clipboard.writeText(code).then(() => {
-                    btn.innerText = 'Copied!';
-                    setTimeout(() => btn.innerText = 'Copy', 2000);
-                });
-            });
-            wrapper.appendChild(btn);
-        });
-    }
-
-    // Render Body
-    function renderBodyContent(rawBody) {
-        const enRegex = /\[EN\]([\s\S]*?)\[END\]/g;
-        const zhRegex = /\[ZH\]([\s\S]*?)\[END\]/g;
-        let enContent = '', zhContent = '';
-        let match;
-        while ((match = enRegex.exec(rawBody)) !== null) enContent += match[1] + '\n\n';
-        while ((match = zhRegex.exec(rawBody)) !== null) zhContent += match[1] + '\n\n';
-
-        let html = '';
-        const parsedRaw = marked.parse(rawBody);
-
-        if (enContent || zhContent) {
-            if (enContent) html += `<div class="content-en">${marked.parse(enContent)}</div>`;
-            else html += `<div class="content-en">${parsedRaw}</div>`;
-            
-            if (zhContent) html += `<div class="content-zh hidden font-serif-cn">${marked.parse(zhContent)}</div>`;
-            else {
-                const contentToShow = enContent ? marked.parse(enContent) : parsedRaw;
-                html += `<div class="content-zh hidden font-serif-cn opacity-80"><p class="text-sm text-slate-500 mb-4 italic">此处暂无中文译文，显示原文：</p>${contentToShow}</div>`;
-            }
-        } else {
-            html += `<div class="content-en">${parsedRaw}</div><div class="content-zh hidden font-serif-cn">${parsedRaw}</div>`;
+        function getQueryParam(name) {
+          return new URLSearchParams(window.location.search).get(name);
         }
 
-        document.getElementById('post-body').innerHTML = html;
-        
-        // Finalize Features
-        updateLang();
-        addCopyButtons(); 
-        if (window.Prism) window.Prism.highlightAll(); // Highlight Code
-    }
+        function parseFrontMatter(raw) {
+          const result = { meta: {}, body: raw };
+          const m = raw.match(/^---\s*([\s\S]*?)\s*---\s*/);
+          if (!m) return result;
+          const head = m[1];
+          const lines = head.split(/\r?\n/);
+          let currentKey = null;
+          lines.forEach((line) => {
+            if (!line.trim()) return;
+            if (line.trim().startsWith("-") && currentKey) {
+              let val = line.trim().replace(/^-\s*/, "").trim();
+              if (/^['"].*['"]$/.test(val)) val = val.slice(1, -1);
+              if (!Array.isArray(result.meta[currentKey]))
+                result.meta[currentKey] = [];
+              result.meta[currentKey].push(val);
+            } else if (line.includes(":")) {
+              const idx = line.indexOf(":");
+              const key = line.slice(0, idx).trim();
+              let val = line.slice(idx + 1).trim();
+              currentKey = key;
+              if (val) {
+                if (/^['"].*['"]$/.test(val)) val = val.slice(1, -1);
+                result.meta[key] = val;
+              } else {
+                result.meta[key] = [];
+              }
+            }
+          });
+          result.body = raw.slice(m[0].length);
+          return result;
+        }
 
-    async function loadPost(){
-        const filename = getQueryParam('id');
-        if(!filename) { window.location.href = 'index.html'; return; }
-        try {
-            const fileUrl = `${POSTS_FOLDER}/${decodeURIComponent(filename)}.md`;
+        // Inject Copy Buttons
+        function addCopyButtons() {
+          document.querySelectorAll("pre").forEach((pre) => {
+            if (pre.parentNode.classList.contains("code-wrapper")) return;
+            const wrapper = document.createElement("div");
+            wrapper.className = "code-wrapper";
+            pre.parentNode.insertBefore(wrapper, pre);
+            wrapper.appendChild(pre);
+            const btn = document.createElement("button");
+            btn.className = "copy-btn";
+            btn.innerText = "Copy";
+            btn.addEventListener("click", () => {
+              const code = pre.querySelector("code").innerText;
+              navigator.clipboard.writeText(code).then(() => {
+                btn.innerText = "Copied!";
+                setTimeout(() => (btn.innerText = "Copy"), 2000);
+              });
+            });
+            wrapper.appendChild(btn);
+          });
+        }
+
+        // Render Body
+        function renderBodyContent(rawBody) {
+          // Pre-process tags to HTML divs, preserving everything else
+          // Adding newlines to ensure markdown inside divs is parsed
+          let processedMarkdown = rawBody
+            .replace(
+              /\[EN\]([\s\S]*?)\[END\]/g,
+              '<div class="content-en">\n\n$1\n\n</div>'
+            )
+            .replace(
+              /\[ZH\]([\s\S]*?)\[END\]/g,
+              '<div class="content-zh hidden font-serif-cn">\n\n$1\n\n</div>'
+            );
+
+          // Parse markdown
+          let html = marked.parse(processedMarkdown);
+
+          document.getElementById("post-body").innerHTML = html;
+
+          // Finalize Features
+          updateLang();
+          addCopyButtons();
+          if (window.Prism) window.Prism.highlightAll(); // Highlight Code
+        }
+
+        async function loadPost() {
+          const filename = getQueryParam("id");
+          if (!filename) {
+            window.location.href = "index.html";
+            return;
+          }
+          try {
+            const fileUrl = `${POSTS_FOLDER}/${decodeURIComponent(
+              filename
+            )}.md`;
             const res = await fetch(fileUrl);
-            if(!res.ok) throw new Error(`Post not found: ${res.status}`);
+            if (!res.ok) throw new Error(`Post not found: ${res.status}`);
             const text = await res.text();
             const data = parseFrontMatter(text);
             const meta = data.meta;
 
-            document.title = (meta.title_en || meta.title) + ' | Flow States';
-            document.getElementById('title-en').textContent = meta.title_en || meta.title;
-            document.getElementById('title-zh').textContent = meta.title_zh || meta.title_en;
-            document.getElementById('post-date').textContent = meta.date || '';
+            document.title = (meta.title_en || meta.title) + " | Flow States";
+            document.getElementById("title-en").textContent =
+              meta.title_en || meta.title;
+            document.getElementById("title-zh").textContent =
+              meta.title_zh || meta.title_en;
+            document.getElementById("post-date").textContent = meta.date || "";
 
-            const catsContainer = document.getElementById('post-cats'); catsContainer.innerHTML = '';
-            const cats = Array.isArray(meta.categories) ? meta.categories : (meta.categories ? [meta.categories] : []);
-            cats.forEach(c => { const span = document.createElement('span'); span.className = 'cat-badge'; span.textContent = c; catsContainer.appendChild(span); });
+            const catsContainer = document.getElementById("post-cats");
+            catsContainer.innerHTML = "";
+            const cats = Array.isArray(meta.categories)
+              ? meta.categories
+              : meta.categories
+              ? [meta.categories]
+              : [];
+            cats.forEach((c) => {
+              const span = document.createElement("span");
+              span.className = "cat-badge";
+              span.textContent = c;
+              catsContainer.appendChild(span);
+            });
 
-            const tagsContainer = document.getElementById('post-tags'); tagsContainer.innerHTML = '';
-            const tags = Array.isArray(meta.tags) ? meta.tags : (meta.tags ? [meta.tags] : []);
-            tags.forEach(t => { const span = document.createElement('span'); span.className = 'tag-pill'; span.textContent = '#' + t; tagsContainer.appendChild(span); });
+            const tagsContainer = document.getElementById("post-tags");
+            tagsContainer.innerHTML = "";
+            const tags = Array.isArray(meta.tags)
+              ? meta.tags
+              : meta.tags
+              ? [meta.tags]
+              : [];
+            tags.forEach((t) => {
+              const span = document.createElement("span");
+              span.className = "tag-pill";
+              span.textContent = "#" + t;
+              tagsContainer.appendChild(span);
+            });
 
             renderBodyContent(data.body);
-
-        } catch(e) {
+          } catch (e) {
             console.error(e);
-            document.getElementById('post-body').innerHTML = `<div class="text-red-400 py-10 text-center"><p class="text-lg font-bold mb-2">Memory Retrieval Failed</p><p class="text-sm opacity-70">${e.message}</p><a href="index.html" class="underline mt-4 inline-block hover:text-white">Return to Main</a></div>`;
+            document.getElementById(
+              "post-body"
+            ).innerHTML = `<div class="text-red-400 py-10 text-center"><p class="text-lg font-bold mb-2">Memory Retrieval Failed</p><p class="text-sm opacity-70">${e.message}</p><a href="index.html" class="underline mt-4 inline-block hover:text-white">Return to Main</a></div>`;
+          }
         }
-    }
 
-    // Progress Bar Logic
-    window.addEventListener('scroll', () => {
-        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-        const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        const scrolled = (scrollTop / scrollHeight) * 100;
-        document.getElementById('progress-bar').style.width = scrolled + "%";
-    });
+        // Progress Bar Logic
+        window.addEventListener("scroll", () => {
+          const scrollTop =
+            document.documentElement.scrollTop || document.body.scrollTop;
+          const scrollHeight =
+            document.documentElement.scrollHeight -
+            document.documentElement.clientHeight;
+          const scrolled = (scrollTop / scrollHeight) * 100;
+          document.getElementById("progress-bar").style.width = scrolled + "%";
+        });
 
-    // Canvas Logic
-    const canvas = document.getElementById('flowCanvas');
-    const ctx = canvas.getContext && canvas.getContext('2d');
-    let w,h,particles=[];
-    function resize(){ if(!canvas) return; w=canvas.width=window.innerWidth; h=canvas.height=window.innerHeight; }
-    function anim(){ if(!ctx) return; ctx.clearRect(0,0,w,h); particles.forEach(p=>{ p.x+=p.vx; p.y+=p.vy; if(p.x<0) p.x=w; if(p.x>w) p.x=0; if(p.y<0) p.y=h; if(p.y>h) p.y=0; ctx.fillStyle='rgba(52, 211, 153, 0.15)'; ctx.beginPath(); ctx.arc(p.x,p.y,p.s,0,Math.PI*2); ctx.fill(); }); requestAnimationFrame(anim); }
-    if(ctx){ window.addEventListener('resize',resize); resize(); for(let i=0;i<40;i++) particles.push({x:Math.random()* (window.innerWidth||800), y:Math.random()* (window.innerHeight||600), vx:(Math.random()-0.5)*0.3, vy:(Math.random()-0.5)*0.3, s:Math.random()*2}); anim(); }
+        // Canvas Logic
+        const canvas = document.getElementById("flowCanvas");
+        const ctx = canvas.getContext && canvas.getContext("2d");
+        let w,
+          h,
+          particles = [];
+        function resize() {
+          if (!canvas) return;
+          w = canvas.width = window.innerWidth;
+          h = canvas.height = window.innerHeight;
+        }
+        function anim() {
+          if (!ctx) return;
+          ctx.clearRect(0, 0, w, h);
+          particles.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            if (p.x < 0) p.x = w;
+            if (p.x > w) p.x = 0;
+            if (p.y < 0) p.y = h;
+            if (p.y > h) p.y = 0;
+            ctx.fillStyle = "rgba(52, 211, 153, 0.15)";
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.s, 0, Math.PI * 2);
+            ctx.fill();
+          });
+          requestAnimationFrame(anim);
+        }
+        if (ctx) {
+          window.addEventListener("resize", resize);
+          resize();
+          for (let i = 0; i < 40; i++)
+            particles.push({
+              x: Math.random() * (window.innerWidth || 800),
+              y: Math.random() * (window.innerHeight || 600),
+              vx: (Math.random() - 0.5) * 0.3,
+              vy: (Math.random() - 0.5) * 0.3,
+              s: Math.random() * 2,
+            });
+          anim();
+        }
 
-    loadPost();
-})();
-</script>
-</body>
+        loadPost();
+      })();
+    </script>
+  </body>
 </html>
