@@ -59,10 +59,6 @@ I didn't move out immediately. I didn't even argue. I continued to pay my rent o
 
 After all, human joys and sorrows are not connected, and I have more important code to ship.
 
-Now, walking this 30-minute path to school, the wind is cold, but my logic is clearer than ever.
-
-Garbage Collected. System running at full capacity.
-
 ## The Walk Is the Main Thread, Garbage Collected
 
 Now, walking this 30-minute path to school, the wind is cold, but my logic is clearer than ever.
