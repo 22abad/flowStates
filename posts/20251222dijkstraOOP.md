@@ -62,29 +62,29 @@ This integration of CS210 and CS627 is more than just academic achievement; it's
 
 [ZH]
 
-# 🚀 从CS210算法演练到CS627 OOP突破：全栈心智模型的解锁
+# 🚀 从 CS210 算法演练到 CS627 OOP 突破：全栈心智模型的解锁
 
-今天上午，在为CS210算法期末考试与Dijkstra算法搏斗时，我经历了一次意想不到的**突破 (Breakthrough)**。这不仅仅是解决了一个图论问题；更重要的是，我终于、真正地理解了之前在CS627课程中只停留在理论层面的**面向对象编程 (OOP)**核心原则。这不仅仅是学习，更是知识的**融合 (Fusion)**，算法、数据结构和软件设计在这一刻融会贯通，形成了一个连贯而强大的**全栈心智模型 (Full-Stack Mental Model)**。
+今天上午，在为 CS210 算法期末考试与 Dijkstra 算法搏斗时，我经历了一次意想不到的**突破 (Breakthrough)**。这不仅仅是解决了一个图论问题；更重要的是，我终于、真正地理解了之前在 CS627 课程中只停留在理论层面的**面向对象编程 (OOP)**核心原则。这不仅仅是学习，更是知识的**融合 (Fusion)**，算法、数据结构和软件设计在这一刻融会贯通，形成了一个连贯而强大的**全栈心智模型 (Full-Stack Mental Model)**。
 
-## Dijkstra算法：不仅仅是找最短路径
+## Dijkstra 算法：不仅仅是找最短路径
 
-随着我们深入Dijkstra算法——从将距离初始化为无穷大 (`Integer.MAX_VALUE`)，到从`PriorityQueue`中贪婪地选择距离最小的节点，再到探索邻居，以及最关键的**松弛操作 (Relaxation)** (`if (newDist < distances.get(neighbor))`)，算法的优雅之处尽显。理解到BFS在无权图中寻找最短路径，而Dijkstra通过优先考虑当前已知最短路径将其扩展到加权图，这让我的理解更加牢固。Edsger Dijkstra在20分钟内没有纸笔就构思出这个算法的历史轶事，进一步激发了我对其纯粹的智力之美的敬意。
+随着我们深入 Dijkstra 算法——从将距离初始化为无穷大 (`Integer.MAX_VALUE`)，到从`PriorityQueue`中贪婪地选择距离最小的节点，再到探索邻居，以及最关键的**松弛操作 (Relaxation)** (`if (newDist < distances.get(neighbor))`)，算法的优雅之处尽显。理解到 BFS 在无权图中寻找最短路径，而 Dijkstra 通过优先考虑当前已知最短路径将其扩展到加权图，这让我的理解更加牢固。Edsger Dijkstra 在 20 分钟内没有纸笔就构思出这个算法的历史轶事，进一步激发了我对其纯粹的智力之美的敬意。
 
 ## OOP：算法背后看不见的架构
 
 然而，真正的启示发生在我们学习处理**路径重建 (Path Reconstruction)**时。为了有效地从`dijkstra`方法中同时返回最短`distances`和`predecessors` Map，我意识到一个简单的`Map`返回类型是不足的。这让我学习了如何设计一个自定义的**封装类 (Wrapper Class)**：`DijkstraResult`。
 
-学习使用这个拥有`distances`和`predecessors`字段以及一个清晰**构造函数 (Constructor)**的`DijkstraResult`类，提供了**数据封装 (Data Encapsulation)**的完美范例。它允许算法返回一个单一、连贯的对象，其中包含所有相关的输出，而无需求助于混乱的变通方法。这就是OOP原则的实际应用，旨在增强算法代码的**清晰度 (Clarity)**、**结构 (Structure)**和**可维护性 (Maintainability)**。
+学习使用这个拥有`distances`和`predecessors`字段以及一个清晰**构造函数 (Constructor)**的`DijkstraResult`类，提供了**数据封装 (Data Encapsulation)**的完美范例。它允许算法返回一个单一、连贯的对象，其中包含所有相关的输出，而无需求助于混乱的变通方法。这就是 OOP 原则的实际应用，旨在增强算法代码的**清晰度 (Clarity)**、**结构 (Structure)**和**可维护性 (Maintainability)**。
 
 ### 全栈心智模型：互联互通的知识
 
-这次经历为我作为开发者的旅程提供了一个至关重要的洞察：**知识不是孤立的 (Knowledge is Not Isolated)**。我的CS210算法演练，侧重于效率和逻辑，直接促进并巩固了我对CS627 OOP概念的理解，后者强调组织和设计。它们是同一枚硬币的两面，共同构建了一个更健壮的**全栈心智模型**来解决问题。
+这次经历为我作为开发者的旅程提供了一个至关重要的洞察：**知识不是孤立的 (Knowledge is Not Isolated)**。我的 CS210 算法演练，侧重于效率和逻辑，直接促进并巩固了我对 CS627 OOP 概念的理解，后者强调组织和设计。它们是同一枚硬币的两面，共同构建了一个更健壮的**全栈心智模型**来解决问题。
 
-以前，我可能只是肤浅地掌握CS627的OOP概念，但学习实现Dijkstra算法并进行路径重建的**摩擦 (Friction)**迫使我进行了更深入的参与。需要连贯地返回`distances`和`predecessors`不再是一个抽象的设计模式；它是一个具体、不可避免的问题，需要用到**封装 (Encapsulation)**。学习使用自定义类（如`DijkstraResult`）来包装这些输出，成为了完美的范例——展示了OOP如何为复杂算法提供**架构支架 (Architectural Scaffolding)**。
+以前，我可能只是肤浅地掌握 CS627 的 OOP 概念，但学习实现 Dijkstra 算法并进行路径重建的**摩擦 (Friction)**迫使我进行了更深入的参与。需要连贯地返回`distances`和`predecessors`不再是一个抽象的设计模式；它是一个具体、不可避免的问题，需要用到**封装 (Encapsulation)**。学习使用自定义类（如`DijkstraResult`）来包装这些输出，成为了完美的范例——展示了 OOP 如何为复杂算法提供**架构支架 (Architectural Scaffolding)**。
 
 ## 从“生存”到“影响”的旅程：脚踏实地的一步
 
-CS210和CS627的这种整合不仅仅是学业上的成就；它是我个人旅程中的一个步骤。我的目标正在从CS领域的仅仅是**生存 (Survival)**，转向积蓄**影响 (Influence)**的能力。通过深入理解这些基础概念，我正在为未来的**信誉 (Credibility)**打下基础。每一个弄懂的复杂问题，每一个真正理解的设计模式，都是我**“十年算法” (10-Year Algorithm)**基石中不可或缺的一块砖。这是一种安静而坚定的能力积累——也是**破局者 (The Breaker)**最终通过行动设定更高标准的唯一途径。
+CS210 和 CS627 的这种整合不仅仅是学业上的成就；它是我个人旅程中的一个步骤。我的目标正在从 CS 领域的仅仅是**生存 (Survival)**，转向积蓄**影响 (Influence)**的能力。通过深入理解这些基础概念，我正在为未来的**信誉 (Credibility)**打下基础。每一个弄懂的复杂问题，每一个真正理解的设计模式，都是我**“十年算法” (10-Year Algorithm)**基石中不可或缺的一块砖。这是一种安静而坚定的能力积累——也是**破局者 (The Breaker)**最终通过行动设定更高标准的唯一途径。
 
 ---
 
