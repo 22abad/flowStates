@@ -68,6 +68,17 @@ The Trap: Off-by-One Error
 
 In Maximum Binary Tree (LC 654), I stumbled on a classic off-by-one error. My loop for (int i = start; i < end; i++) ignored the last element because end in my recursive definition was inclusive. The fix i <= end was small, but it highlighted the importance of defining precise interval invariants (e.g., left-closed, right-closed).
 
+**The Value of "Useless" Work**
+
+![A screenshot of LeetCode submission history, showing an initial attempt on Oct 30 and recent, successful attempts. The final two submissions show a 'Wrong Answer' followed by an 'Accepted' just two minutes later, highlighting rapid debugging.|800](https://assets.flowstates.me/2025/20251226submission_history_evolution.jpg)
+
+This submission history tells a story. My first attempt on October 30th was, frankly, an act of "copying." I was rushing, trying to make progress without looking back. Why? Because I simply couldn't understand it. My grasp of state management and boundary control was too weak for such a task. The multiple submissions were just noise, a quantity-over-quality exercise.
+
+But today is different. Not only can I solve it independently, but I can also debug it on my own. The proof is in the pudding: a 'Wrong Answer' followed by an 'Accepted' solution just two minutes later. This highlights two core truths I've come to believe:
+
+1.  **Just keep going, and you will see.** The path forward clarifies itself through persistence.
+2.  **What seems meaningless is, in fact, deeply meaningful.** This accumulation is a quantitative change that is impossible to measure until the moment of qualitative breakthrough. Only then do you realize the profound impact of all that "useless work."
+
 Phase 3: The State Machine (LeetCode 98, 530, 501)
 
 The final boss was the Binary Search Tree (BST). The "High Dimensional" insight here is simple but profound: BST Inorder Traversal = Sorted Stream.
@@ -149,6 +160,17 @@ root.left = build(inorder, inStart, rootIndex - 1, postorder, postStart, postSta
 陷阱：差一错误 (Off-by-One Error)
 
 在 最大二叉树 (LC 654) 中，我被一个经典的差一错误绊倒了。我的循环 for (int i = start; i < end; i++) 忽略了最后一个元素，因为我在递归定义中 end 是包含在内的（闭区间）。修正为 i <= end 虽然只是一个小改动，但它强调了定义精确区间不变量的重要性。
+
+**“无用功”的价值**
+
+![一张 LeetCode 提交历史截图，显示了10月30日的初次尝试和近期的成功尝试。最后两次提交记录为一个“错误答案”，紧接着在两分钟后就是一个“已接受”，凸显了快速调试的能力。|800](https://assets.flowstates.me/2025/20251226submission_history_evolution.jpg)
+
+这张提交记录本身就在讲一个故事。10月30日的第一次提交，说白了就是“抄”。我当时在疯狂地“赶进度”，根本没回头看。原因？因为根本看不懂。以我当时对状态的理解和边界的控制能力来说，那是不可能独立完成的任务，后续的多次提交也仅仅是凑数量而已。
+
+但如今，我不仅可以独立做出来，甚至可以独立 debug。证据就在那里：一个红色的 "Wrong Answer" 之后，仅仅两分钟就迎来了正式的 "Accepted"。这恰恰说明了两个道理：
+
+1.  **只管走下去，你终将看到风景 (Just keep going, and you will see)。** 坚持本身就会让道路变得清晰。
+2.  **看似无意义的量变，实则充满了意义。** 这种积累是无法被量化的，直到质变发生的那一刻，你才会突然意识到所有那些“无用功”的真正作用。
 
 第三阶段：状态机（LeetCode 98, 530, 501）
 
