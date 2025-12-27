@@ -3,8 +3,15 @@ title: "The Christmas Algorithm: Breaking the Tutorial Loop"
 title_zh: "圣诞算法：打破教程的循环"
 date: 2025-12-26
 author: Dong Li
-categories: [Algorithm Analysis, Cognitive Shift]
-tags: [Backtracking, Binary Tree, LeetCode 113, Debugging, Java]
+categories:
+  - "Algorithm Analysis"
+  - "Cognitive Shift"
+tags:
+  - "Backtracking"
+  - "Binary Tree"
+  - "LeetCode 113"
+  - "Debugging"
+  - "Java"
 summary_en: A reflection on solving LeetCode 113 without tutorials, discovering the necessity of state restoration in backtracking, and understanding the 'Snapshot' mechanism in Java memory.
 summary_zh: 记录在不依赖教程的情况下攻克 LeetCode 113 的过程，深刻理解回溯中状态恢复的必要性，以及 Java 内存中的“快照”机制。
 ---

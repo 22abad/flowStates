@@ -3,8 +3,17 @@ title: "The Boxing Day Protocol: From Code Tourist to State Architect"
 title_zh: "圣诞次日的算法突围：从代码游客到状态架构师"
 date: 2025-12-26
 author: Dong Li
-categories: [Algorithm Analysis, Cognitive Shift, Software Engineering]
-tags: [LeetCode, Backtracking, Binary Tree, Recursion, State Machine, Java]
+categories:
+  - "Algorithm Analysis"
+  - "Cognitive Shift"
+  - "Software Engineering"
+tags:
+  - "LeetCode"
+  - "Backtracking"
+  - "Binary Tree"
+  - "Recursion"
+  - "State Machine"
+  - "Java"
 summary_en: A comprehensive retrospective of a 12-hour coding marathon on Boxing Day. Covering the shift from backtracking snapshots (LC 113) to index arithmetic in tree construction (LC 106), and finally treating BST inorder traversal as a state machine (LC 501). A journey of 43-year-old wisdom applied to 100-day-old coding skills.
 summary_zh: 记录圣诞次日长达12小时的编程马拉松。深度复盘从回溯快照（LC 113）到二叉树构造中的索引算术（LC 106），再到将 BST 中序遍历视为状态机（LC 501）的思维跃迁。这是一场用43岁的智慧去重塑100天编程技能的旅程。
 ---
@@ -165,7 +174,7 @@ root.left = build(inorder, inStart, rootIndex - 1, postorder, postStart, postSta
 
 ![一张 LeetCode 提交历史截图，显示了10月30日的初次尝试和近期的成功尝试。最后两次提交记录为一个“错误答案”，紧接着在两分钟后就是一个“已接受”，凸显了快速调试的能力。|800](https://assets.flowstates.me/2025/20251226submission_history_evolution.jpg)
 
-这张提交记录本身就在讲一个故事。10月30日的第一次提交，说白了就是“抄”。我当时在疯狂地“赶进度”，根本没回头看。原因？因为根本看不懂。以我当时对状态的理解和边界的控制能力来说，那是不可能独立完成的任务，后续的多次提交也仅仅是凑数量而已。
+这张提交记录本身就在讲一个故事。10 月 30 日的第一次提交，说白了就是“抄”。我当时在疯狂地“赶进度”，根本没回头看。原因？因为根本看不懂。以我当时对状态的理解和边界的控制能力来说，那是不可能独立完成的任务，后续的多次提交也仅仅是凑数量而已。
 
 但如今，我不仅可以独立做出来，甚至可以独立 debug。证据就在那里：一个红色的 "Wrong Answer" 之后，仅仅两分钟就迎来了正式的 "Accepted"。这恰恰说明了两个道理：
 
