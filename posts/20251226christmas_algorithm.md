@@ -9,7 +9,7 @@ categories:
 tags:
   - "Backtracking"
   - "Binary Tree"
-  - "LeetCode 113"
+  - "LeetCode"
   - "Debugging"
   - "Java"
 summary_en: A reflection on solving LeetCode 113 without tutorials, discovering the necessity of state restoration in backtracking, and understanding the 'Snapshot' mechanism in Java memory.
