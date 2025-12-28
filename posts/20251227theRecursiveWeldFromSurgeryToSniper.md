@@ -74,6 +74,136 @@ I realized that my value isn't defined by geography or external validation, but 
 
 When the crosshairs of logic align with the core of the problem, all that remains is a single, clean shot. In this noisy world, the sniper has holstered his weapon, awaiting the next dawn.
 
+## Appendix: Code Solutions
+
+_(Note: The `TreeNode` class definition is omitted for brevity, as is standard in LeetCode.)_
+
+### LeetCode 450: Delete Node in a BST
+
+```java
+class Solution {
+    public TreeNode deleteNode(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+
+        if (key < root.val) {
+            root.left = deleteNode(root.left, key);
+        } else if (key > root.val) {
+            root.right = deleteNode(root.right, key);
+        } else { // key == root.val, we found the node to delete
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            } else {
+                // Node has two children
+                // Find the inorder successor (smallest node in the right subtree)
+                TreeNode successor = findMin(root.right);
+                // "Steal" the value
+                root.val = successor.val;
+                // "Delete the ghost" - recursively delete the successor from the right subtree
+                root.right = deleteNode(root.right, successor.val);
+            }
+        }
+        return root;
+    }
+
+    private TreeNode findMin(TreeNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+}
+```
+
+### LeetCode 108: Convert Sorted Array to BST
+
+```java
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return buildBST(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode buildBST(int[] nums, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = buildBST(nums, start, mid - 1);
+        root.right = buildBST(nums, mid + 1, end);
+        return root;
+    }
+}
+```
+
+### LeetCode 538: Convert BST to Greater Tree
+
+```java
+class Solution {
+    private int sum = 0;
+
+    public TreeNode convertBST(TreeNode root) {
+        if (root != null) {
+            // Traverse right subtree first (reverse inorder)
+            convertBST(root.right);
+
+            // Process the current node
+            sum += root.val;
+            root.val = sum;
+
+            // Traverse left subtree
+            convertBST(root.left);
+        }
+        return root;
+    }
+}
+```
+
+### LeetCode 235: Lowest Common Ancestor of a BST
+
+```java
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null) {
+            if (p.val > root.val && q.val > root.val) {
+                root = root.right;
+            } else if (p.val < root.val && q.val < root.val) {
+                root = root.left;
+            } else {
+                return root; // Found the split point
+            }
+        }
+        return null; // Should not be reached
+    }
+}
+```
+
+### LeetCode 701: Insert into a BST
+
+```java
+class Solution {
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        if (root == null) {
+            return new TreeNode(val);
+        }
+
+        if (val < root.val) {
+            root.left = insertIntoBST(root.left, val);
+        } else {
+            root.right = insertIntoBST(root.right, val);
+        }
+
+        return root;
+    }
+}
+```
+
 [END]
 
 [ZH]
@@ -130,5 +260,135 @@ if (root.val > val) root.left = insertIntoBST(root.left, val);
 我意识到，我的价值不取决于地理位置或外界的评价，而取决于专注的密度。能够坐在房间里，过滤掉杂音，产出这种级别的逻辑，才是我唯一的硬通货。
 
 当逻辑的准星与问题的核心重合，剩下的只有一次干净利落的击发。在这喧嚣的世界里，狙击手已收枪入鞘，静待下一个黎明。
+
+## 附录：代码实现
+
+_（注：为简洁起见，此处省略了 LeetCode 平台标准的 `TreeNode` 类定义。）_
+
+### LeetCode 450: 删除二叉搜索树中的节点
+
+```java
+class Solution {
+    public TreeNode deleteNode(TreeNode root, int key) {
+        if (root == null) {
+            return null;
+        }
+
+        if (key < root.val) {
+            root.left = deleteNode(root.left, key);
+        } else if (key > root.val) {
+            root.right = deleteNode(root.right, key);
+        } else { // 找到了要删除的节点
+            if (root.left == null) {
+                return root.right;
+            } else if (root.right == null) {
+                return root.left;
+            } else {
+                // 节点有两个孩子
+                // 找到右子树中的最小节点（中序后继者）
+                TreeNode successor = findMin(root.right);
+                // “偷梁换柱”
+                root.val = successor.val;
+                // “清除替身”：递归地从右子树中删除那个后继节点
+                root.right = deleteNode(root.right, successor.val);
+            }
+        }
+        return root;
+    }
+
+    private TreeNode findMin(TreeNode node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
+    }
+}
+```
+
+### LeetCode 108: 将有序数组转换为二叉搜索树
+
+```java
+class Solution {
+    public TreeNode sortedArrayToBST(int[] nums) {
+        if (nums == null || nums.length == 0) {
+            return null;
+        }
+        return buildBST(nums, 0, nums.length - 1);
+    }
+
+    private TreeNode buildBST(int[] nums, int start, int end) {
+        if (start > end) {
+            return null;
+        }
+        int mid = start + (end - start) / 2;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = buildBST(nums, start, mid - 1);
+        root.right = buildBST(nums, mid + 1, end);
+        return root;
+    }
+}
+```
+
+### LeetCode 538: 把二叉搜索树转换为累加树
+
+```java
+class Solution {
+    private int sum = 0;
+
+    public TreeNode convertBST(TreeNode root) {
+        if (root != null) {
+            // 优先遍历右子树（反向中序）
+            convertBST(root.right);
+
+            // 处理当前节点
+            sum += root.val;
+            root.val = sum;
+
+            // 遍历左子树
+            convertBST(root.left);
+        }
+        return root;
+    }
+}
+```
+
+### LeetCode 235: 二叉搜索树的最近公共祖先
+
+```java
+class Solution {
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        while (root != null) {
+            if (p.val > root.val && q.val > root.val) {
+                root = root.right;
+            } else if (p.val < root.val && q.val < root.val) {
+                root = root.left;
+            } else {
+                return root; // 找到 p 和 q 的分叉点
+            }
+        }
+        return null; // 不应到达
+    }
+}
+```
+
+### LeetCode 701: 二叉搜索树中的插入操作
+
+```java
+class Solution {
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        if (root == null) {
+            return new TreeNode(val);
+        }
+
+        if (val < root.val) {
+            root.left = insertIntoBST(root.left, val);
+        } else {
+            root.right = insertIntoBST(root.right, val);
+        }
+
+        return root;
+    }
+}
+```
 
 [END]
