@@ -23,7 +23,7 @@ summary_zh: 12月27日日记。记录了从复杂的二叉树手术（LC 450）�
 
 # The Recursive Weld: From Surgery to Sniper
 
-Today, December 27th, was a day of duality. It began in the bright, 4K-monitor-equipped Eolas Lab and ended in my warm, €700 sanctuary in Kingsbry. It started with frustration at the "low density" noise of peer pressure but ended with the high-density satisfaction of algorithmic mastery.
+Today, December 27th, was a day of duality. It began in the bright, 4K-monitor-equipped Eolas Lab and ended in my warm sanctuary in Kingsbry. It started with frustration at the "low density" noise of peer pressure but ended with the high-density satisfaction of algorithmic mastery.
 
 The theme of the day was Connection. How do we connect nodes? How do we connect logic? And how do we connect our past selves to our future potential?
 
@@ -72,7 +72,7 @@ Today proved that efficiency isn't just about speed; it's about depth. I spent t
 
 I realized that my value isn't defined by geography or external validation, but by the density of my focus. The ability to sit in a room, filter out the static, and produce this level of logic is the only currency that matters.
 
-The recursive structure is complete. The logic is welded shut. The "Old Urchin" is finally at peace.
+When the crosshairs of logic align with the core of the problem, all that remains is a single, clean shot. In this noisy world, the sniper has holstered his weapon, awaiting the next dawn.
 
 [END]
 
@@ -80,7 +80,7 @@ The recursive structure is complete. The logic is welded shut. The "Old Urchin" 
 
 # 递归的焊点：从外科手术到夜间狙击
 
-今天是 12 月 27 日，一个充满二元对立的日子。它始于 Eolas 实验室明亮的 4K 显示器前，结束于我在 Kingsbry 那间 700 欧元的温暖避难所里。它始于对周围“低密度”社交噪音的愤怒，却结束于算法精通带来的高密度满足感。
+今天是 12 月 27 日，一个充满二元对立的日子。它始于 Eolas 实验室明亮的 4K 显示器前，结束于我在 Kingsbry 的温暖避难所里。它始于外部世界的无序与喧嚣，却在算法逻辑的有序与宁静中，觅得了内心的“高密度”自洽。
 
 今天的主题是 **连接**。我们如何连接节点？我们如何连接逻辑？以及我们如何将过去的自己与未来的潜能连接起来？
 
@@ -129,6 +129,6 @@ if (root.val > val) root.left = insertIntoBST(root.left, val);
 
 我意识到，我的价值不取决于地理位置或外界的评价，而取决于专注的密度。能够坐在房间里，过滤掉杂音，产出这种级别的逻辑，才是我唯一的硬通货。
 
-递归结构已闭环，逻辑焊点已冷却。“老顽童”终于可以心安了。
+当逻辑的准星与问题的核心重合，剩下的只有一次干净利落的击发。在这喧嚣的世界里，狙击手已收枪入鞘，静待下一个黎明。
 
 [END]
