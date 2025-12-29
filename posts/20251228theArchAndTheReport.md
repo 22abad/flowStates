@@ -18,7 +18,7 @@ summary_en: "A log of a single day's cognitive journey, starting with deconstruc
 summary_zh: "一日心流实录：上午，通过解构树形DP的“造桥-汇报”模式打破“天才”神话；下午，将贪心算法从“直觉猜测”升维至“数学确信”，领悟其构造性证明的本质。记录两次认知飞跃的全过程。"
 ---
 
-![Diptyque digital art. Left panel: a binary tree node acts as a glowing arch and a reporting signal, against a background of chaotic puzzle pieces turning into a blueprint. Right panel: a powerful bulldozer labeled 'Proof' clears a straight path through a tangled landscape. The two scenes are connected by a flow of light, symbolizing a day of cognitive breakthroughs from one concept to another. Cinematic, 8K.|800](https://assets.flowstates.me/2025/20251228revelationDay.jpg)
+![Diptyque digital art. Left panel: a binary tree node acts as a glowing arch and a reporting signal, against a background of chaotic puzzle pieces turning into a blueprint. Right panel: a powerful bulldozer labeled 'Proof' clears a straight path through a tangled landscape. The two scenes are connected by a flow of light, symbolizing a day of cognitive breakthroughs from one concept to another. Cinematic, 8K.|800](https://assets.flowstates.me/2025/20251228the_arch_and_the_report.jpg)
 
 [EN]
 
