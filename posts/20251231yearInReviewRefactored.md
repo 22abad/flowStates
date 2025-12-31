@@ -1,6 +1,6 @@
 ---
-title: "2025: The Year of Kernel Panic and System Rebirth (Refactored)"
-title_zh: "2025：内核崩溃与系统重生之年（重构版）"
+title: "2025: The Year of Kernel Panic and System Rebirth"
+title_zh: "2025：内核崩溃与系统重生之年"
 date: 2025-12-31
 author: Dong Li
 categories:
@@ -21,7 +21,7 @@ summary_zh: "这一年不是线性的渐进，而是一次剧烈而美丽的断�
 
 [EN]
 
-# 2025: The Year of Kernel Panic and System Rebirth (Refactored)
+# 2025: The Year of Kernel Panic and System Rebirth
 
 > **Status:** Compilation Complete. Build Successful.
 
@@ -108,7 +108,7 @@ I will continue to change. I will continue to struggle. Because wobbling is grow
 
 [ZH]
 
-# 2025：内核崩溃与系统重生之年（重构版）
+# 2025：内核崩溃与系统重生之年
 
 > **状态：** 编译完成。构建成功。
 
