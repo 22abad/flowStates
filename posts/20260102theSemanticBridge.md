@@ -72,9 +72,20 @@ grid[r][c] = '0'; // Claim the land now to prevent others from queuing it
 
 This is not just syntax; it is state management logic. Lock the resource when you intend to use it.
 
-## 4. The Upward Spiral
+## 4. The Philosophy: The Joy of Sisyphus
 
-This process of refining code is not repetitive; it is evolutionary. The discomfort of revisiting "solved" problems is the friction of growth. It transforms latent knowledge into active mastery, bridging the gap between simply "knowing" the syntax and truly "owning" the semantics.
+This morning, I told my wife, "I think I've hit a comfort zone. Algorithms are no longer monsters; solving them now feels like a walk in the park." It sounded like a victory, but it was immediately followed by a wave of panic.
+
+A walk in the park is boring. I realized that my dopamine threshold has been permanently re-calibrated by high-intensity logical training. Low-density pleasure no longer registers. The only antidote is to voluntarily seek out hardship—to find the next problem that will make me suffer.
+
+This might seem like a vicious cycle, but it is the **Old Urchin's way of life.**
+
+The essence of pain is **focus**.
+The essence of comfort is **stagnation**.
+
+There are only two states in this world: **Growing** or **Decaying**. If we are condemned to push a boulder up a hill every day like Sisyphus, we shouldn't complain about the weight of the stone. We should learn to enjoy the feeling of muscles tearing and rebuilding. Because if we stop, what awaits us is not rest, but the rot of mediocrity.
+
+Since walking is boring, it's time to run.
 
 [END]
 
@@ -100,7 +111,7 @@ int h = Math.min(height[i], height[stack.peek()]) - height[mid];
 int w = i - stack.peek() - 1;
 ```
 
-今天，我实施了**“变量实名制”**。我强迫自己在将指针用于计算之前，先赋予它物理语义。
+今天，我实施了“**变量实名制**”。我强迫自己在将指针用于计算之前，先赋予它物理语义。
 
 **“架构师”写法：**
 
