@@ -18,9 +18,13 @@ tags:
 summary_en: "A reflection on the first morning after exams, embracing the identity of a 'humble beginner' while recognizing the power of 'muscle memory' in coding. It explores the unexpected benefits of an 'automatic garbage collection' mindset and the subtle influence of personal dedication on others, ultimately finding freedom in mental refactoring."
 summary_zh: "期末考后的第一个清晨，在 Eolas 011 教室里，一个“肉鸡”程序员对“肌肉记忆”的顿悟。探讨了“自动垃圾回收”的心智模式、个人坚持对周围人的无声影响，以及心智重构带来的最高维度自由。"
 ---
+
 ![Whiteboard Rebellion|800](https://assets.flowstates.me/2026/20260123theHumbleBeginnersMuscleMemory.jpg)
 
-![A lone figure of a middle-aged man in a brightly lit modern university lab (Eolas 011), surrounded by multiple 4K monitors displaying complex code. Outside the window, it's still dark and misty, typical of an Irish morning. The man is intensely focused on his keyboard, with subtle glowing lines connecting his brain to his hands, symbolizing muscle memory. A faint, almost invisible, aura of positive energy radiates outwards from him, subtly illuminating the empty chairs around him. The overall tone is one of quiet determination and profound insight. --ar 21:9 --v 6.0|800](https://assets.flowstates.me/2026/20260123theHumbleBeginnersMuscleMemory.jpg)
+<!--
+Image Prompt:
+A lone figure of a middle-aged man in a brightly lit modern university lab (Eolas 011), surrounded by multiple 4K monitors displaying complex code. Outside the window, it's still dark and misty, typical of an Irish morning. The man is intensely focused on his keyboard, with subtle glowing lines connecting his brain to his hands, symbolizing muscle memory. A faint, almost invisible, aura of positive energy radiates outwards from him, subtly illuminating the empty chairs around him. The overall tone is one of quiet determination and profound insight. --ar 21:9 --v 6.0|800
+-->
 
 [EN]
 
