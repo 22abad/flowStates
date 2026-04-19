@@ -19,7 +19,7 @@ summary_zh: "反思在梅努斯的最后 30 天。将七个月高强度 CS 训�
 
 # Countdown 30 Days: At the Zenith of Code, Returning to the Warmth of Home
 
-![Zenith and Home|800](https://assets.flowstates.me/2026/20260419countdown.jpg)
+![Zenith and Home|800](https://assets.flowstates.me/2026/20260419countdown.png)
 
 <!-- Prompt: A cinematic digital illustration presenting a striking duality. On the left, a high-tech, cool-toned cyberpunk environment with a glowing V8 engine fused with a pulsating human brain, symbolizing intense coding. On the right, a warm, golden-lit transition into a cozy domestic scene with abstract silhouettes of a family. The two halves are connected by glowing strings of code bridging into threads of warm light. Hyper-detailed, 8K resolution, 4:3 aspect ratio, dramatic lighting. -->
 
