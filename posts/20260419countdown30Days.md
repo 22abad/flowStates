@@ -66,7 +66,7 @@ Wife, daughter, prepare to welcome this fully-fueled, roaring V8 engine!
 
 # 倒计时 30 天：在代码的极点，重逢我的人间烟火
 
-![代码极点与人间烟火|800](https://assets.flowstates.me/2026/20260419countdown.jpg)
+![代码极点与人间烟火|800](https://assets.flowstates.me/2026/20260419countdown.png)
 
 <!-- Prompt: 一幅具有极强电影感的数字插画，展现鲜明的二元感。左侧是冷色的赛博朋克环境，闪烁代码光芒的人脑与轰鸣的 V8 引擎融合；右侧过渡到温暖的家庭场景，妻子与两岁女儿的剪影沐浴在金色炉火中。两侧由发光的代码线条化作温暖光丝连接。8K分辨率，4:3比例，戏剧性光影。 -->
 
